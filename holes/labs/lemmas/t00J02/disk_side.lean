@@ -705,3 +705,187 @@ lemma disk_side_aux_sign_unique
 #print axioms disk_side_aux_one_side
 #print axioms disk_side_aux_sign_unique
 end t00J02_ModelProduct
+
+namespace ConstructionTargets.RelativeSingularHomologyHomotopy
+
+open ConstructionTargets.SingularHomologyConcrete
+open ConstructionTargets.SingularExcision
+
+abbrev Fch := (AlgebraicTopology.singularChainComplexFunctor AddCommGrpCat).obj
+  (AddCommGrpCat.of ℤ)
+
+lemma chainHomology_eq_of_homotopic {P Q : Type} [TopologicalSpace P] [TopologicalSpace Q]
+    {a b : C(P, Q)} (h : ContinuousMap.Homotopic a b) (n : ℕ) :
+    HomologicalComplex.homologyMap (Fch.map (TopCat.ofHom a)) n =
+      HomologicalComplex.homologyMap (Fch.map (TopCat.ofHom b)) n := by
+  have := ConstructionTargets.SingularHomologyHomotopy.singularHomology_map_eq_of_homotopic
+    AddCommGrpCat (AddCommGrpCat.of ℤ) h n
+  simpa [AlgebraicTopology.singularHomologyFunctor,
+    AlgebraicTopology.singularChainComplexFunctor] using this
+
+lemma chainHomology_isIso_of_section {P Q : Type} [TopologicalSpace P] [TopologicalSpace Q]
+    (q : C(P, Q)) (s : C(Q, P)) (hqs : q.comp s = ContinuousMap.id Q)
+    (hsq : ContinuousMap.Homotopic (s.comp q) (ContinuousMap.id P)) (n : ℕ) :
+    IsIso (HomologicalComplex.homologyMap (Fch.map (TopCat.ofHom q)) n) := by
+  refine ⟨⟨HomologicalComplex.homologyMap (Fch.map (TopCat.ofHom s)) n, ?_, ?_⟩⟩
+  · rw [← HomologicalComplex.homologyMap_comp, ← Functor.map_comp]
+    have : TopCat.ofHom q ≫ TopCat.ofHom s = TopCat.ofHom (s.comp q) := rfl
+    rw [this, chainHomology_eq_of_homotopic hsq n]
+    rw [show TopCat.ofHom (ContinuousMap.id P) = 𝟙 _ from rfl]
+    simp only [CategoryTheory.Functor.map_id, HomologicalComplex.homologyMap_id]
+  · rw [← HomologicalComplex.homologyMap_comp, ← Functor.map_comp]
+    have : TopCat.ofHom s ≫ TopCat.ofHom q = TopCat.ofHom (q.comp s) := rfl
+    rw [this, hqs, show TopCat.ofHom (ContinuousMap.id Q) = 𝟙 _ from rfl]
+    simp only [CategoryTheory.Functor.map_id, HomologicalComplex.homologyMap_id]
+
+/-- Relative homotopy invariance for maps of pairs. -/
+theorem relativeSingularHomologyMap_eq_of_homotopy
+    {X Y : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    (A : Set X) (B : Set Y) {f₀ f₁ : C(X, Y)}
+    (H : ContinuousMap.Homotopy f₀ f₁)
+    (hH : ∀ t : unitInterval, ∀ x ∈ A, H (t, x) ∈ B)
+    (h₀ : Set.MapsTo f₀ A B) (h₁ : Set.MapsTo f₁ A B) (n : ℕ) :
+    HomologicalComplex.homologyMap (relativeSingularMap A B f₀ h₀) n =
+      HomologicalComplex.homologyMap (relativeSingularMap A B f₁ h₁) n := by
+  let A' : Set (X × unitInterval) := A ×ˢ univ
+  let p : C(X × unitInterval, X) := ContinuousMap.fst
+  have hp : Set.MapsTo p A' A := fun q hq => hq.1
+  let ι : unitInterval → C(X, X × unitInterval) := fun t =>
+    ⟨fun x => (x, t), continuous_id.prodMk continuous_const⟩
+  have hι : ∀ t, Set.MapsTo (ι t) A A' := fun t x hx => ⟨hx, trivial⟩
+  let Hc : C(X × unitInterval, Y) :=
+    ⟨fun q => H (q.2, q.1), H.continuous.comp (continuous_snd.prodMk continuous_fst)⟩
+  have hHc : Set.MapsTo Hc A' B := fun q hq => hH q.2 q.1 hq.1
+  -- p is an isomorphism on relative homology
+  have hpiso : ∀ m, IsIso (HomologicalComplex.homologyMap (relativeSingularMap A' A p hp) m) := by
+    intro m
+    -- the deformation retraction of the cylinder onto its bottom
+    have hdef : ∀ {Z : Set X},
+        ContinuousMap.Homotopic
+          ((⟨fun z : (Z ×ˢ (univ : Set unitInterval) : Set _) =>
+              (⟨((z : X × unitInterval).1, 0), ⟨z.2.1, trivial⟩⟩ :
+                (Z ×ˢ (univ : Set unitInterval) : Set _)),
+            by fun_prop⟩ : C(_, _)))
+          (ContinuousMap.id _) := by
+      intro Z
+      refine ⟨{ toFun := fun r => ⟨((r.2 : X × unitInterval).1,
+                  ⟨(r.1 : ℝ) * ((r.2 : X × unitInterval).2 : ℝ),
+                    unitInterval.mul_mem r.1.2 (r.2 : X × unitInterval).2.2⟩),
+                  ⟨r.2.2.1, trivial⟩⟩
+                continuous_toFun := by fun_prop
+                map_zero_left := by intro z; ext <;> simp
+                map_one_left := by intro z; ext <;> simp }⟩
+    have hdefX : ContinuousMap.Homotopic ((ι 0).comp p) (ContinuousMap.id _) := by
+      refine ⟨{ toFun := fun r => ((r.2).1,
+                  ⟨(r.1 : ℝ) * ((r.2).2 : ℝ), unitInterval.mul_mem r.1.2 (r.2).2.2⟩)
+                continuous_toFun := by fun_prop
+                map_zero_left := by intro z; ext <;> simp [ι, p]
+                map_one_left := by intro z; ext <;> simp }⟩
+    apply relativeSingularMap_homologyMap_isIso
+    · exact chainHomology_isIso_of_section _
+        ⟨fun a : A => (⟨((a : X), 0), ⟨a.2, trivial⟩⟩ : A'), by fun_prop⟩
+        (by ext; rfl) (by simpa using hdef (Z := A)) m
+    · exact chainHomology_isIso_of_section p (ι 0) (by ext; rfl) hdefX m
+    · intro j _
+      exact chainHomology_isIso_of_section _
+        ⟨fun a : A => (⟨((a : X), 0), ⟨a.2, trivial⟩⟩ : A'), by fun_prop⟩
+        (by ext; rfl) (by simpa using hdef (Z := A)) j
+    · intro j _
+      exact chainHomology_isIso_of_section p (ι 0) (by ext; rfl) hdefX j
+  have hsec : ∀ t, HomologicalComplex.homologyMap (relativeSingularMap A A' (ι t) (hι t)) n =
+      inv (HomologicalComplex.homologyMap (relativeSingularMap A' A p hp) n) := by
+    intro t
+    haveI := hpiso n
+    apply IsIso.eq_inv_of_inv_hom_id
+    rw [← HomologicalComplex.homologyMap_comp,
+      relativeSingularMap_comp A A' A (ι t) p (hι t) hp (by
+        intro x hx; exact hx)]
+    have : p.comp (ι t) = ContinuousMap.id X := by ext; rfl
+    have hcongr : ∀ (F G : C(X, X)) (hFG : F = G) hF hG,
+        relativeSingularMap A A F hF = relativeSingularMap A A G hG := by
+      intro F G hFG _ _; subst hFG; rfl
+    rw [hcongr _ _ this _ (fun x hx => hx), relativeSingularMap_id,
+      HomologicalComplex.homologyMap_id]
+  have hfac : ∀ t (f : C(X, Y)) (hf : Set.MapsTo f A B), Hc.comp (ι t) = f →
+      HomologicalComplex.homologyMap (relativeSingularMap A B f hf) n =
+        HomologicalComplex.homologyMap (relativeSingularMap A A' (ι t) (hι t)) n ≫
+          HomologicalComplex.homologyMap (relativeSingularMap A' B Hc hHc) n := by
+    intro t f hf hfe
+    subst hfe
+    rw [← HomologicalComplex.homologyMap_comp, relativeSingularMap_comp]
+  rw [hfac 0 f₀ h₀ (by ext x; simp [Hc, ι]), hfac 1 f₁ h₁ (by ext x; simp [Hc, ι]),
+    hsec 0, hsec 1]
+
+end ConstructionTargets.RelativeSingularHomologyHomotopy
+
+namespace t00J02_ModelProduct
+
+open ConstructionTargets.SingularHomologyConcrete
+open ConstructionTargets.SingularExcision
+open ConstructionTargets.LocalHomologyNeighborhoodExcision
+
+/-- Convex combinations of real numbers with the same strict sign do not vanish. -/
+lemma disk_side_aux_blend_ne_zero (a b τ : ℝ) (hτ0 : 0 ≤ τ) (hτ1 : τ ≤ 1)
+    (hab : 0 < a * b) : (1 - τ) * a + τ * b ≠ 0 := by
+  rcases mul_pos_iff.mp hab with ⟨ha, hb⟩ | ⟨ha, hb⟩
+  · have hpos : 0 < (1 - τ) * a + τ * b := by
+      by_cases ht : τ = 1
+      · simpa [ht] using hb
+      · exact add_pos_of_pos_of_nonneg
+          (mul_pos (sub_pos.mpr (lt_of_le_of_ne hτ1 ht)) ha) (mul_nonneg hτ0 hb.le)
+    exact ne_of_gt hpos
+  · have hneg : (1 - τ) * a + τ * b < 0 := by
+      by_cases ht : τ = 1
+      · simpa [ht] using hb
+      · exact add_neg_of_neg_of_nonpos
+          (mul_neg_of_pos_of_neg (sub_pos.mpr (lt_of_le_of_ne hτ1 ht)) ha)
+          (mul_nonpos_of_nonneg_of_nonpos hτ0 hb.le)
+    exact ne_of_lt hneg
+
+/-- A straight homotopy between two plane maps avoids the origin whenever their
+normal coordinates have the same strict sign off the axis and their tangential
+coordinates have the same strict sign on the punctured axis. -/
+lemma disk_side_aux_blend_avoids_zero (U : Set E2) (F G : C(U, E2))
+    (hnormal : ∀ p : U, (p : E2) 1 ≠ 0 → 0 < F p 1 * G p 1)
+    (htangent : ∀ p : U, (p : E2) 1 = 0 → (p : E2) 0 ≠ 0 → 0 < F p 0 * G p 0)
+    (τ : unitInterval) (p : U) (hp : (p : E2) ≠ 0) :
+    (1 - (τ : ℝ)) • F p + (τ : ℝ) • G p ≠ 0 := by
+  intro he
+  by_cases hp1 : (p : E2) 1 = 0
+  · have hp0 : (p : E2) 0 ≠ 0 := by
+      intro h
+      apply hp
+      ext i
+      fin_cases i <;> assumption
+    have he0 := congrArg (fun v : E2 => v 0) he
+    have hz : (1 - (τ : ℝ)) * F p 0 + (τ : ℝ) * G p 0 = 0 := by simpa using he0
+    exact disk_side_aux_blend_ne_zero _ _ _ τ.2.1 τ.2.2 (htangent p hp1 hp0) hz
+  · have he1 := congrArg (fun v : E2 => v 1) he
+    have hz : (1 - (τ : ℝ)) * F p 1 + (τ : ℝ) * G p 1 = 0 := by simpa using he1
+    exact disk_side_aux_blend_ne_zero _ _ _ τ.2.1 τ.2.2 (hnormal p hp1) hz
+
+/-- The sign-controlled straight homotopy identifies the actual relative H₂ maps,
+not merely an abstract integer degree. This is the homological comparison step
+for a reflected boundary chart and its signed linear model. -/
+theorem disk_side_aux_boundary_homology_comparison
+    (U : Set E2) (F G : C(U, E2))
+    (hnormal : ∀ p : U, (p : E2) 1 ≠ 0 → 0 < F p 1 * G p 1)
+    (htangent : ∀ p : U, (p : E2) 1 = 0 → (p : E2) 0 ≠ 0 → 0 < F p 0 * G p 0)
+    (hF : MapsTo F (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)))
+    (hG : MapsTo G (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2))) :
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) F hF) 2 =
+    HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint U (0 : E2)) (deletedPoint (0 : E2)) G hG) 2 := by
+  let H : ContinuousMap.Homotopy F G :=
+    { toFun := fun q => (1 - (q.1 : ℝ)) • F q.2 + (q.1 : ℝ) • G q.2
+      continuous_toFun := by fun_prop
+      map_zero_left := by intro p; simp
+      map_one_left := by intro p; simp }
+  apply ConstructionTargets.RelativeSingularHomologyHomotopy.relativeSingularHomologyMap_eq_of_homotopy
+    _ _ H _ hF hG 2
+  intro τ p hp
+  exact disk_side_aux_blend_avoids_zero U F G hnormal htangent τ p hp
+
+#print axioms disk_side_aux_boundary_homology_comparison
+end t00J02_ModelProduct
