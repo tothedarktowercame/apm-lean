@@ -1747,6 +1747,26 @@
    "rev": "8fccb9498",
    "approved_at": "2026-10-24T21:53:16Z"
   },
+  "a97A07": {
+   "decls": [
+    "apm_a97A07"
+   ],
+   "sha256": "8d2bf064106f7279bce51a60a81932f16d9ebf681ec5b66fb7981b7ddac2f6f7",
+   "defs": [
+    "apm_a97A07_IsJordanCurve",
+    "apm_a97A07_P",
+    "apm_a97A07_PositivelyOriented",
+    "apm_a97A07_Q",
+    "apm_a97A07_inside",
+    "apm_a97A07_p"
+   ],
+   "grade": "faithful",
+   "grader": "claude-14 outside grader (read-only Claude subagent, 2026-11-05)",
+   "evidence": "holes/labs/statement-registry/a97A07-regrade.md",
+   "prelim_defect": "problems/a97A07/PRELIM-DEFECT.md",
+   "rev": "1dae05a9e0",
+   "approved_at": "2026-11-05T20:44:16Z"
+  },
   "a97A08": {
    "decls": [
     "apm_a97A08_rouche_outer",
