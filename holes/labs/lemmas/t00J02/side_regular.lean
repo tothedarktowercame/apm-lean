@@ -6850,6 +6850,21 @@ namespace t00J02_ModelProduct
 open ConstructionTargets.DiskBoundaryHomology
 open Filter Topology
 
+/-- The straightening chart's parametrized axis supplies the eventual zero-normal-coordinate
+hypothesis required by the transverse normal-form theorem.  This is the C1-to-C2 handoff. -/
+lemma isSideSign_exists_at_regular_aux_straightening_eventually_axis
+    {S : Type} [TopologicalSpace S]
+    (c : C(Circle, S)) (z : Circle) (β : OpenPartialHomeomorph S E2)
+    (δ : ℝ) (hδ : 0 < δ)
+    (haxis : ∀ r ∈ Set.Ioo (-δ) δ,
+      β (c (z * Circle.exp r)) = (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0]) :
+    ∀ᶠ w in 𝓝 z, β (c w) 1 = 0 := by
+  filter_upwards [eventually_exists_small_exp_coordinate (ContinuousMap.id Circle) z hδ]
+      with w ⟨r, hr, hw⟩
+  have hw' : w = z * Circle.exp r := by simpa using hw
+  rw [hw', haxis r hr]
+  simp
+
 /-- **S2.** At a parameter where `c` is regular at `ℓ t`, a side sign exists. -/
 theorem isSideSign_exists_at_regular
     {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
@@ -6865,6 +6880,17 @@ theorem isSideSign_exists_at_regular
       ∀ y ∈ C, y ∈ Set.range (D ∘ circleToDisk) → C ⊆ Set.range (D ∘ circleToDisk))
     (t : Circle) (hreg : mfderiv (𝓡 1) apm_t00j02_I2 c (ℓ t) ≠ 0) :
     ∃ lam : ℤ, IsSideSign e f c D ℓ t lam := by
+  let z := ℓ t
+  let x := D (circleToDisk t)
+  obtain ⟨β, δβ, hδβ, hβz, hβ0, hβsmooth, hβinv, hβaxis, hβexclusive⟩ :=
+    exists_straightening_chart c hc hcsmooth z hreg
+  have hβc : ∀ᶠ w in 𝓝 z, β (c w) 1 = 0 :=
+    isSideSign_exists_at_regular_aux_straightening_eventually_axis
+      c z β δβ hδβ (fun r hr => (hβaxis r hr).2)
+  have hx : f x = c z := by simpa [x, z] using hℓ t
+  have hxtrans := htrans x z hx
+  obtain ⟨α, g, hxα, hα0, hαβ, hnormal⟩ :=
+    exists_transverse_normal_form f hf c hcsmooth z β hβz hβsmooth hβinv hβc x hx hxtrans
   sorry
 
 end t00J02_ModelProduct
