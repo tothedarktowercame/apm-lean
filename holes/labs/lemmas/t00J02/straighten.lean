@@ -97,11 +97,11 @@ lemma straightening_transverse_basis (v : SurfaceModel) (hv : v ≠ 0) :
     · erw [(hT _).1]
       dsimp
       field_simp [hd]
-      <;> ring
+      ring
     · erw [(hT _).2]
       dsimp
       field_simp [hd]
-      <;> ring
+      ring
   exact ⟨n, (LinearEquiv.ofBijective T.toLinearMap ⟨hi, hs⟩).toContinuousLinearEquiv, rfl⟩
 
 /-- Once the transverse derivative columns form a basis, the explicit
@@ -169,3 +169,13 @@ lemma straightening_regular_planar_curve
 
 #print axioms straightening_transverse_basis
 #print axioms straightening_regular_planar_curve
+
+open scoped Manifold
+
+/-- Circle exponential, followed by translation, is open because it is the
+quotient map onto the angle circle followed by two homeomorphisms. -/
+lemma straightening_circle_param_open (z : Circle) :
+    IsOpenMap (fun r : ℝ => z * Circle.exp r) := by
+  exact (Homeomorph.mulLeft z).isOpenMap.comp
+    (AddCircle.homeomorphCircle'.isOpenMap.comp QuotientAddGroup.isOpenMap_coe)
+
