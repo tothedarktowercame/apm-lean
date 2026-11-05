@@ -5578,7 +5578,57 @@ lemma localHomeomorph_chartSign_transition_product
     (ht₁ : IsChartSign e (Φ.trans β₁) x' k₁ k₁0 t₁)
     (ht₂ : IsChartSign e (Φ.trans β₂) x' k₂ k₂0 t₂) :
     t₁ * t₂ = s₁ * s₂ := by
-  sorry
+  set γ₁ := Φ.trans β₁ with hγ₁
+  set γ₂ := Φ.trans β₂ with hγ₂
+  set q := γ₁.symm.trans γ₂ with hq
+  have hγ₁0 : γ₁.symm 0 = x' := by rw [← k₁0]; exact γ₁.left_inv k₁
+  have h0t : (0 : E2) ∈ γ₁.target := k₁0 ▸ γ₁.map_source k₁
+  have hq0s : (0 : E2) ∈ q.source := by
+    rw [hq, OpenPartialHomeomorph.trans_source]
+    refine ⟨by simpa using h0t, ?_⟩
+    simp only [Set.mem_preimage]; rw [hγ₁0]; exact k₂
+  obtain ⟨r, hr, F, hsub, hF⟩ := partialHomeomorph_extension_on_ball q 0 hq0s
+  set U := Metric.ball (0 : E2) r
+  have hUo : IsOpen U := Metric.isOpen_ball
+  have h0U : (0 : E2) ∈ U := Metric.mem_ball_self hr
+  have hmem : ∀ p ∈ U, p ∈ γ₁.target ∧ γ₁.symm p ∈ γ₂.source := by
+    intro p hp
+    have := hsub hp
+    rw [hq, OpenPartialHomeomorph.trans_source] at this
+    exact ⟨by simpa using this.1, this.2⟩
+  have hFq : ∀ p ∈ U, F p = γ₂ (γ₁.symm p) := by
+    intro p hp; rw [hF p hp, hq]; rfl
+  have hzero : ∀ p : U, F p = 0 ↔ (p : E2) = 0 := by
+    intro p
+    have hq00 : q 0 = 0 := by
+      show γ₂ (γ₁.symm 0) = 0; rw [hγ₁0]; exact k₂0
+    rw [hF p p.2]
+    constructor
+    · intro h
+      exact q.injOn (hsub p.2) hq0s (h.trans hq00.symm)
+    · intro h; rw [h]; exact hq00
+  -- the same plane map seen from the target charts
+  have hmemβ : ∀ p ∈ U, p ∈ β₁.target ∧ β₁.symm p ∈ β₂.source ∧
+      F p = β₂ (β₁.symm p) := by
+    intro p hp
+    obtain ⟨h1, h2⟩ := hmem p hp
+    rw [hγ₁, OpenPartialHomeomorph.trans_target] at h1
+    have hΦ : Φ (Φ.symm (β₁.symm p)) = β₁.symm p := Φ.right_inv h1.2
+    have hsy : γ₁.symm p = Φ.symm (β₁.symm p) := rfl
+    rw [hγ₂, OpenPartialHomeomorph.trans_source, hsy] at h2
+    refine ⟨h1.1, ?_, ?_⟩
+    · have := h2.2; simp only [Set.mem_preimage] at this; rwa [hΦ] at this
+    · rw [hFq p hp, hsy]
+      show β₂ (Φ (Φ.symm (β₁.symm p))) = _
+      rw [hΦ]
+  have ht₂1 := isSideSign_aux_chartSign_unit e γ₂ x' k₂ k₂0 t₂ ht₂
+  have hs₂1 := isSideSign_aux_chartSign_unit e β₂ (Φ x') h₂ h₂0 s₂ hs₂
+  have hdeg1 := chart_transition_degree e γ₁ γ₂ x' k₁ k₁0 k₂ k₂0 U hUo h0U
+    (fun p hp => (hmem p hp).1) (fun p hp => (hmem p hp).2) F hFq hzero t₁ t₂ ht₁ ht₂ ht₂1
+  have hdeg2 := chart_transition_degree e β₁ β₂ (Φ x') h₁ h₁0 h₂ h₂0 U hUo h0U
+    (fun p hp => (hmemβ p hp).1) (fun p hp => (hmemβ p hp).2.1) F
+    (fun p hp => (hmemβ p hp).2.2) hzero s₁ s₂ hs₁ hs₂ hs₂1
+  exact localDegreeTwo_unique U hUo h0U F hzero hdeg1 hdeg2
 
 /-- For the fixed target chart at `Φ x`, recentering at nearby image points
 gives a single orientation multiplier.  The proof extends the fixed plane
@@ -5597,7 +5647,156 @@ lemma localHomeomorph_chartSign_canonical_eventually
           (k0 : (Φ.trans (recentre β₀ (Φ x'))) x' = 0)
           (s t : ℤ), IsChartSign e (recentre β₀ (Φ x')) (Φ x') h h0 s ∧
             IsChartSign e (Φ.trans (recentre β₀ (Φ x'))) x' k k0 t ∧ t = n * s := by
-  sorry
+  -- fixed centred charts at x and Φ x
+  set α₀ := recentre (chartAt apm_t00j02_E2 x) x with hα₀
+  have hxα₀ : x ∈ α₀.source := mem_recentre_source _ x (mem_chart_source _ x)
+  have hα₀0 : α₀ x = 0 := recentre_self _ x
+  set β₀ := recentre (chartAt apm_t00j02_E2 (Φ x)) (Φ x) with hβ₀
+  have hyβ₀ : Φ x ∈ β₀.source := mem_recentre_source _ (Φ x) (mem_chart_source _ (Φ x))
+  have hβ₀0 : β₀ (Φ x) = 0 := recentre_self _ (Φ x)
+  obtain ⟨sα₀, hsα₀1, hsα₀⟩ := exists_chartSign e α₀ x hxα₀ hα₀0
+  obtain ⟨sβ₀, hsβ₀1, hsβ₀⟩ := exists_chartSign e β₀ (Φ x) hyβ₀ hβ₀0
+  have h0α : (0 : E2) ∈ α₀.target := hα₀0 ▸ α₀.map_source hxα₀
+  have h0β : (0 : E2) ∈ β₀.target := hβ₀0 ▸ β₀.map_source hyβ₀
+  obtain ⟨Rα, hRα, hRαt⟩ := Metric.isOpen_iff.mp α₀.open_target 0 h0α
+  obtain ⟨Rβ, hRβ, hRβt⟩ := Metric.isOpen_iff.mp β₀.open_target 0 h0β
+  -- the fixed plane transition and its extension
+  set G := α₀.symm.trans (Φ.trans β₀) with hG
+  have hα₀s0 : α₀.symm 0 = x := by rw [← hα₀0]; exact α₀.left_inv hxα₀
+  have hG0 : (0 : E2) ∈ G.source := by
+    rw [hG, OpenPartialHomeomorph.trans_source]
+    refine ⟨by simpa using h0α, ?_⟩
+    simp only [Set.mem_preimage, OpenPartialHomeomorph.trans_source]
+    rw [hα₀s0]; exact ⟨hx, hyβ₀⟩
+  obtain ⟨r, hr, F, hsub, hF⟩ := partialHomeomorph_extension_on_ball G 0 hG0
+  set U := Metric.ball (0 : E2) r
+  have hinj : Set.InjOn F U := by
+    intro p hp q hq h
+    rw [hF p hp, hF q hq] at h
+    exact G.injOn (hsub hp) (hsub hq) h
+  have hGmem : ∀ p ∈ U, p ∈ α₀.target ∧ α₀.symm p ∈ Φ.source ∧ Φ (α₀.symm p) ∈ β₀.source := by
+    intro p hp
+    have := hsub hp
+    rw [hG, OpenPartialHomeomorph.trans_source] at this
+    obtain ⟨h1, h2⟩ := this
+    simp only [Set.mem_preimage, OpenPartialHomeomorph.trans_source] at h2
+    exact ⟨by simpa using h1, h2.1, h2.2⟩
+  have hFG : ∀ p ∈ U, F p = β₀ (Φ (α₀.symm p)) := fun p hp => hF p hp
+  set ρ := min (r / 2) Rα with hρ
+  have hρpos : 0 < ρ := lt_min (half_pos hr) hRα
+  -- neighbourhood conditions
+  let P : S → Prop := fun x' => x' ∈ α₀.source ∧ α₀ x' ∈ Metric.ball (0 : E2) ρ ∧
+    x' ∈ Φ.source ∧ Φ x' ∈ β₀.source ∧ β₀ (Φ x') ∈ Metric.ball (0 : E2) Rβ
+  have hPev : ∀ᶠ x' in 𝓝 x, P x' := by
+    have e1 : ∀ᶠ x' in 𝓝 x, x' ∈ α₀.source := α₀.open_source.mem_nhds hxα₀
+    have e2 : ∀ᶠ x' in 𝓝 x, α₀ x' ∈ Metric.ball (0 : E2) ρ := by
+      have := (α₀.continuousAt hxα₀).eventually (Metric.ball_mem_nhds (α₀ x) hρpos)
+      simpa [hα₀0] using this
+    have e3 : ∀ᶠ x' in 𝓝 x, x' ∈ Φ.source := Φ.open_source.mem_nhds hx
+    have e4 : ∀ᶠ x' in 𝓝 x, Φ x' ∈ β₀.source :=
+      (Φ.continuousAt hx).eventually (β₀.open_source.mem_nhds hyβ₀)
+    have e5 : ∀ᶠ x' in 𝓝 x, β₀ (Φ x') ∈ Metric.ball (0 : E2) Rβ := by
+      have hc : ContinuousAt (fun x' => β₀ (Φ x')) x :=
+        ContinuousAt.comp (f := Φ) (β₀.continuousAt hyβ₀) (Φ.continuousAt hx)
+      have := hc.eventually (Metric.ball_mem_nhds (β₀ (Φ x)) hRβ)
+      simpa [hβ₀0] using this
+    filter_upwards [e1, e2, e3, e4, e5] with x' a b c d f using ⟨a, b, c, d, f⟩
+  -- key computation at a good point
+  have hkey : ∀ x', P x' →
+      ∃ (k : x' ∈ (Φ.trans (recentre β₀ (Φ x'))).source)
+        (k0 : (Φ.trans (recentre β₀ (Φ x'))) x' = 0) (t : ℤ),
+        IsChartSign e (Φ.trans (recentre β₀ (Φ x'))) x' k k0 t ∧
+        ∃ hz : ∀ p : Metric.ball (0 : E2) (r / 2),
+            recentred F (α₀ x') p = 0 ↔ (p : E2) = 0,
+          IsLocalDegreeTwo (Metric.ball (0 : E2) (r / 2)) (recentred F (α₀ x')) hz (sα₀ * t) := by
+    intro x' ⟨hxs, hxb, hxΦ, hxβ, hxβb⟩
+    obtain ⟨hh, hh0, k, k0⟩ := localHomeomorph_recentre_target_data Φ x' hxΦ β₀ hxβ
+    obtain ⟨t, ht1, ht⟩ := exists_chartSign e _ x' k k0
+    refine ⟨k, k0, t, ht, ?_⟩
+    set a := α₀ x' with ha
+    have hanorm : ‖a‖ < ρ := by simpa using hxb
+    have haU : a ∈ U := by
+      rw [Metric.mem_ball, dist_zero_right]
+      linarith [min_le_left (r / 2) Rα]
+    have hshift : ∀ p ∈ Metric.ball (0 : E2) (r / 2), p + a ∈ U := by
+      intro p hp
+      rw [Metric.mem_ball, dist_zero_right] at hp ⊢
+      calc ‖p + a‖ ≤ ‖p‖ + ‖a‖ := norm_add_le _ _
+        _ < r / 2 + r / 2 := add_lt_add hp (lt_of_lt_of_le hanorm (min_le_left _ _))
+        _ = r := by ring
+    have hz : ∀ p : Metric.ball (0 : E2) (r / 2), recentred F a p = 0 ↔ (p : E2) = 0 := by
+      intro p
+      have hpU : a + (p : E2) ∈ U := by rw [add_comm]; exact hshift p p.2
+      show F (a + p) - F a = 0 ↔ _
+      rw [sub_eq_zero]
+      constructor
+      · intro h
+        have := hinj hpU haU h
+        simpa using this
+      · intro h; rw [h, add_zero]
+    refine ⟨hz, ?_⟩
+    have haR : α₀ x' ∈ Metric.ball (0 : E2) Rα := by
+      rw [Metric.mem_ball, dist_zero_right]; linarith [min_le_right (r / 2) Rα]
+    have hsA := isChartSign_recentre e α₀ x hxα₀ hα₀0 Rα hRαt x' hxs haR sα₀ hsα₀
+    set A' := recentre α₀ x'
+    set B' := Φ.trans (recentre β₀ (Φ x'))
+    have hA's : ∀ p, A'.symm p = α₀.symm (p + a) := fun p => recentre_symm_apply' α₀ x' p
+    have hmem : ∀ p ∈ Metric.ball (0 : E2) (r / 2), p ∈ A'.target ∧ A'.symm p ∈ B'.source ∧
+        recentred F a p = B' (A'.symm p) := by
+      intro p hp
+      have hpa := hshift p hp
+      obtain ⟨g1, g2, g3⟩ := hGmem _ hpa
+      refine ⟨mem_recentre_target' α₀ x' p g1, ?_, ?_⟩
+      · rw [hA's]
+        exact ⟨g2, by simpa [recentre] using g3⟩
+      · rw [hA's]
+        show F (a + p) - F a = (recentre β₀ (Φ x')) (Φ (α₀.symm (p + a)))
+        rw [recentre_apply', add_comm a p, hFG _ hpa, hFG _ haU, ha, α₀.left_inv hxs]
+    exact chart_transition_degree e A' B' x' _ _ k k0 (Metric.ball (0 : E2) (r / 2))
+      Metric.isOpen_ball (Metric.mem_ball_self (half_pos hr)) (fun p hp => (hmem p hp).1)
+      (fun p hp => (hmem p hp).2.1) (recentred F a) (fun p hp => (hmem p hp).2.2) hz
+      sα₀ t hsA ht ht1
+  -- the value at x itself
+  obtain ⟨kx, kx0, tx, htx, hzx, hdx⟩ := hkey x hPev.self_of_nhds
+  have htx1 := isSideSign_aux_chartSign_unit e _ x kx kx0 tx htx
+  refine ⟨tx * sβ₀, ?_, β₀, hyβ₀, ?_⟩
+  · rcases htx1 with rfl | rfl <;> rcases hsβ₀1 with rfl | rfl <;> norm_num
+  filter_upwards [hPev] with x' hx'
+  obtain ⟨k, k0, t, ht, hz, hd⟩ := hkey x' hx'
+  obtain ⟨hxs, hxb, hxΦ, hxβ, hxβb⟩ := hx'
+  obtain ⟨hh, hh0, -, -⟩ := localHomeomorph_recentre_target_data Φ x' hxΦ β₀ hxβ
+  have hsB := isChartSign_recentre e β₀ (Φ x) hyβ₀ hβ₀0 Rβ hRβt (Φ x') hxβ hxβb sβ₀ hsβ₀
+  refine ⟨hh, hh0, k, k0, sβ₀, t, hsB, ht, ?_⟩
+  -- constancy of the degree
+  have hUc : IsPreconnected U := (convex_ball (0 : E2) r).isPreconnected
+  have haU : ∀ y, P y → α₀ y ∈ U := by
+    intro y hy
+    rw [Metric.mem_ball, dist_zero_right]
+    have : ‖α₀ y‖ < ρ := by simpa using hy.2.1
+    linarith [min_le_left (r / 2) Rα, half_lt_self hr]
+  have hVU : ∀ y, P y → ∀ u ∈ Metric.ball (0 : E2) (r / 2), α₀ y + u ∈ U := by
+    intro y hy u hu
+    rw [Metric.mem_ball, dist_zero_right] at hu ⊢
+    have : ‖α₀ y‖ < ρ := by simpa using hy.2.1
+    calc ‖α₀ y + u‖ ≤ ‖α₀ y‖ + ‖u‖ := norm_add_le _ _
+      _ < r / 2 + r / 2 := add_lt_add (lt_of_lt_of_le this (min_le_left _ _)) hu
+      _ = r := by ring
+  have hPx : P x := hPev.self_of_nhds
+  have heq := localDegreeTwo_recentred_eq U Metric.isOpen_ball hUc F hinj (α₀ x) (α₀ x')
+    (haU x hPx) (haU x' ⟨hxs, hxb, hxΦ, hxβ, hxβb⟩)
+    (Metric.ball (0 : E2) (r / 2)) (Metric.ball (0 : E2) (r / 2)) Metric.isOpen_ball Metric.isOpen_ball
+    (Metric.mem_ball_self (half_pos hr)) (Metric.mem_ball_self (half_pos hr))
+    (hVU x hPx) (hVU x' ⟨hxs, hxb, hxΦ, hxβ, hxβb⟩) hzx hz _ _ hdx hd
+  have hsα₀u : sα₀ * sα₀ = 1 := by rcases hsα₀1 with rfl | rfl <;> norm_num
+  have hsβ₀u : sβ₀ * sβ₀ = 1 := by rcases hsβ₀1 with rfl | rfl <;> norm_num
+  have htt : t = tx := by
+    have := congrArg (fun m => sα₀ * m) heq
+    simp only at this
+    calc t = (sα₀ * sα₀) * t := by rw [hsα₀u, one_mul]
+      _ = sα₀ * (sα₀ * t) := by ring
+      _ = sα₀ * (sα₀ * tx) := by rw [← heq]
+      _ = tx := by rw [← mul_assoc, hsα₀u, one_mul]
+  rw [htt, mul_assoc, hsβ₀u, mul_one]
 
 /-- A local homeomorphism of an oriented surface has a locally constant
 orientation multiplier. -/
