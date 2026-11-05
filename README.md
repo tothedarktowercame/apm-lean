@@ -2,8 +2,11 @@
 
 This repository formalises, in Lean 4 with Mathlib, the problems from the
 University of Texas at Austin mathematics preliminary examinations (1990s to
-2003), together with ten problems from *Berkeley Problems in Mathematics*
-(`bpm-*`).
+2003).
+
+A sequel, bpm-lean, will apply the same method to *Berkeley Problems in
+Mathematics* as a replication case study. The ten Berkeley problems
+formalised here during development have moved there.
 
 Each problem has a Lean statement, and all but a few have a Lean proof. A problem counts as
 **closed** when its `problems/P/lean/Main.lean` compiles with no `sorry`, and
@@ -15,10 +18,10 @@ outside grader has compared the Lean statement with the problem text.
 
 | | count |
 |---|---|
-| problems | 490 (480 UT Austin, 10 Berkeley) |
-| closed: `Main.lean` has no `sorry` | 472 |
+| problems | 480 |
+| closed: `Main.lean` has no `sorry` | 462 |
 | open | 18, all topology (`t*`) |
-| registered statements | 489 (447 graded faithful, 26 stronger, 16 narrower) |
+| registered statements | 479 (437 graded faithful, 26 stronger, 16 narrower) |
 
 A "narrower" statement is admitted only where the problem text itself is
 defective (for instance a claim that is false as printed); the defect is
