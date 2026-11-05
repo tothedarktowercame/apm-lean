@@ -1272,6 +1272,208 @@ lemma continuous_complexToE2 : Continuous complexToE2 := by
   · simpa using Complex.continuous_re
   · simpa using Complex.continuous_im
 
+lemma chartInverseMap_pair_iff {S : Type} [TopologicalSpace S]
+    (α : OpenPartialHomeomorph S E2) (x : S) (hx : x ∈ α.source) (hα0 : α x = 0)
+    (p : α.target) :
+    p ∈ neighborhoodDeletedPoint α.target (0 : E2) ↔
+      α.toHomeomorphSourceTarget.symm p ∈ neighborhoodDeletedPoint α.source x := by
+  constructor
+  · intro hp
+    intro heq
+    apply hp
+    calc
+      (p : E2) = α (α.symm p) := (α.right_inv p.2).symm
+      _ = α x := congrArg (fun y => α y) heq
+      _ = 0 := hα0
+  · intro hp
+    intro heq
+    apply hp
+    apply α.injOn (α.toHomeomorphSourceTarget.symm p).property hx
+    change α (α.symm p) = α x
+    rw [α.right_inv p.2, heq, hα0]
+
+/-- The inverse chart followed by inclusion induces an isomorphism from the
+chart-target local H₂ to the ambient local H₂. -/
+theorem chartInverseMap_H2_isIso
+    {S : Type} [TopologicalSpace S] [T2Space S]
+    (α : OpenPartialHomeomorph S E2) (x : S) (hx : x ∈ α.source) (hα0 : α x = 0) :
+    IsIso (HomologicalComplex.homologyMap
+      (relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+        (deletedPoint x) (chartInverseMap α) (chartInverseMap_mapsTo α x hx hα0)) 2) := by
+  let e : α.target ≃ₜ α.source := α.toHomeomorphSourceTarget.symm
+  let em : C(α.target, α.source) :=
+    ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap e
+  have hem : Set.MapsTo em (neighborhoodDeletedPoint α.target (0 : E2))
+      (neighborhoodDeletedPoint α.source x) :=
+    ConstructionTargets.ChartPairRelativeHomologyTransport.pairContinuousMap_mapsTo e _ _
+      (chartInverseMap_pair_iff α x hx hα0)
+  let inc := ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion α.source
+  have hinc := ConstructionTargets.LocalHomologyNeighborhoodExcision.neighborhoodInclusion_mapsTo α.source x
+  letI := ConstructionTargets.ChartPairRelativeHomologyTransport.relativeSingularMap_homeomorphPair_isIso
+    e (neighborhoodDeletedPoint α.target (0 : E2))
+      (neighborhoodDeletedPoint α.source x)
+      (chartInverseMap_pair_iff α x hx hα0) 2
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso
+    0 α.source x α.open_source hx
+  have hcomp := ConstructionTargets.SingularExcision.relativeSingularMap_comp
+    (neighborhoodDeletedPoint α.target (0 : E2))
+    (neighborhoodDeletedPoint α.source x) (deletedPoint x) em inc hem hinc
+    (hinc.comp hem)
+  have hmaps : inc.comp em = chartInverseMap α := by ext p; rfl
+  have hchain :
+      relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+          (deletedPoint x) (chartInverseMap α) (chartInverseMap_mapsTo α x hx hα0) =
+        relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+            (neighborhoodDeletedPoint α.source x) em hem ≫
+      relativeSingularMap (neighborhoodDeletedPoint α.source x)
+            (deletedPoint x) inc hinc := by
+    have map_congr : ∀ (F G : C(α.target, S)) (hFG : F = G) hF hG,
+        relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+            (deletedPoint x) F hF =
+          relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+            (deletedPoint x) G hG := by
+      intro F G hFG _ _
+      subst hFG
+      rfl
+    exact (map_congr _ _ hmaps.symm _ _).trans hcomp.symm
+  rw [hchain, HomologicalComplex.homologyMap_comp]
+  infer_instance
+
+theorem exists_chartSign
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (x : S) (hx : x ∈ α.source) (hα0 : α x = 0) :
+    ∃ s : ℤ, (s = 1 ∨ s = -1) ∧ IsChartSign e α x hx hα0 s := by
+  let i := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+      (deletedPoint (0 : E2)) (neighborhoodInclusion α.target)
+      (neighborhoodInclusion_mapsTo α.target 0)) 2
+  have h0target : (0 : E2) ∈ α.target := by
+    rw [← hα0]
+    exact α.map_source hx
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso
+    0 α.target (0 : E2) α.open_target h0target
+  let j := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+      (deletedPoint x) (chartInverseMap α) (chartInverseMap_mapsTo α x hx hα0)) 2
+  letI := chartInverseMap_H2_isIso α x hx hα0
+  let gx := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) x
+  let g0 := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+    (k := 0) (0 : E2)
+  let b := (asIso i).inv g0
+  have hib : i b = g0 := ConcreteCategory.congr_hom (asIso i).inv_hom_id g0
+  obtain ⟨m, hm⟩ :=
+    ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates
+      (k := 0) x (j b)
+  let w := (asIso j).inv gx
+  obtain ⟨n, hn⟩ :=
+    ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates
+      (k := 0) (0 : E2) (i w)
+  have hnbw : n • b = w := by
+    change n • (asIso i).inv g0 = w
+    rw [← map_zsmul, hn]
+    exact ConcreteCategory.congr_hom (asIso i).hom_inv_id w
+  have hnj : n • j b = gx := by
+    rw [← map_zsmul, hnbw]
+    exact ConcreteCategory.congr_hom (asIso j).inv_hom_id gx
+  have hnm : n * m = 1 := by
+    apply ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
+      0 x
+    change (n * m) • gx = 1 • gx
+    rw [mul_smul, hm, hnj, one_zsmul]
+  have hmUnit : IsUnit m := by
+    apply isUnit_iff_dvd_one.mpr
+    exact ⟨n, by simpa [mul_comm] using hnm.symm⟩
+  have hmSign : m = 1 ∨ m = -1 := Int.isUnit_eq_one_or hmUnit
+  obtain ⟨r, hrSign, hr⟩ :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2 e x
+  rcases hmSign with rfl | rfl <;> rcases hrSign with rfl | rfl
+  · refine ⟨1, Or.inl rfl, ⟨b, hib, ?_⟩⟩
+    simpa [gx] using hm.symm.trans hr
+  · refine ⟨-1, Or.inr rfl, ⟨b, hib, ?_⟩⟩
+    rw [neg_smul, ← hr]
+    simpa [gx] using hm.symm
+  · refine ⟨-1, Or.inr rfl, ⟨b, hib, ?_⟩⟩
+    rw [neg_smul, ← hr]
+    simpa [gx] using hm.symm
+  · refine ⟨1, Or.inl rfl, ⟨b, hib, ?_⟩⟩
+    simpa [gx] using hm.symm.trans hr
+
+#print axioms exists_chartSign
+
+
+/-- Invariance of domain for an injective continuous map from an open subset of
+the plane into a surface (copy of `largeInterior_isOpen_aux_euclidean_aux_chart`
+with an arbitrary open domain). -/
+theorem openSubset_isOpenMap {S : Type} [TopologicalSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    {W : Set E2} (hW : IsOpen W) {f : W → S} (hf : Continuous f)
+    (hinj : Function.Injective f) : IsOpenMap f := by
+  have hE : ∀ {U : Set E2}, IsOpen U → ∀ {g : U → E2}, Continuous g →
+      Function.Injective g → IsOpenMap g := fun hU _ hg hinj =>
+    ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_open 2
+      (fun hf' hinj' =>
+        ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_interior 2
+          (fun hg' =>
+            ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_brouwer 2
+              ConstructionTargets.CollaredConnectedSumHomology.BallCollar.largeInterior_isOpen_aux_euclidean_aux_noRetraction
+              hg') hf' hinj')
+      hU hg hinj
+  let q : W → E2 := Subtype.val
+  have hq : Topology.IsOpenEmbedding q := hW.isOpenEmbedding_subtypeVal
+  intro s hs
+  apply isOpen_iff_forall_mem_open.mpr
+  rintro y ⟨x, hx, rfl⟩
+  let c := chartAt E2 (f x)
+  let A : Set W := s ∩ f ⁻¹' c.source
+  have hA : IsOpen A := hs.inter (c.open_source.preimage hf)
+  have hxA : x ∈ A := ⟨hx, mem_chart_source E2 (f x)⟩
+  let U : Set E2 := q '' A
+  have hU : IsOpen U := hq.isOpenMap A hA
+  let e : A ≃ₜ U :=
+    (Equiv.Set.image q A hq.injective).toHomeomorphOfIsInducing
+      ((hq.restrict (fun z (hz : z ∈ A) =>
+        show q z ∈ U from ⟨z, hz, rfl⟩) hA).isInducing)
+  let g : U → E2 := fun z => c (f (e.symm z).1)
+  have hg : Continuous g := by
+    apply c.continuousOn.comp_continuous
+      (hf.comp (continuous_subtype_val.comp e.symm.continuous))
+    intro z
+    exact (e.symm z).2.2
+  have hginj : Function.Injective g := by
+    intro z w hzw
+    have hc : f (e.symm z).1 = f (e.symm w).1 :=
+      c.injOn (e.symm z).2.2 (e.symm w).2.2 hzw
+    exact e.symm.injective (Subtype.ext (hinj hc))
+  have hopen_g : IsOpenMap g := hE hU hg hginj
+  let T : Set E2 := g '' (e '' {z : A | z.1 ∈ s})
+  have heall : e '' {z : A | z.1 ∈ s} = Set.univ := by
+    ext z
+    simp only [Set.mem_image, Set.mem_setOf_eq, Set.mem_univ, iff_true]
+    exact ⟨e.symm z, (e.symm z).2.1, e.apply_symm_apply z⟩
+  have hT : IsOpen T := hopen_g _ (by rw [heall]; exact isOpen_univ)
+  have hTtarget : T ⊆ c.target := by
+    rintro z ⟨u, hu, rfl⟩
+    exact c.map_source (e.symm u).2.2
+  refine ⟨c.symm '' T, ?_, c.isOpen_image_symm_of_subset_target hT hTtarget, ?_⟩
+  · rintro z ⟨u, huT, huz⟩
+    obtain ⟨v, hv, rfl⟩ := huT
+    refine ⟨(e.symm v).1, (e.symm v).2.1, ?_⟩
+    rw [← huz]
+    change f (e.symm v).1 = c.symm (c (f (e.symm v).1))
+    exact (c.left_inv (e.symm v).2.2).symm
+  · refine ⟨g (e ⟨x, hxA⟩), ?_, ?_⟩
+    · refine ⟨e ⟨x, hxA⟩, ?_, rfl⟩
+      rw [heall]
+      trivial
+    · change c.symm (c (f (e.symm (e ⟨x, hxA⟩)).1)) = f x
+      rw [e.symm_apply_apply]
+      exact c.left_inv (mem_chart_source E2 (f x))
+
+lemma complexToE2_eq_repr (z : ℂ) : complexToE2 z = Complex.orthonormalBasisOneI.repr z := by
+  ext i; fin_cases i <;> simp [complexToE2]
+
 /-- The inverse of an embedded disk interior is an open chart onto the model
 unit ball.  Invariance of domain (`largeInterior_isOpen_aux_euclidean`) makes
 the image open; the embedding then supplies the inverse homeomorphism.
@@ -1285,7 +1487,55 @@ theorem diskInterior_openPartialHomeomorph
       δ.target = Metric.ball (0 : E2) 1 ∧
       ∀ a : ConstructionTargets.DiskBoundaryHomology.Disk, ‖(a : ℂ)‖ < 1 →
         D a ∈ δ.source ∧ δ (D a) = complexToE2 a := by
-  sorry
+  let L := Complex.orthonormalBasisOneI.repr
+  let B := Metric.ball (0 : E2) 1
+  have hmem : ∀ v : B, L.symm (v : E2) ∈ ConstructionTargets.DiskBoundaryHomology.Disk := by
+    intro v
+    rw [Metric.mem_closedBall, dist_zero_right, LinearIsometryEquiv.norm_map]
+    exact le_of_lt (by have := v.2; rwa [Metric.mem_ball, dist_zero_right] at this)
+  let g : B → S := fun v => D ⟨L.symm (v : E2), hmem v⟩
+  have hg : Continuous g :=
+    hD.comp (Continuous.subtype_mk (L.symm.continuous.comp continuous_subtype_val) _)
+  have hginj : Function.Injective g := by
+    intro v w h
+    have h1 := hDemb.injective h
+    have h2 : L.symm (v : E2) = L.symm (w : E2) := congrArg Subtype.val h1
+    exact Subtype.ext (L.symm.injective h2)
+  have hgopen : IsOpenMap g := openSubset_isOpenMap Metric.isOpen_ball hg hginj
+  have hemb : Topology.IsOpenEmbedding g :=
+    Topology.IsOpenEmbedding.of_continuous_injective_isOpenMap hg hginj hgopen
+  haveI : Nonempty B := ⟨⟨0, Metric.mem_ball_self one_pos⟩⟩
+  let φ := hemb.toOpenPartialHomeomorph g
+  let ψ := (Metric.isOpen_ball (x := (0 : E2)) (ε := 1)).isOpenEmbedding_subtypeVal.toOpenPartialHomeomorph
+    (Subtype.val : B → E2)
+  refine ⟨φ.symm.trans ψ, ?_, ?_⟩
+  · ext v
+    simp only [OpenPartialHomeomorph.trans_target, OpenPartialHomeomorph.symm_target,
+      Set.mem_inter_iff, Set.mem_preimage, φ, ψ,
+      Topology.IsOpenEmbedding.toOpenPartialHomeomorph_target,
+      Topology.IsOpenEmbedding.toOpenPartialHomeomorph_source, Subtype.range_coe_subtype,
+      Set.mem_univ, and_true]
+    rfl
+  · intro a ha
+    have haB : complexToE2 a ∈ B := by
+      rw [complexToE2_eq_repr]
+      simpa [B, LinearIsometryEquiv.norm_map] using ha
+    have hga : g ⟨complexToE2 a, haB⟩ = D a := by
+      simp only [g]
+      congr 1
+      apply Subtype.ext
+      simp [complexToE2_eq_repr, L]
+    refine ⟨?_, ?_⟩
+    · simp only [OpenPartialHomeomorph.trans_source, OpenPartialHomeomorph.symm_source,
+        Set.mem_inter_iff, Set.mem_preimage, φ, ψ,
+        Topology.IsOpenEmbedding.toOpenPartialHomeomorph_target,
+        Topology.IsOpenEmbedding.toOpenPartialHomeomorph_source, Set.mem_univ, and_true]
+      exact ⟨_, hga⟩
+    · rw [OpenPartialHomeomorph.coe_trans, Function.comp_apply, ← hga]
+      have := hemb.toOpenPartialHomeomorph_left_inv g (x := ⟨complexToE2 a, haB⟩)
+      simp only [φ] at this ⊢
+      rw [this]
+      rfl
 
 /-- A chart whose target is the connected unit ball has one orientation sign
 at every source point.  Use `exists_chartSign` at the centre, convert with
@@ -1299,7 +1549,17 @@ theorem unitBallChart_constantSign
     (δ : OpenPartialHomeomorph S E2) (hδ : δ.target = Metric.ball (0 : E2) 1) :
     ∃ κD : ℤ, (κD = 1 ∨ κD = -1) ∧
       ∀ (y : S) (hy : y ∈ δ.source), IsChartSignAt e δ y hy κD := by
-  sorry
+  have h0t : (0 : E2) ∈ δ.target := by rw [hδ]; exact Metric.mem_ball_self one_pos
+  let x := δ.symm 0
+  have hx : x ∈ δ.source := δ.map_target h0t
+  have hx0 : δ x = 0 := δ.right_inv h0t
+  obtain ⟨κD, hκD, hs⟩ := exists_chartSign e δ x hx hx0
+  have hsx := (isChartSign_iff_at e δ x hx hx0 κD).mp hs
+  refine ⟨κD, hκD, fun y hy => ?_⟩
+  have hball : Metric.ball (0 : E2) 1 ⊆ δ.target := hδ.symm ▸ le_rfl
+  have hyR : δ y ∈ Metric.ball (0 : E2) 1 := hδ ▸ δ.map_source hy
+  have hxR : δ x ∈ Metric.ball (0 : E2) 1 := hδ ▸ δ.map_source hx
+  exact isChartSignAt_constant_on_ball e δ 0 1 hball x y hx hy hxR hyR κD hsx
 
 /-- An embedded closed disk supplies its interior chart, and the orientation
 coefficient of that chart is constant on the connected unit ball. -/
@@ -1324,3 +1584,4 @@ end L1ball
 #print axioms t00J02_ModelProduct.isChartSignAt_constant_on_ball
 
 end t00J02_ModelProduct
+#print axioms t00J02_ModelProduct.exists_diskChart
