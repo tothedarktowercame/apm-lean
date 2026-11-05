@@ -5307,15 +5307,10 @@ lemma isSideSign_aux_tangent_neighborhood
 
 end t00J02_ModelProduct
 
-/-!
-## Remaining work for S0 (not asserted as a lemma)
+namespace t00J02_ModelProduct
+open ConstructionTargets.DiskBoundaryHomology
 
-The following purely topological preparation lemma is still needed. It is
-strictly smaller than side-sign uniqueness: it mentions neither homology,
-orientations, disk maps nor side labels. No unproved declaration is introduced.
-
-Suggested name and exact statement:
-
+/-- Extend a local transition by radial retraction while preserving its axis and tangent signs. -/
 lemma isSideSign_aux_transition_extension
     (q : OpenPartialHomeomorph E2 E2) (hq0 : q 0 = 0)
     (R : ℝ) (hR : 0 < R) (hsource : Metric.ball (0 : E2) R ⊆ q.source)
@@ -5333,24 +5328,160 @@ lemma isSideSign_aux_transition_extension
       IsOpen (F '' Metric.ball (0 : E2) r) ∧
       (∀ p ∈ Metric.ball (0 : E2) r, F p 1 = 0 ↔ p 1 = 0) ∧
       (∀ p ∈ Metric.ball (0 : E2) r, p 1 = 0 → p 0 ≠ 0 → 0 < p 0 * F p 0)
+ := by
+  obtain ⟨ε, hε, ht⟩ := isSideSign_aux_tangent_neighborhood q φ ψ δ hδ hc hφ hψ hφ0 hψ0 hparam
+  let r := min (R / 2) ε
+  have hr : 0 < r := lt_min (half_pos hR) hε
+  have hrR : r < R := lt_of_le_of_lt (min_le_left _ _) (by linarith)
+  let retract : E2 → E2 := fun p => (r / max r ‖p‖) • p
+  have hrc : Continuous retract := by
+    apply Continuous.smul _ continuous_id
+    exact continuous_const.div (continuous_const.max continuous_norm)
+      (fun p => (lt_of_lt_of_le hr (le_max_left _ _)).ne')
+  have hrs : ∀ p, retract p ∈ q.source := by
+    intro p
+    apply hsource
+    rw [Metric.mem_ball, dist_zero_right]
+    have hm : 0 < max r ‖p‖ := lt_of_lt_of_le hr (le_max_left _ _)
+    calc ‖retract p‖ = r / max r ‖p‖ * ‖p‖ := by
+           simp only [retract, norm_smul, Real.norm_eq_abs, abs_div, abs_of_pos hr, abs_of_pos hm]
+         _ ≤ r := by
+           rw [div_mul_eq_mul_div, div_le_iff₀ hm]
+           exact mul_le_mul_of_nonneg_left (le_max_right _ _) hr.le
+         _ < R := hrR
+  let F : C(E2, E2) := ⟨fun p => q (retract p), q.continuousOn.comp_continuous hrc hrs⟩
+  have heq : ∀ p ∈ Metric.ball (0 : E2) r, F p = q p := by
+    intro p hp
+    have hn : ‖p‖ < r := by simpa using hp
+    simp [F, retract, max_eq_left hn.le, hr.ne']
+  have hsub : Metric.ball (0 : E2) r ⊆ q.source :=
+    fun p hp => hsource (Metric.ball_subset_ball hrR.le hp)
+  have h0 : (0 : E2) ∈ Metric.ball (0 : E2) r := Metric.mem_ball_self hr
+  refine ⟨r, hr, F, hrR.le, heq, (heq 0 h0).trans hq0, ?_, ?_, ?_, ?_⟩
+  · intro p
+    rw [heq p p.2]
+    exact ⟨fun h => q.injOn (hsub p.2) (hsub h0) (h.trans hq0.symm),
+      fun h => (congrArg q h).trans hq0⟩
+  · have hi : F '' Metric.ball (0 : E2) r = q '' Metric.ball (0 : E2) r :=
+      Set.image_congr heq
+    rw [hi]
+    exact q.isOpen_image_of_subset_source Metric.isOpen_ball hsub
+  · intro p hp
+    rw [heq p hp]
+    exact haxis p (Metric.ball_subset_ball hrR.le hp)
+  · intro p hp hp1 hp0
+    rw [heq p hp]
+    apply ht p _ hp1 hp0
+    have hn : ‖p‖ < r := by simpa using hp
+    have hcoord : |p 0| ≤ ‖p‖ := by
+      simpa only [Real.norm_eq_abs] using PiLp.norm_apply_le p 0
+    exact abs_lt.mp (lt_of_le_of_lt hcoord (lt_of_lt_of_le hn (min_le_right _ _)))
 
-Why true / estimated implementation: 60–100 lines. Apply
-`isSideSign_aux_tangent_neighborhood` to q; choose r small enough that a larger
-closed ball is in q.source and |p 0| is below the supplied tangent radius.
-Extend the continuous restriction of q on that closed ball coordinatewise
-by Tietze (`ContinuousMap.exists_restrict_eq`), using EuclideanSpace.equiv.
-Injectivity of q gives the zero equivalence; q.isOpen_image_of_subset_source
-gives openness, and agreement with q gives all remaining properties.
+/-- Two charts with increasing parameterizations of the same local axis
+compare normal signs by the product of their chart signs. -/
+lemma isSideSign_aux_chart_comparison
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (c : C(Circle, S)) (w : Circle)
+    (α β : OpenPartialHomeomorph S E2)
+    (hα : c w ∈ α.source) (hα0 : α (c w) = 0)
+    (hβ : c w ∈ β.source) (hβ0 : β (c w) = 0)
+    (sα sβ : ℤ) (hsα : IsChartSign e α (c w) hα hα0 sα)
+    (hsβ : IsChartSign e β (c w) hβ hβ0 sβ)
+    (ρ τ δ : ℝ) (hρ : 0 < ρ) (hτ : 0 < τ) (hδ : 0 < δ)
+    (φ ψ : ℝ → ℝ)
+    (hφ : StrictMonoOn φ (Set.Ioo (-δ) δ)) (hψ : StrictMonoOn ψ (Set.Ioo (-δ) δ))
+    (hparamα : ∀ r ∈ Set.Ioo (-δ) δ, c (w * Circle.exp r) ∈ α.source ∧
+      α (c (w * Circle.exp r)) = horizontal (φ r))
+    (hparamβ : ∀ r ∈ Set.Ioo (-δ) δ, c (w * Circle.exp r) ∈ β.source ∧
+      β (c (w * Circle.exp r)) = horizontal (ψ r))
+    (haxisα : ∀ p ∈ Metric.ball (0 : E2) ρ, α.symm p ∈ Set.range c ↔ p 1 = 0)
+    (haxisβ : ∀ p ∈ Metric.ball (0 : E2) τ, β.symm p ∈ Set.range c ↔ p 1 = 0) :
+    ∃ O : Set S, IsOpen O ∧ c w ∈ O ∧
+      ∀ x ∈ O, α x 1 ≠ 0 → 0 < ((sα * sβ : ℤ) : ℝ) * α x 1 * β x 1 := by
+  let q := α.symm.trans β
+  have hαsymm : α.symm 0 = c w := by rw [← hα0]; exact α.left_inv hα
+  have hqs : (0 : E2) ∈ q.source := by
+    change 0 ∈ α.target ∧ α.symm 0 ∈ β.source
+    exact ⟨hα0 ▸ α.map_source hα, hαsymm ▸ hβ⟩
+  have hq0 : q 0 = 0 := by change β (α.symm 0) = 0; rw [hαsymm, hβ0]
+  let W : Set E2 := Metric.ball (0 : E2) ρ ∩
+    (q.source ∩ q ⁻¹' Metric.ball (0 : E2) τ)
+  have hWo : IsOpen W := Metric.isOpen_ball.inter (q.isOpen_inter_preimage Metric.isOpen_ball)
+  have h0W : (0 : E2) ∈ W :=
+    ⟨Metric.mem_ball_self hρ, hqs, by simpa only [Set.mem_preimage, hq0] using Metric.mem_ball_self hτ⟩
+  obtain ⟨R, hR, hRW⟩ := Metric.isOpen_iff.mp hWo 0 h0W
+  have hsource : Metric.ball (0 : E2) R ⊆ q.source := fun p hp => (hRW hp).2.1
+  have haxis : ∀ p ∈ Metric.ball (0 : E2) R, q p 1 = 0 ↔ p 1 = 0 := by
+    intro p hp
+    have hw := hRW hp
+    exact (isSideSign_aux_axis_iff c α β ρ τ haxisα haxisβ p hw.1 hw.2.1.2 hw.2.2).symm
+  have h0δ : (0 : ℝ) ∈ Set.Ioo (-δ) δ := ⟨by linarith, hδ⟩
+  have hφ0 : φ 0 = 0 := by
+    have h := congrArg (fun p : E2 => p 0) (hparamα 0 h0δ).2
+    simpa [horizontal, hα0] using h.symm
+  have hψ0 : ψ 0 = 0 := by
+    have h := congrArg (fun p : E2 => p 0) (hparamβ 0 h0δ).2
+    simpa [horizontal, hβ0] using h.symm
+  have hcurve : Continuous (fun r : ℝ => c (w * Circle.exp r)) := by fun_prop
+  have hchart : ContinuousOn (fun r : ℝ => α (c (w * Circle.exp r))) (Set.Ioo (-δ) δ) :=
+    α.continuousOn.comp hcurve.continuousOn (fun r hr => (hparamα r hr).1)
+  have hc : ContinuousOn φ (Set.Ioo (-δ) δ) := by
+    have hh := (EuclideanSpace.proj (0 : Fin 2) : E2 →L[ℝ] ℝ).continuous.comp_continuousOn hchart
+    apply hh.congr
+    intro r hr
+    have he := congrArg (fun p : E2 => p 0) (hparamα r hr).2
+    simpa [horizontal] using he.symm
+  have hparam : ∀ r ∈ Set.Ioo (-δ) δ, q (horizontal (φ r)) = horizontal (ψ r) := by
+    intro r hr
+    change β (α.symm (horizontal (φ r))) = _
+    rw [← (hparamα r hr).2, α.left_inv (hparamα r hr).1]
+    exact (hparamβ r hr).2
+  obtain ⟨r, hr, F, hrR, hF, hF0, hz, hopen, hax, htan⟩ :=
+    isSideSign_aux_transition_extension q hq0 R hR hsource haxis φ ψ δ hδ hc hφ hψ hφ0 hψ0 hparam
+  have hsmall : Metric.ball (0 : E2) r ⊆ q.source :=
+    fun p hp => hsource (Metric.ball_subset_ball hrR hp)
+  have hdegree := chart_transition_degree e α β (c w) hα hα0 hβ hβ0
+    (Metric.ball (0 : E2) r) Metric.isOpen_ball (Metric.mem_ball_self hr)
+    (fun p hp => (hsmall hp).1) (fun p hp => (hsmall hp).2) F hF hz sα sβ hsα hsβ
+    (isSideSign_aux_chartSign_unit e β (c w) hβ hβ0 sβ hsβ)
+  have hnormal := isSideSign_aux_ball_normal_sign r hr F hF0 hz hopen hax htan (sα * sβ) hdegree
+  refine ⟨α.source ∩ α ⁻¹' Metric.ball (0 : E2) r,
+    α.isOpen_inter_preimage Metric.isOpen_ball,
+    ⟨hα, by simpa only [Set.mem_preimage, hα0] using Metric.mem_ball_self hr⟩, ?_⟩
+  intro x hx hn
+  have h := hnormal (α x) hx.2 hn
+  rw [hF (α x) hx.2] at h
+  change 0 < ((sα * sβ : ℤ) : ℝ) * α x 1 * β (α.symm (α x)) 1 at h
+  rwa [α.left_inv hx.1] at h
 
-Assembly still needed: unpack the two IsSideSign witnesses, restrict both
-parameters to the smaller interval, prove φ continuous from its expression
-as coordinate zero of α ∘ c ∘ (w * Circle.exp), and apply the preparation
-lemma to q = α.symm.trans β after choosing R inside both radius constraints.
-`isSideSign_aux_axis_iff` supplies its axis hypothesis. Then
-`chart_transition_degree` and `isSideSign_aux_ball_normal_sign` identify the
-normal sign. Pull the small ball back to an open neighborhood in S and apply
-`isSideSign_aux_compare_at_neighborhood` to g = f ∘ D, using hℓ at t.
-The two chart signs are units by `isSideSign_aux_chartSign_unit`.
-This final chart localization/assembly is not implemented (estimate 100–160
-lines). No doubts about truth of the target have been identified.
--/
+/-- The side sign is independent of the witnessing oriented straightening chart. -/
+theorem isSideSign_unique
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) (c : C(Circle, S))
+    (D : Disk → S) (hD : Continuous D) (ℓ : C(Circle, Circle))
+    (hℓ : ∀ t, f (D (circleToDisk t)) = c (ℓ t))
+    (t : Circle) (l₁ l₂ : ℤ)
+    (h₁ : IsSideSign e f c D ℓ t l₁) (h₂ : IsSideSign e f c D ℓ t l₂) : l₁ = l₂ := by
+  obtain ⟨hl₁, α, hα, hα0, sα, hsα, ρ, δ, φ, hρ, hδ, _, hφ, hpα, haα, η, hη, hsideα⟩ := h₁
+  obtain ⟨hl₂, β, hβ, hβ0, sβ, hsβ, τ, ε, ψ, hτ, hε, _, hψ, hpβ, haβ, ζ, hζ, hsideβ⟩ := h₂
+  have hδsub : Set.Ioo (-(min δ ε)) (min δ ε) ⊆ Set.Ioo (-δ) δ := by
+    intro r hr; constructor <;> linarith [hr.1, hr.2, min_le_left δ ε]
+  have hεsub : Set.Ioo (-(min δ ε)) (min δ ε) ⊆ Set.Ioo (-ε) ε := by
+    intro r hr; constructor <;> linarith [hr.1, hr.2, min_le_right δ ε]
+  obtain ⟨O, hO, hw, hcompare⟩ := isSideSign_aux_chart_comparison e c (ℓ t) α β hα hα0 hβ hβ0
+    sα sβ hsα hsβ ρ τ (min δ ε) hρ hτ (lt_min hδ hε) φ ψ
+    (hφ.mono hδsub) (hψ.mono hεsub)
+    (fun r hr => hpα r (hδsub hr)) (fun r hr => hpβ r (hεsub hr)) haα haβ
+  exact isSideSign_aux_compare_at_neighborhood (fun a => f (D a)) (f.continuous.comp hD) t
+    α β l₁ l₂ sα sβ hl₁ hl₂
+    (isSideSign_aux_chartSign_unit e α (c (ℓ t)) hα hα0 sα hsα)
+    (isSideSign_aux_chartSign_unit e β (c (ℓ t)) hβ hβ0 sβ hsβ)
+    η ζ hη hζ (fun a ha hn => (hsideα a ha hn).2.2) (fun a ha hn => (hsideβ a ha hn).2.2)
+    O hO (by simpa only [hℓ t] using hw) hcompare
+
+#print axioms isSideSign_aux_transition_extension
+#print axioms isSideSign_unique
+
+end t00J02_ModelProduct
