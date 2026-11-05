@@ -438,7 +438,41 @@ lemma transportMap1_square {X Y Z T : Type}
   have hcomp : g.comp f = k.comp h := ContinuousMap.ext he
   simp only [hcomp]
 
+lemma circleExpSign_transport {X : Type} [TopologicalSpace X]
+    (w : Circle) (s : ℤ) (hs : IsCircleExpSign w s)
+    (A : Set X) (q : C(X, Set.Ioo (-Real.pi) Real.pi))
+    (hq : MapsTo q A
+      (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ)))
+    (a : (RelativeSingularChains A).homology 1) (m : ℤ)
+    (hm : transportMap1
+      (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ))
+      (deletedPoint (0 : ℝ))
+      (neighborhoodInclusion (Set.Ioo (-Real.pi) Real.pi))
+      (neighborhoodInclusion_mapsTo (Set.Ioo (-Real.pi) Real.pi) 0)
+      (transportMap1 A
+        (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ)) q hq a) =
+      m • ConstructionTargets.OneDimensionalChartLocalGenerator.realLocalGenerator 0) :
+    transportMap1
+      (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ))
+      (deletedPoint w) (expArc w) (expArc_mapsTo w)
+      (transportMap1 A
+        (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ)) q hq a) =
+      (m * s) • ConstructionTargets.ManifoldFundamentalClass.localizationMap w 1
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator
+          (TopCat.of Circle) 1 ConstructionTargets.CircleHomology.circleH1IsoInt) := by
+  obtain ⟨b, hb, hb'⟩ := hs
+  have h0 : (0 : ℝ) ∈ Set.Ioo (-Real.pi) Real.pi := by
+    constructor <;> linarith [Real.pi_pos]
+  have he : transportMap1 A
+      (neighborhoodDeletedPoint (Set.Ioo (-Real.pi) Real.pi) (0 : ℝ)) q hq a =
+      m • b := by
+    apply (transportInclusion1_bijective _ 0 isOpen_Ioo h0).1
+    rw [map_zsmul, hb]
+    exact hm
+  rw [he, map_zsmul, hb', smul_smul]
+
 #print axioms exists_isLocalDegreeR
+#print axioms circleExpSign_transport
 #print axioms localExpArc_mapsTo_circleFiberComplement
 
 end t00J02_CircleChart
