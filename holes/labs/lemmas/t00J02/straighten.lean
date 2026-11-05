@@ -411,3 +411,29 @@ theorem exists_straightening_chart
 
 #print axioms straightening_circle_param_deriv_surjective
 #print axioms straightening_coordinate_deriv_ne_zero
+
+/-- C1 → C2 interface: the straightening chart puts `β ∘ c` on the axis `v = 0`
+for all parameters near `z`, in the eventual form used by
+`exists_transverse_normal_form`. -/
+theorem exists_straightening_chart_eventually
+    {S : Type} [TopologicalSpace S] [T2Space S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c) (z : Circle)
+    (hz : mfderiv (𝓡 1) SurfaceModelWithCorners c z ≠ 0) :
+    ∃ β : OpenPartialHomeomorph S SurfaceModel,
+      c z ∈ β.source ∧ β (c z) = 0 ∧
+      ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ β (c z) ∧
+      LinearMap.ker (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners β (c z)).toLinearMap = ⊥ ∧
+      ∀ᶠ w in 𝓝 z, β (c w) 1 = 0 := by
+  obtain ⟨β, δ, -, hβz, hβ0, hβsm, hβinj, hpar, hexcl⟩ :=
+    exists_straightening_chart c hc hcsmooth z hz
+  refine ⟨β, hβz, hβ0, hβsm, hβinj, ?_⟩
+  have hopen : ∀ᶠ w in 𝓝 z, c w ∈ β.source :=
+    c.continuous.continuousAt.preimage_mem_nhds (β.open_source.mem_nhds hβz)
+  filter_upwards [hopen] with w hw
+  obtain ⟨r, hr, he⟩ := hexcl (c w) hw ⟨w, rfl⟩
+  rw [he, (hpar r hr).2]
+  simp
+
+#print axioms exists_straightening_chart_eventually
