@@ -968,6 +968,118 @@ lemma chart_ball_res_isIso {S : Type} [TopologicalSpace S] [T2Space S]
     · intro h; exact α.injOn u.2 hx h
   · exact subtype_ball_res_isIso α.target α.open_target c ρ hK (α x) hxK
 
+/-- Model coherence: a closed-ball class restricting to the model generator at its centre
+restricts to the model generator at every point within half the radius. -/
+lemma model_coherent (p q : E2) (R : ℝ) (h : 2 * ‖q - p‖ ≤ R)
+    (w : (RelativeSingularChains (Metric.closedBall p R)ᶜ).homology 2)
+    (hp : transportMap (Metric.closedBall p R)ᶜ (deletedPoint p) (ContinuousMap.id E2)
+      (compl_mapsTo_deletedPoint _ _ (Metric.mem_closedBall_self (by linarith [norm_nonneg (q - p)]))) w = G p) :
+    transportMap (Metric.closedBall p R)ᶜ (deletedPoint q) (ContinuousMap.id E2)
+      (compl_mapsTo_deletedPoint _ _ (by
+        rw [Metric.mem_closedBall, dist_eq_norm]; linarith [norm_nonneg (q - p)])) w = G q := by
+  obtain ⟨v, rfl⟩ : ∃ v, q = p + v := ⟨q - p, by abel⟩
+  have hv : 2 * ‖v‖ ≤ R := by simpa using h
+  rw [res_translate p v R hv w, hp, translate_G]
+
+lemma tcomp_auto {X Y Z : Type} [TopologicalSpace X] [TopologicalSpace Y]
+    [TopologicalSpace Z] (A : Set X) (B : Set Y) (C : Set Z)
+    (f : C(X, Y)) (g : C(Y, Z)) (hf : MapsTo f A B) (hg : MapsTo g B C)
+    (a : (RelativeSingularChains A).homology 2) :
+    transportMap B C g hg (transportMap A B f hf a) =
+      transportMap A C (g.comp f) (hg.comp hf) a :=
+  transportMap_comp A B C f g hf hg (hg.comp hf) a
+
+local notation "factorLoc" =>
+  punctured_topHomology_zero_aux_map_eq_zero_aux_localization_mono_aux_generator_injective_aux_coefficient_ne_zero_aux_locallyConstant_aux_eventually_sign_aux_factor
+
+/-- One step of chart-sign constancy: from `x` to a point `x'` whose chart coordinate is
+within half the radius of a closed ball around `α x` contained in the chart target. -/
+lemma isChartSignAt_step {S : Type} [TopologicalSpace S] [T2Space S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (x x' : S) (hx : x ∈ α.source) (hx' : x' ∈ α.source)
+    (ρ : ℝ) (hρ : 0 < ρ) (hK : Metric.closedBall (α x) ρ ⊆ α.target)
+    (hv : 2 * ‖α x' - α x‖ ≤ ρ) (s : ℤ) (h : IsChartSignAt e α x hx s) :
+    IsChartSignAt e α x' hx' s := by
+  obtain ⟨b, hb1, hb2⟩ := h
+  have hxK : α x ∈ Metric.ball (α x) ρ := Metric.mem_ball_self hρ
+  have hx'K : α x' ∈ Metric.ball (α x) ρ := by
+    rw [Metric.mem_ball, dist_eq_norm]
+    have : ‖α x' - α x‖ < ρ := by
+      rcases eq_or_lt_of_le (norm_nonneg (α x' - α x)) with h0 | h0
+      · rw [← h0]; exact hρ
+      · linarith
+    exact this
+  let K := Metric.closedBall (α x) ρ
+  let KT : Set α.target := {u | u.1 ∉ K}
+  have hKT : ∀ q ∈ Metric.ball (α x) ρ, MapsTo (ContinuousMap.id α.target) KT
+      (neighborhoodDeletedPoint α.target q) :=
+    fun q hq _ hu hb => hu (Set.singleton_subset_iff.mpr (Metric.ball_subset_closedBall hq) hb)
+  let resT := fun (q : E2) (hq : q ∈ Metric.ball (α x) ρ) =>
+    transportMap KT (neighborhoodDeletedPoint α.target q) (ContinuousMap.id α.target) (hKT q hq)
+  have hiso : IsIso (resT (α x) hxK) :=
+    subtype_ball_res_isIso α.target α.open_target (α x) ρ hK (α x) hxK
+  let wT := (asIso (resT (α x) hxK)).inv b
+  have hwT : resT (α x) hxK wT = b := ConcreteCategory.congr_hom (asIso (resT (α x) hxK)).inv_hom_id b
+  -- the class in `E2`
+  have hinclK : MapsTo (neighborhoodInclusion α.target) KT Kᶜ := fun _ hu => hu
+  let w := transportMap KT Kᶜ (neighborhoodInclusion α.target) hinclK wT
+  have hres : ∀ q (hq : q ∈ Metric.ball (α x) ρ),
+      transportMap (neighborhoodDeletedPoint α.target q) (deletedPoint q)
+        (neighborhoodInclusion α.target) (neighborhoodInclusion_mapsTo α.target q) (resT q hq wT) =
+      transportMap Kᶜ (deletedPoint q) (ContinuousMap.id E2)
+        (compl_mapsTo_deletedPoint _ _ (Metric.ball_subset_closedBall hq)) w := by
+    intro q hq
+    rw [tcomp_auto, tcomp_auto]
+    rfl
+  refine ⟨resT (α x') hx'K wT, ?_, ?_⟩
+  · have h0 : transportMap Kᶜ (deletedPoint (α x)) (ContinuousMap.id E2)
+        (compl_mapsTo_deletedPoint _ _ (Metric.ball_subset_closedBall hxK)) w = G (α x) := by
+      rw [← hres (α x) hxK, hwT]; exact hb1
+    have := model_coherent (α x) (α x') ρ hv w h0
+    rw [← hres (α x') hx'K] at this
+    exact this
+  · -- the class in `S`
+    let A := α.symm '' K
+    have hAm : MapsTo (chartInverseMap α) KT Aᶜ := by
+      intro u hu hA
+      obtain ⟨k, hk, hku⟩ := hA
+      apply hu
+      have : k = u.1 := α.symm.injOn (by simpa using hK hk) (by simpa using u.2) hku
+      rw [← this]; exact hk
+    let W := transportMap KT Aᶜ (chartInverseMap α) hAm wT
+    have hxA : ∀ y : S, y ∈ α.source → α y ∈ Metric.ball (α x) ρ → y ∈ A :=
+      fun y hy hyb => ⟨α y, Metric.ball_subset_closedBall hyb, α.left_inv hy⟩
+    have hresS : ∀ (y : S) (hy : y ∈ α.source) (hyb : α y ∈ Metric.ball (α x) ρ),
+        transportMap (neighborhoodDeletedPoint α.target (α y)) (deletedPoint y) (chartInverseMap α)
+          (chartInverseMap_mapsTo_at α y hy) (resT (α y) hyb wT) =
+        transportMap Aᶜ (deletedPoint y) (ContinuousMap.id S)
+          (compl_mapsTo_deletedPoint _ _ (hxA y hy hyb)) W := by
+      intro y hy hyb
+      rw [tcomp_auto, tcomp_auto]
+      rfl
+    let g := ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e
+    let PK := HomologicalComplex.homologyMap
+      (ConstructionTargets.SingularHomologyConcrete.relativeSingularProjection Aᶜ) 2 g
+    have hloc : ∀ (y : S) (hyA : y ∈ A),
+        ConstructionTargets.ManifoldFundamentalClass.localizationMap y 2 g =
+        transportMap Aᶜ (deletedPoint y) (ContinuousMap.id S)
+          (compl_mapsTo_deletedPoint _ _ hyA) PK := by
+      intro y hyA
+      rw [factorLoc A y hyA 2]
+      rfl
+    have hWx : transportMap Aᶜ (deletedPoint x) (ContinuousMap.id S)
+        (compl_mapsTo_deletedPoint _ _ (hxA x hx hxK)) (W - s • PK) = 0 := by
+      rw [map_sub, map_zsmul, ← hresS x hx hxK, ← hloc x (hxA x hx hxK), hwT, hb2, sub_self]
+    have hinj : W - s • PK = 0 := by
+      haveI := chart_ball_res_isIso α (α x) ρ hK x hx hxK
+      have hi := (ConcreteCategory.injective_of_mono_of_preservesPullback
+        (HomologicalComplex.homologyMap
+          (relativeSingularMap Aᶜ (deletedPoint x) (ContinuousMap.id S)
+            (compl_mapsTo_deletedPoint _ _ (hxA x hx hxK))) 2))
+      exact hi (by rw [hWx, map_zero])
+    have hW : W = s • PK := sub_eq_zero.mp hinj
+    rw [hresS x' hx' hx'K, hW, map_zsmul, ← hloc x' (hxA x' hx' hx'K)]
+
 end L1ball
 
 end t00J02_ModelProduct
