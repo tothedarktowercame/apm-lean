@@ -197,3 +197,41 @@ lemma straightening_coordinate_smooth
     simpa only [hg0] using h
   exact h'.comp 0 (hc.comp hg).contMDiffAt
 
+/-- The translated exponential parameter has surjective manifold derivative:
+its composite with the complex inclusion has derivative `z * I`, which is
+nonzero, and the circle tangent space is one-dimensional. -/
+lemma straightening_circle_param_deriv_surjective (z : Circle) :
+    Function.Surjective (mfderiv 𝓘(ℝ, ℝ) (𝓡 1)
+      (fun r : ℝ => z * Circle.exp r) 0) := by
+  let g : ℝ → Circle := fun r => z * Circle.exp r
+  have hg : ContMDiff 𝓘(ℝ, ℝ) (𝓡 1) ∞ g :=
+    contMDiff_const.mul contMDiff_circleExp
+  letI : Fact (Module.finrank ℝ ℂ = 1 + 1) := ⟨by simp⟩
+  have hcoe : MDifferentiableAt (𝓡 1) 𝓘(ℝ, ℂ)
+      (fun q : Circle => (q : ℂ)) (g 0) :=
+    (contMDiff_coe_sphere (m := ∞) (n := 1) (g 0)).mdifferentiableAt (by simp)
+  have hd : HasDerivAt (fun r : ℝ => (g r : ℂ)) ((z : ℂ) * Complex.I) 0 := by
+    have h := ((((hasDerivAt_id (0 : ℂ)).mul_const Complex.I).cexp).const_mul (z : ℂ)).comp_ofReal
+    simpa [g, Circle.coe_mul, Circle.coe_exp] using h
+  have hchain := mfderiv_comp 0 hcoe (hg.contMDiffAt.mdifferentiableAt (by simp))
+  rw [mfderiv_eq_fderiv] at hchain
+  change fderiv ℝ (fun r : ℝ => (g r : ℂ)) 0 = _ at hchain
+  rw [hd.hasFDerivAt.fderiv] at hchain
+  have hne : mfderiv 𝓘(ℝ, ℝ) (𝓡 1) g 0 ≠ 0 := by
+    intro he
+    rw [he, ContinuousLinearMap.comp_zero] at hchain
+    have heval := congrArg (fun T : ℝ →L[ℝ] ℂ => T 1) hchain
+    have hz : (z : ℂ) ≠ 0 := Circle.coe_ne_zero z
+    have heval' : (z : ℂ) * Complex.I = 0 := by
+      simpa only [ContinuousLinearMap.toSpanSingleton_apply, one_smul,
+        ContinuousLinearMap.zero_apply] using heval
+    exact mul_ne_zero hz Complex.I_ne_zero heval'
+  apply surjective_of_nonzero_of_finrank_eq_one (K := ℝ)
+    (show Module.finrank ℝ (EuclideanSpace ℝ (Fin 1)) = 1 by simp)
+    (f := (mfderiv 𝓘(ℝ, ℝ) (𝓡 1) g 0).toLinearMap)
+  intro he
+  apply hne
+  apply DFunLike.ext
+  intro r
+  exact LinearMap.congr_fun he r
+
