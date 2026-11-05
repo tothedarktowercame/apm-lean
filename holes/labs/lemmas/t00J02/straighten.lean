@@ -297,3 +297,82 @@ def straightening_plane_coordinates : (ℝ × ℝ) ≃L[ℝ] SurfaceModel :=
     straightening_plane_coordinates (r, 0) =
       (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0] := rfl
 
+/-- A local straightening chart with the original exponential parameter and
+no other portion of the embedded circle in its source. -/
+theorem exists_straightening_chart
+    {S : Type} [TopologicalSpace S] [T2Space S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (c : C(Circle, S)) (hc : Topology.IsEmbedding c)
+    (hcsmooth : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c) (z : Circle)
+    (hz : mfderiv (𝓡 1) SurfaceModelWithCorners c z ≠ 0) :
+    ∃ (β : OpenPartialHomeomorph S SurfaceModel) (δ : ℝ), 0 < δ ∧
+      c z ∈ β.source ∧ β (c z) = 0 ∧
+      ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ β (c z) ∧
+      (∀ r ∈ Set.Ioo (-δ) δ, c (z * Circle.exp r) ∈ β.source ∧
+        β (c (z * Circle.exp r)) = (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0]) ∧
+      (∀ p ∈ β.source, p ∈ Set.range c →
+        ∃ r ∈ Set.Ioo (-δ) δ, p = c (z * Circle.exp r)) := by
+  let φ := chartAt SurfaceModel (c z)
+  let g : ℝ → Circle := fun r => z * Circle.exp r
+  let w : ℝ → SurfaceModel := fun r => extChartAt SurfaceModelWithCorners (c z) (c (g r))
+  have hg0 : g 0 = z := by simp [g]
+  have hw0 : w 0 = φ (c z) := by simp [w, hg0, φ, extChartAt, SurfaceModelWithCorners]
+  have hs : ContDiffAt ℝ ∞ w 0 := straightening_coordinate_smooth c hcsmooth z
+  have hd : HasDerivAt w (deriv w 0) 0 := (hs.differentiableAt (by simp)).hasDerivAt
+  obtain ⟨a, ε, hε, ha0, hav, has, _, har⟩ :=
+    straightening_regular_planar_curve w (deriv w 0) hd
+      (straightening_coordinate_deriv_ne_zero c hcsmooth z hz) hs
+  let b := (φ.trans a).trans straightening_plane_coordinates.toHomeomorph.toOpenPartialHomeomorph
+  have hbsource : b.source = {p | p ∈ φ.source ∧ φ p ∈ a.source} := by
+    ext p
+    simp [b]
+  have hbval : ∀ p, b p = straightening_plane_coordinates (a (φ p)) := fun _ => rfl
+  have hbc : c z ∈ b.source := by
+    rw [hbsource]
+    exact ⟨mem_chart_source _ _, hw0 ▸ ha0⟩
+  have hbzero : b (c z) = 0 := by
+    rw [hbval, ← hw0, hav]
+    exact map_zero _
+  have hbsm : ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ b (c z) := by
+    have hφ : ContMDiffAt SurfaceModelWithCorners SurfaceModelWithCorners ∞ φ (c z) := by
+      simpa [φ, extChartAt, SurfaceModelWithCorners] using
+        (contMDiffAt_extChartAt (I := SurfaceModelWithCorners) (x := c z))
+    have hcomp := (hw0 ▸ has).contMDiffAt.comp (c z) hφ
+    exact straightening_plane_coordinates.contDiff.contMDiff.contMDiffAt.comp (c z) hcomp
+  have hpre : IsOpen {r : ℝ | c (g r) ∈ φ.source} :=
+    φ.open_source.preimage (c.continuous.comp (continuous_const.mul Circle.exp.continuous))
+  obtain ⟨η, hη, hηφ⟩ := Metric.isOpen_iff.mp hpre 0 (by
+    change c (g 0) ∈ φ.source
+    rw [hg0]
+    exact mem_chart_source SurfaceModel (c z))
+  let δ := min ε η
+  have hδ : 0 < δ := lt_min hε hη
+  have hδε : δ ≤ ε := min_le_left _ _
+  have hδη : δ ≤ η := min_le_right _ _
+  have hδr : ∀ r ∈ Set.Ioo (-δ) δ, c (g r) ∈ b.source ∧
+      b (c (g r)) = (EuclideanSpace.equiv (Fin 2) ℝ).symm ![r, 0] := by
+    intro r hr
+    have hrε : r ∈ Set.Ioo (-ε) ε := ⟨lt_of_le_of_lt (neg_le_neg hδε) hr.1, hr.2.trans_le hδε⟩
+    have hrη : r ∈ Metric.ball (0 : ℝ) η := by
+      rw [Metric.mem_ball, Real.dist_eq, sub_zero, abs_lt]
+      exact ⟨lt_of_le_of_lt (neg_le_neg hδη) hr.1, hr.2.trans_le hδη⟩
+    have hwr : w r = φ (c (g r)) := rfl
+    refine ⟨?_, ?_⟩
+    · rw [hbsource]
+      exact ⟨hηφ hrη, hwr ▸ (har r hrε).1⟩
+    · rw [hbval, ← hwr, (har r hrε).2, straightening_plane_coordinates_axis]
+  let V : Set Circle := g '' Set.Ioo (-δ) δ
+  have hV : IsOpen V := straightening_circle_param_open z _ isOpen_Ioo
+  have hzV : z ∈ V := ⟨0, ⟨neg_neg_of_pos hδ, hδ⟩, hg0⟩
+  obtain ⟨O, hO, hzO, hOV, _⟩ := straightening_isolate_arc c hc hV hzV
+  refine ⟨b.restrOpen O hO, δ, hδ, ⟨hbc, hzO⟩, hbzero, hbsm, ?_, ?_⟩
+  · intro r hr
+    exact ⟨⟨(hδr r hr).1, (hOV (g r)).mpr ⟨r, hr, rfl⟩⟩, (hδr r hr).2⟩
+  · rintro p hp ⟨t, rfl⟩
+    obtain ⟨r, hr, he⟩ := (hOV t).mp hp.2
+    exact ⟨r, hr, congrArg c he.symm⟩
+
+#print axioms exists_straightening_chart
+
+#print axioms straightening_circle_param_deriv_surjective
+#print axioms straightening_coordinate_deriv_ne_zero
