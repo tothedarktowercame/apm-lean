@@ -94,4 +94,112 @@ theorem mfderiv_ne_zero_eventually
 #print axioms exists_mfderiv_surjective_fiber_mem_open_of_fixedTargetChart
 #print axioms mfderiv_ne_zero_eventually
 
+
+/-- An injective smooth circle has a point with nonzero derivative. -/
+theorem exists_mfderiv_ne_zero
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S]
+    (c : Circle → S)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (hcinj : Function.Injective c) :
+    ∃ z : Circle, mfderiv (𝓡 1) SurfaceModelWithCorners c z ≠ 0 := by
+  by_contra hall
+  push_neg at hall
+  let h : ℝ → S := fun t => c (Circle.exp t)
+  have hexp : ContMDiff 𝓘(ℝ, ℝ) (𝓡 1) ∞ Circle.exp := contMDiff_circleExp
+  have hcd : ∀ z, MDifferentiableAt (𝓡 1) SurfaceModelWithCorners c z :=
+    fun z => (hc z).mdifferentiableAt (by simp)
+  have hed : ∀ t, MDifferentiableAt 𝓘(ℝ, ℝ) (𝓡 1) Circle.exp t :=
+    fun t => (hexp t).mdifferentiableAt (by simp)
+  have hhc : Continuous h := hc.continuous.comp hexp.continuous
+  have hloc : IsLocallyConstant h := by
+    rw [IsLocallyConstant.iff_eventually_eq]
+    intro t₀
+    let x₀ := h t₀
+    have hU : IsOpen (h ⁻¹' (chartAt SurfaceModel x₀).source) :=
+      (chartAt SurfaceModel x₀).open_source.preimage hhc
+    have ht₀ : t₀ ∈ h ⁻¹' (chartAt SurfaceModel x₀).source := mem_chart_source _ _
+    obtain ⟨r, hr, hball⟩ := Metric.isOpen_iff.mp hU t₀ ht₀
+    let F : ℝ → SurfaceModel := fun t => extChartAt SurfaceModelWithCorners x₀ (h t)
+    have hFd : ∀ t ∈ Metric.ball t₀ r,
+        MDifferentiableAt 𝓘(ℝ, ℝ) SurfaceModelWithCorners F t ∧
+          mfderiv 𝓘(ℝ, ℝ) SurfaceModelWithCorners F t = 0 := by
+      intro t ht
+      have hsrc : h t ∈ (chartAt SurfaceModel x₀).source := hball ht
+      have he := mdifferentiableAt_extChartAt (I := SurfaceModelWithCorners) hsrc
+      have hh : MDifferentiableAt 𝓘(ℝ, ℝ) SurfaceModelWithCorners h t :=
+        (hcd _).comp t (hed t)
+      refine ⟨he.comp t hh, ?_⟩
+      have h1 : mfderiv 𝓘(ℝ, ℝ) SurfaceModelWithCorners F t =
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners
+            (extChartAt SurfaceModelWithCorners x₀) (h t)).comp
+            (mfderiv 𝓘(ℝ, ℝ) SurfaceModelWithCorners h t) :=
+        mfderiv_comp t he hh
+      have h2 : mfderiv 𝓘(ℝ, ℝ) SurfaceModelWithCorners h t =
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c (Circle.exp t)).comp
+            (mfderiv 𝓘(ℝ, ℝ) (𝓡 1) Circle.exp t) :=
+        mfderiv_comp t (hcd _) (hed t)
+      have hh0 : mfderiv 𝓘(ℝ, ℝ) SurfaceModelWithCorners h t = 0 := by
+        rw [h2, hall]; exact ContinuousLinearMap.zero_comp _
+      rw [h1, hh0]; exact ContinuousLinearMap.comp_zero _
+    have hconst : ∀ t ∈ Metric.ball t₀ r, F t = F t₀ := by
+      intro t ht
+      refine (Metric.isOpen_ball).is_const_of_fderiv_eq_zero (convex_ball t₀ r).isPreconnected
+        (𝕜 := ℝ) ?_ ?_ ht (Metric.mem_ball_self hr)
+      · intro s hs
+        exact (mdifferentiableAt_iff_differentiableAt.mp (hFd s hs).1).differentiableWithinAt
+      · intro s hs
+        have := (hFd s hs).2
+        rwa [mfderiv_eq_fderiv] at this
+    filter_upwards [Metric.ball_mem_nhds t₀ hr] with t ht
+    have hsrc : h t ∈ (chartAt SurfaceModel x₀).source := hball ht
+    apply (extChartAt SurfaceModelWithCorners x₀).injOn
+    · rw [extChartAt_source]; exact hsrc
+    · rw [extChartAt_source]; exact ht₀
+    · exact hconst t ht
+  have h0pi := hloc.apply_eq_of_preconnectedSpace 0 Real.pi
+  have hre := congrArg (fun w : Circle => (w : ℂ).re) (hcinj h0pi)
+  simp [Circle.coe_exp] at hre
+  norm_num at hre
+
+/-- The Sard selection can be made at a regular point of an injective `c`. -/
+theorem exists_regularCircleValue_locallyInjectiveAlongFiber
+    {S : Type} [TopologicalSpace S] [ChartedSpace SurfaceModel S]
+    [IsManifold SurfaceModelWithCorners ∞ S] [CompactSpace S]
+    (mu : MeasureTheory.Measure (EuclideanSpace ℝ (Fin 1)))
+    [mu.IsAddHaarMeasure]
+    (f : S → S) (c : Circle → S)
+    (hf : ContMDiff SurfaceModelWithCorners SurfaceModelWithCorners ∞ f)
+    (hc : ContMDiff (𝓡 1) SurfaceModelWithCorners ∞ c)
+    (hcinj : Function.Injective c)
+    (htrans : ∀ x z, f x = c z →
+      LinearMap.range
+          (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap ⊔
+        LinearMap.range
+          (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap = ⊤) :
+    ∃ z : Circle, mfderiv (𝓡 1) SurfaceModelWithCorners c z ≠ 0 ∧
+      LocallyInjectiveAlongFiber f (c z) := by
+  obtain ⟨z₀, hz₀⟩ := exists_mfderiv_ne_zero c hc hcinj
+  obtain ⟨O, hOsub, hO, hz₀O⟩ := mem_nhds_iff.mp (mfderiv_ne_zero_eventually c hc z₀ hz₀)
+  letI := circleIncidenceAtlas f c hf hc htrans
+  letI : IsManifold (modelWithCornersSelf ℝ CircleIncidenceModel) ∞
+      (CircleIncidence f c) := circleIncidence_isManifold f c hf hc htrans
+  letI : SecondCountableTopology (CircleIncidence f c) :=
+    circleIncidence_secondCountableTopology f c
+  obtain ⟨z, hzO, hzreg⟩ := exists_mfderiv_surjective_fiber_mem_open_of_fixedTargetChart mu
+    (circleIncidenceProjection (f := f) (c := c)) z₀
+    (circleIncidenceProjection_contMDiff f c hf hc htrans) O hO hz₀O
+  refine ⟨z, hOsub hzO, ?_⟩
+  apply locallyInjectiveAlongFiber_of_circleDirection_lifts f c z hf (fun x hx ↦ htrans x z hx)
+  intro x hx
+  let p : CircleIncidence f c := ⟨(x, z), hx⟩
+  have hp := hzreg p rfl
+  have hkernel := (circleIncidenceProjection_surjective_iff_kernel_snd
+    f c hf hc htrans p).mp hp
+  exact direction_lifts_of_surjective_incidenceKernel_snd
+    (mfderiv SurfaceModelWithCorners SurfaceModelWithCorners f x).toLinearMap
+    (mfderiv (𝓡 1) SurfaceModelWithCorners c z).toLinearMap hkernel
+
+#print axioms exists_regularCircleValue_locallyInjectiveAlongFiber
+
 end ConstructionTargets.T00J02Closure
