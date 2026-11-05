@@ -582,6 +582,37 @@ lemma recentre_self {S : Type} [TopologicalSpace S]
     recentre α x' x' = 0 := by
   simp [recentre, OpenPartialHomeomorph.trans_apply]
 
+lemma chartInverseMap_mapsTo_at {S : Type} [TopologicalSpace S]
+    (α : OpenPartialHomeomorph S E2) (x : S) (_hx : x ∈ α.source) :
+    Set.MapsTo (chartInverseMap α) (neighborhoodDeletedPoint α.target (α x))
+      (deletedPoint x) := by
+  intro p hp hpx
+  apply hp
+  have h1 : α (α.symm p) = (p : E2) := α.right_inv p.2
+  change α.symm p = x at hpx
+  rw [hpx] at h1
+  exact h1.symm
+
+/-- Chart sign of `α` at an arbitrary point `x` of its source (not necessarily
+centred): the class of `H₂(α.target, α.target ∖ α x)` restricting to the model
+local generator at `α x` is carried by `α.symm` to `s` times the localized global
+generator at `x`. -/
+def IsChartSignAt {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (x : S) (hx : x ∈ α.source) (s : ℤ) : Prop :=
+  ∃ b : (RelativeSingularChains (neighborhoodDeletedPoint α.target (α x))).homology 2,
+    HomologicalComplex.homologyMap
+        (relativeSingularMap (neighborhoodDeletedPoint α.target (α x))
+          (deletedPoint (α x)) (neighborhoodInclusion α.target)
+          (neighborhoodInclusion_mapsTo α.target (α x))) 2 b =
+      ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (α x) ∧
+    HomologicalComplex.homologyMap
+        (relativeSingularMap (neighborhoodDeletedPoint α.target (α x))
+          (deletedPoint x) (chartInverseMap α) (chartInverseMap_mapsTo_at α x hx)) 2 b =
+      s • ConstructionTargets.ManifoldFundamentalClass.localizationMap x 2
+        (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
+
+
 #print axioms mem_recentre_source
 #print axioms recentre_self
 
