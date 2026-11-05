@@ -656,4 +656,112 @@ lemma chartSign_transport {S X : Type} [TopologicalSpace S] [TopologicalSpace X]
   rw [he, map_zsmul, hb', smul_smul]
 
 
+theorem localDegree_chart_transport
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (f : C(S, S)) (y : S)
+    [Fintype {x : S // f x = y}]
+    (x : {x : S // f x = y}) (n : ℤ) (hd : t00J02_IsLocalDegree e f y x n)
+    (α β : OpenPartialHomeomorph S E2)
+    (hxα : (x : S) ∈ α.source) (hα0 : α x = 0) (hyβ : y ∈ β.source) (hβ0 : β y = 0)
+    (U : Set E2) (hUo : IsOpen U) (h0U : (0 : E2) ∈ U) (hUα : U ⊆ α.target)
+    (hUf : ∀ p ∈ U, f (α.symm p) ∈ β.source)
+    (hUfib : ∀ p ∈ U, f (α.symm p) = y → p = 0)
+    (F : C(E2, E2)) (hF : ∀ p ∈ U, F p = β (f (α.symm p)))
+    (hzero : ∀ p : U, F p = 0 ↔ (p : E2) = 0)
+    (sα sβ : ℤ) (hsα : IsChartSign e α x hxα hα0 sα)
+    (hsβ : IsChartSign e β y hyβ hβ0 sβ) (hsβ1 : sβ = 1 ∨ sβ = -1) :
+    IsLocalDegreeTwo U F hzero (sα * sβ * n) := by
+  let A := neighborhoodDeletedPoint U (0 : E2)
+  let T : Set S := {z | f z = y}ᶜ
+  let G := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) (0 : E2)
+  let L := fun z : S => ConstructionTargets.ManifoldFundamentalClass.localizationMap z 2
+    (ConstructionTargets.ManifoldFundamentalClass.groupGlobalGenerator (TopCat.of S) 2 e)
+  obtain ⟨u, hu⟩ := (transportInclusion_bijective U 0 hUo h0U).2 G
+  let q : C(U, α.target) := ⟨fun p => ⟨p, hUα p.2⟩, continuous_subtype_val.subtype_mk _⟩
+  have hq : MapsTo q A (neighborhoodDeletedPoint α.target (0 : E2)) := fun _ hp => hp
+  let j : C(U, S) := (chartInverseMap α).comp q
+  have hj0 : α.symm (0 : E2) = (x : S) := by rw [← hα0]; exact α.left_inv hxα
+  have hj : MapsTo j A T := by
+    intro p hp h
+    exact hp (hUfib p p.2 h)
+  let v := transportMap A T j hj u
+  have hvx : t00J02_fiberRestriction f y x v = sα • L x := by
+    have hm : transportMap (neighborhoodDeletedPoint α.target (0 : E2)) (deletedPoint (0 : E2))
+        (neighborhoodInclusion α.target) (neighborhoodInclusion_mapsTo α.target 0)
+        (transportMap A (neighborhoodDeletedPoint α.target (0 : E2)) q hq u) = (1 : ℤ) • G := by
+      rw [transportMap_comp_auto]
+      simpa only [one_smul] using hu
+    have hh := chartSign_transport e α x hxα hα0 sα hsα A q hq u 1 hm
+    rw [one_mul] at hh
+    rw [transportMap_comp_auto] at hh
+    change transportMap T (deletedPoint (x : S)) (ContinuousMap.id S) _ v = _
+    dsimp only [v]
+    rw [transportMap_comp_auto]
+    exact hh
+  have hvother : ∀ x' : {z : S // f z = y}, x' ≠ x →
+      t00J02_fiberRestriction f y x' v = 0 := by
+    intro x' hne
+    have hall : ∀ p : U, j p ∈ deletedPoint (x' : S) := by
+      intro p hp
+      change j p = (x' : S) at hp
+      have hfp : f (α.symm p) = y := by change f (j p) = y; rw [hp]; exact x'.2
+      have hp0 := hUfib p p.2 hfp
+      have he : (x' : S) = (x : S) := by
+        rw [← hp]
+        change α.symm (p : E2) = (x : S)
+        rw [hp0, hj0]
+      exact hne (Subtype.ext he)
+    change transportMap T (deletedPoint (x' : S)) (ContinuousMap.id S) _ v = 0
+    dsimp only [v]
+    rw [transportMap_comp_auto]
+    exact transportMap_zero A (deletedPoint (x' : S)) j _ hall u
+  obtain ⟨a, hax, hao, haf⟩ := hd
+  have hva : v = sα • a := by
+    apply (t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D1 f y).1
+    funext x'
+    change t00J02_fiberRestriction f y x' v = t00J02_fiberRestriction f y x' (sα • a)
+    rw [map_zsmul]
+    by_cases he : x' = x
+    · subst x'; rw [hvx, hax]
+    · rw [hvother x' he, hao x' he, smul_zero]
+  have hvf : t00J02_fiberPushforward f y v = (sα * n) • L y := by
+    rw [hva, map_zsmul, haf, smul_smul]
+  have hFpair : MapsTo (restrictedMap U F) A (deletedPoint (0 : E2)) := by
+    intro p hp h; exact hp ((hzero p).mp h)
+  obtain ⟨m, hm⟩ := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates
+    (k := 0) (0 : E2) (transportMap A (deletedPoint (0 : E2)) (restrictedMap U F) hFpair u)
+  let k : C(U, β.target) :=
+    ⟨fun p => ⟨F p, by rw [hF p p.2]; exact β.map_source (hUf p p.2)⟩,
+      (F.continuous.comp continuous_subtype_val).subtype_mk (by
+        intro p; change F p ∈ β.target
+        rw [hF p p.2]; exact β.map_source (hUf p p.2))⟩
+  have hk : MapsTo k A (neighborhoodDeletedPoint β.target (0 : E2)) := by
+    intro p hp h; exact hp ((hzero p).mp h)
+  have hm' : transportMap (neighborhoodDeletedPoint β.target (0 : E2)) (deletedPoint (0 : E2))
+      (neighborhoodInclusion β.target) (neighborhoodInclusion_mapsTo β.target 0)
+      (transportMap A (neighborhoodDeletedPoint β.target (0 : E2)) k hk u) = m • G := by
+    rw [transportMap_comp_auto]
+    exact hm.symm
+  have hb := chartSign_transport e β y hyβ hβ0 sβ hsβ A k hk u m hm'
+  have he : ∀ p : U, f (j p) = chartInverseMap β (k p) := by
+    intro p
+    change f (α.symm p) = β.symm (F p)
+    rw [hF p p.2, β.left_inv (hUf p p.2)]
+  have heq := transportMap_square A T (neighborhoodDeletedPoint β.target (0 : E2))
+    (deletedPoint y) j f k (chartInverseMap β) hj
+    (show MapsTo f T (deletedPoint y) from fun _ h => h)
+    hk (chartInverseMap_mapsTo β y hyβ hβ0) he u
+  change t00J02_fiberPushforward f y v = _ at heq
+  rw [hvf, hb] at heq
+  have hcoeff : sα * n = m * sβ := by
+    have hz : (sα * n - m * sβ) • L y = 0 := by rw [sub_smul, heq, sub_self]
+    exact sub_eq_zero.mp (t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2b e y _ hz)
+  have hmval : m = sα * sβ * n := by
+    rcases hsβ1 with rfl | rfl <;> nlinarith [hcoeff]
+  refine ⟨u, hu, ?_⟩
+  rw [← hmval]
+  exact hm.symm
+
+#print axioms localDegree_chart_transport
 end t00J02_ModelProduct
