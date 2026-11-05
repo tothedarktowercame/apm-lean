@@ -1080,6 +1080,67 @@ lemma isChartSignAt_step {S : Type} [TopologicalSpace S] [T2Space S]
     have hW : W = s • PK := sub_eq_zero.mp hinj
     rw [hresS x' hx' hx'K, hW, map_zsmul, ← hloc x' (hxA x' hx' hx'K)]
 
+lemma isChartSignAt_congr {S : Type} [TopologicalSpace S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ) (α : OpenPartialHomeomorph S E2)
+    (y y' : S) (h : y = y') (hy : y ∈ α.source) (hy' : y' ∈ α.source) (s : ℤ)
+    (hs : IsChartSignAt e α y hy s) : IsChartSignAt e α y' hy' s := by
+  subst h; exact hs
+
+/-- **L1b.** A chart's sign is the same at all points of a ball in its target. -/
+theorem isChartSignAt_constant_on_ball {S : Type} [TopologicalSpace S] [T2Space S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (c : E2) (R : ℝ) (hR : Metric.ball c R ⊆ α.target)
+    (x x' : S) (hx : x ∈ α.source) (hx' : x' ∈ α.source)
+    (hxR : α x ∈ Metric.ball c R) (hx'R : α x' ∈ Metric.ball c R)
+    (s : ℤ) (h : IsChartSignAt e α x hx s) : IsChartSignAt e α x' hx' s := by
+  let B := Metric.ball c R
+  have hsrc : ∀ q : B, α.symm q ∈ α.source := fun q => α.map_target (hR q.2)
+  let P : B → Prop := fun q => IsChartSignAt e α (α.symm q) (hsrc q) s
+  -- radius of a closed ball around `q` inside `B`
+  have hrad : ∀ q : B, 0 < (R - dist (q : E2) c) / 2 := fun q => by
+    have := Metric.mem_ball.mp q.2; linarith
+  have hsub : ∀ (q : E2) (r : ℝ), dist q c + r < R → Metric.closedBall q r ⊆ α.target := by
+    intro q r hr y hy
+    apply hR
+    rw [Metric.mem_ball]
+    have := Metric.mem_closedBall.mp hy
+    linarith [dist_triangle y q c]
+  have hstep : ∀ (q q' : B), dist (q' : E2) q < (R - dist (q : E2) c) / 8 → P q → P q' := by
+    intro q q' hd hq
+    have hq0 : α (α.symm (q : E2)) = q := α.right_inv (hR q.2)
+    have hq1 : α (α.symm (q' : E2)) = q' := α.right_inv (hR q'.2)
+    have hρ := hrad q
+    refine isChartSignAt_step e α (α.symm q) (α.symm q') (hsrc q) (hsrc q')
+      ((R - dist (q : E2) c) / 2) hρ ?_ ?_ s hq
+    · rw [hq0]; apply hsub; linarith
+    · rw [hq0, hq1, ← dist_eq_norm]; linarith
+  have hlc : IsLocallyConstant P := by
+    rw [IsLocallyConstant.iff_eventually_eq]
+    intro q
+    have hρ := hrad q
+    rw [Metric.eventually_nhds_iff]
+    refine ⟨(R - dist (q : E2) c) / 16, by linarith, ?_⟩
+    intro q' hd
+    have hd' : dist (q' : E2) q < (R - dist (q : E2) c) / 16 := hd
+    apply propext
+    constructor
+    · intro hq'
+      apply hstep q' q _ hq'
+      have h1 := dist_triangle (q' : E2) q c
+      have h2 : dist (q : E2) q' = dist (q' : E2) q := dist_comm _ _
+      rw [h2]
+      have h3 := hrad q
+      linarith
+    · intro hq
+      exact hstep q q' (by linarith) hq
+  haveI : PreconnectedSpace B :=
+    Subtype.preconnectedSpace (convex_ball c R).isPreconnected
+  have hP := hlc.apply_eq_of_preconnectedSpace ⟨α x, hxR⟩ ⟨α x', hx'R⟩
+  have h0 : P ⟨α x, hxR⟩ :=
+    isChartSignAt_congr e α x _ (α.left_inv hx).symm hx _ s h
+  have h1 : P ⟨α x', hx'R⟩ := hP ▸ h0
+  exact isChartSignAt_congr e α _ x' (α.left_inv hx') _ hx' s h1
+
 end L1ball
 
 end t00J02_ModelProduct
