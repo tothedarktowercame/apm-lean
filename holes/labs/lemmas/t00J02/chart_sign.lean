@@ -634,4 +634,67 @@ theorem chartInverseMap_H2_isIso
   rw [hchain, HomologicalComplex.homologyMap_comp]
   infer_instance
 
+theorem exists_chartSign
+    {S : Type} [TopologicalSpace S] [T2Space S] [CompactSpace S] [PathConnectedSpace S]
+    [ChartedSpace apm_t00j02_E2 S] [IsManifold apm_t00j02_I2 ∞ S]
+    (e : apm_t00j02_H 2 S ≅ ModuleCat.of ℤ ℤ)
+    (α : OpenPartialHomeomorph S E2) (x : S) (hx : x ∈ α.source) (hα0 : α x = 0) :
+    ∃ s : ℤ, (s = 1 ∨ s = -1) ∧ IsChartSign e α x hx hα0 s := by
+  let i := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+      (deletedPoint (0 : E2)) (neighborhoodInclusion α.target)
+      (neighborhoodInclusion_mapsTo α.target 0)) 2
+  have h0target : (0 : E2) ∈ α.target := by
+    rw [← hα0]
+    exact α.map_source hx
+  letI := ConstructionTargets.HigherChartLocalGenerator.neighborhoodInclusion_Hn_isIso
+    0 α.target (0 : E2) α.open_target h0target
+  let j := HomologicalComplex.homologyMap
+    (relativeSingularMap (neighborhoodDeletedPoint α.target (0 : E2))
+      (deletedPoint x) (chartInverseMap α) (chartInverseMap_mapsTo α x hx hα0)) 2
+  letI := chartInverseMap_H2_isIso α x hx hα0
+  let gx := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator (k := 0) x
+  let g0 := ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator
+    (k := 0) (0 : E2)
+  let b := (asIso i).inv g0
+  have hib : i b = g0 := ConcreteCategory.congr_hom (asIso i).inv_hom_id g0
+  obtain ⟨m, hm⟩ :=
+    ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates
+      (k := 0) x (j b)
+  let w := (asIso j).inv gx
+  obtain ⟨n, hn⟩ :=
+    ConstructionTargets.HigherChartLocalGenerator.ambientLocalGenerator_generates
+      (k := 0) (0 : E2) (i w)
+  have hnbw : n • b = w := by
+    change n • (asIso i).inv g0 = w
+    rw [← map_zsmul, hn]
+    exact ConcreteCategory.congr_hom (asIso i).hom_inv_id w
+  have hnj : n • j b = gx := by
+    rw [← map_zsmul, hnbw]
+    exact ConcreteCategory.congr_hom (asIso j).inv_hom_id gx
+  have hnm : n * m = 1 := by
+    apply ConstructionTargets.ManifoldFundamentalClass.ambientLocalGenerator_zsmul_injective
+      0 x
+    change (n * m) • gx = 1 • gx
+    rw [mul_smul, hm, hnj, one_zsmul]
+  have hmUnit : IsUnit m := by
+    apply isUnit_iff_dvd_one.mpr
+    exact ⟨n, by simpa [mul_comm] using hnm.symm⟩
+  have hmSign : m = 1 ∨ m = -1 := Int.isUnit_eq_one_or hmUnit
+  obtain ⟨r, hrSign, hr⟩ :=
+    t00J02_transverse_diskBounded_topHomologyMap_eq_zero_aux_D2 e x
+  rcases hmSign with rfl | rfl <;> rcases hrSign with rfl | rfl
+  · refine ⟨1, Or.inl rfl, ⟨b, hib, ?_⟩⟩
+    simpa [gx] using hm.symm.trans hr
+  · refine ⟨-1, Or.inr rfl, ⟨b, hib, ?_⟩⟩
+    rw [neg_smul, ← hr]
+    simpa [gx] using hm.symm
+  · refine ⟨-1, Or.inr rfl, ⟨b, hib, ?_⟩⟩
+    rw [neg_smul, ← hr]
+    simpa [gx] using hm.symm
+  · refine ⟨1, Or.inl rfl, ⟨b, hib, ?_⟩⟩
+    simpa [gx] using hm.symm.trans hr
+
+#print axioms exists_chartSign
+
 end t00J02_ModelProduct
