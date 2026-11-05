@@ -5083,7 +5083,95 @@ lemma isSideSign_eventually_of_exp_coordinate
     (t₀ : Circle) (lam : ℤ) (h : IsSideSign e f c D ℓ t₀ lam) :
     ∃ ε > 0, ∀ᶠ t in 𝓝 t₀, ∀ r ∈ Set.Ioo (-ε) ε,
       ℓ t = ℓ t₀ * Circle.exp r → IsSideSign e f c D ℓ t lam := by
-  sorry
+  obtain ⟨hlam, β, hβ, hβ0, sβ, hsβ, ρ, δ, φ, hρ, hδ, hball, hφ, haxis, hexcl, η, hη, hdisk⟩ := h
+  -- control of the disk near `circleToDisk t₀`
+  set a₀ := circleToDisk t₀ with ha₀
+  have hfa₀ : f (D a₀) = c (ℓ t₀) := hℓ t₀
+  have hgcont : ContinuousAt (fun a : Disk => β (f (D a))) a₀ := by
+    have h1 : ContinuousAt β (f (D a₀)) := by
+      rw [hfa₀]; exact β.continuousAt hβ
+    exact ContinuousAt.comp (f := fun a => f (D a)) h1 (f.continuous.comp hD).continuousAt
+  have hsrc : ∀ᶠ a in 𝓝 a₀, f (D a) ∈ β.source := by
+    apply (f.continuous.comp hD).continuousAt.preimage_mem_nhds
+    rw [Function.comp_apply, hfa₀]
+    exact β.open_source.mem_nhds hβ
+  have hsmall : ∀ᶠ a in 𝓝 a₀, ‖β (f (D a))‖ < ρ / 4 := by
+    have h0 : β (f (D a₀)) = 0 := by rw [hfa₀, hβ0]
+    have := hgcont.eventually (Metric.ball_mem_nhds (β (f (D a₀))) (by linarith : 0 < ρ / 4))
+    filter_upwards [this] with a ha
+    simpa [h0, dist_zero_right] using ha
+  obtain ⟨η₁, hη₁, hη₁P⟩ := Metric.eventually_nhds_iff.mp (hsrc.and hsmall)
+  set η₂ := min η η₁ with hη₂
+  have hη₂pos : 0 < η₂ := lt_min hη hη₁
+  -- control of the base point `c (ℓ t)` near `c (ℓ t₀)`
+  have hbase : ∀ᶠ t in 𝓝 t₀, ‖β (c (ℓ t))‖ < ρ / 4 := by
+    have hc : ContinuousAt (fun t => β (c (ℓ t))) t₀ :=
+      ContinuousAt.comp (f := fun t => c (ℓ t)) (β.continuousAt hβ)
+        (c.continuous.comp ℓ.continuous).continuousAt
+    have := hc.eventually (Metric.ball_mem_nhds (β (c (ℓ t₀))) (by linarith : 0 < ρ / 4))
+    filter_upwards [this] with t ht
+    simpa [hβ0, dist_zero_right] using ht
+  have hdiskt : ∀ᶠ t in 𝓝 t₀, dist (circleToDisk t) a₀ < η₂ / 2 := by
+    have hc : ContinuousAt circleToDisk t₀ := continuous_circleToDisk.continuousAt
+    have := hc.eventually (Metric.ball_mem_nhds a₀ (by linarith : 0 < η₂ / 2))
+    filter_upwards [this] with t ht
+    exact ht
+  refine ⟨δ / 2, by linarith, ?_⟩
+  filter_upwards [hbase, hdiskt] with t htb htd
+  intro r₁ hr₁ hℓt
+  have hr₁abs : |r₁| < δ / 2 := abs_lt.mpr ⟨by linarith [hr₁.1], hr₁.2⟩
+  have hr₁δ : r₁ ∈ Set.Ioo (-δ) δ := ⟨by linarith [hr₁.1], by linarith [hr₁.2]⟩
+  obtain ⟨hx'src, hx'eq⟩ := haxis r₁ hr₁δ
+  rw [← hℓt] at hx'src hx'eq
+  set x' := c (ℓ t) with hx'
+  have hh1 : (β x') 1 = 0 := by rw [hx'eq]; exact horizontal_apply_one _
+  have hx'R : β x' ∈ Metric.ball (0 : E2) ρ := by
+    rw [Metric.mem_ball, dist_zero_right]; linarith
+  refine ⟨hlam, recentre β x', mem_recentre_source β x' hx'src, recentre_self β x', sβ,
+    isChartSign_recentre e β (c (ℓ t₀)) hβ hβ0 ρ hball x' hx'src hx'R sβ hsβ,
+    ρ / 2, δ / 2, fun r => φ (r₁ + r) - φ r₁, by linarith, by linarith, ?_,
+    (by have := strictMonoOn_shift_sub hφ hδ hr₁abs; rwa [neg_div] at this), ?_, ?_, ?_⟩
+  · intro p hp
+    apply mem_recentre_target'
+    apply hball
+    rw [Metric.mem_ball, dist_zero_right] at hp ⊢
+    calc ‖p + β x'‖ ≤ ‖p‖ + ‖β x'‖ := norm_add_le _ _
+      _ < ρ := by linarith
+  · intro r hr
+    have hrr : r₁ + r ∈ Set.Ioo (-δ) δ :=
+      ⟨by linarith [hr.1, hr₁.1], by linarith [hr.2, hr₁.2]⟩
+    have hpt : ℓ t * Circle.exp r = ℓ t₀ * Circle.exp (r₁ + r) := by
+      rw [hℓt]; exact circle_mul_exp_add _ _ _
+    obtain ⟨hs2, he2⟩ := haxis (r₁ + r) hrr
+    rw [← hpt] at hs2 he2
+    refine ⟨by simpa [recentre] using hs2, ?_⟩
+    rw [recentre_apply', he2, hx'eq, horizontal_sub]
+  · intro p hp
+    rw [recentre_symm_apply']
+    have hp' : p + β x' ∈ Metric.ball (0 : E2) ρ := by
+      rw [Metric.mem_ball, dist_zero_right] at hp ⊢
+      calc ‖p + β x'‖ ≤ ‖p‖ + ‖β x'‖ := norm_add_le _ _
+        _ < ρ := by linarith
+    rw [hexcl _ hp']
+    have : (p + β x') 1 = p 1 := by
+      rw [PiLp.add_apply, hh1, add_zero]
+    rw [this]
+  · refine ⟨η₂ / 2, by linarith, ?_⟩
+    intro a ha hanorm
+    have hda : dist a a₀ < η₂ := by
+      calc dist a a₀ ≤ dist a (circleToDisk t) + dist (circleToDisk t) a₀ := dist_triangle _ _ _
+        _ < η₂ / 2 + η₂ / 2 := add_lt_add ha htd
+        _ = η₂ := by ring
+    have hdη : dist a a₀ < η := lt_of_lt_of_le hda (min_le_left _ _)
+    have hdη₁ : dist a a₀ < η₁ := lt_of_lt_of_le hda (min_le_right _ _)
+    obtain ⟨hs, hpos⟩ := (hdisk a hdη hanorm).1, (hdisk a hdη hanorm).2.2
+    obtain ⟨-, hsm⟩ := hη₁P hdη₁
+    refine ⟨by simpa [recentre] using hs, ?_, ?_⟩
+    · rw [recentre_apply']
+      calc ‖β (f (D a)) - β x'‖ ≤ ‖β (f (D a))‖ + ‖β x'‖ := norm_sub_le _ _
+        _ < ρ / 2 := by linarith
+    · rw [recentre_apply', PiLp.sub_apply, hh1, sub_zero]
+      exact hpos
 
 theorem isSideSign_eventually
     {S : Type} [TopologicalSpace S] [T2Space S]
