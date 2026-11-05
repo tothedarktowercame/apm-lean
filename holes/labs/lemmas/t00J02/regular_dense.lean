@@ -439,7 +439,91 @@ lemma smooth_embedded_circle_regular_on_arc
     (w : Circle) (a b : ℝ) (hab : a < b) :
     ∃ z ∈ (fun r ↦ w * Circle.exp r) '' Set.Ioo a b,
       mfderiv (𝓡 1) SurfaceModelWithCorners c z ≠ 0 := by
-  sorry
+  by_contra hcon
+  push_neg at hcon
+  let g : ℝ → Circle := fun r => w * Circle.exp r
+  have hg : ContMDiff 𝓘(ℝ, ℝ) (𝓡 1) ∞ g :=
+    contMDiff_const.mul contMDiff_circleExp
+  set r₀ := (a + b) / 2 with hr₀
+  set z₀ := g r₀
+  set φ := extChartAt SurfaceModelWithCorners (c z₀)
+  have hcg : Continuous fun r => c (g r) :=
+    c.continuous.comp ((continuous_const.mul Circle.exp.continuous))
+  have hsrc : {r : ℝ | c (g r) ∈ (chartAt SurfaceModel (c z₀)).source} ∈ 𝓝 r₀ :=
+    hcg.continuousAt.preimage_mem_nhds
+      ((chartAt SurfaceModel (c z₀)).open_source.mem_nhds (mem_chart_source _ _))
+  obtain ⟨ε, hε, hεsub⟩ := Metric.mem_nhds_iff.mp hsrc
+  set ε' := min ε (min ((b - a) / 2) 1) with hε'
+  have hε'pos : 0 < ε' := lt_min hε (lt_min (by linarith) one_pos)
+  set J := Set.Ioo (r₀ - ε') (r₀ + ε')
+  have hJsrc : ∀ r ∈ J, c (g r) ∈ (chartAt SurfaceModel (c z₀)).source := by
+    intro r hr
+    apply hεsub
+    rw [Metric.mem_ball, Real.dist_eq, abs_lt]
+    have := min_le_left ε (min ((b - a) / 2) 1)
+    constructor <;> linarith [hr.1, hr.2]
+  have hJab : ∀ r ∈ J, r ∈ Set.Ioo a b := by
+    intro r hr
+    have h1 : ε' ≤ (b - a) / 2 := le_trans (min_le_right _ _) (min_le_left _ _)
+    constructor <;> linarith [hr.1, hr.2, hr₀]
+  let W : ℝ → SurfaceModel := fun r => φ (c (g r))
+  have hWdiff : ∀ r ∈ J, HasFDerivAt W (0 : ℝ →L[ℝ] SurfaceModel) r := by
+    intro r hr
+    have hφ : MDifferentiableAt SurfaceModelWithCorners SurfaceModelWithCorners φ (c (g r)) :=
+      mdifferentiableAt_extChartAt (hJsrc r hr)
+    have hcgd := (hcsmooth.comp hg).contMDiffAt.mdifferentiableAt (x := r) (by simp)
+    have hchain := mfderiv_comp r hφ hcgd
+    have hcgchain := mfderiv_comp r (hcsmooth.contMDiffAt.mdifferentiableAt (x := g r) (by simp))
+      (hg.contMDiffAt.mdifferentiableAt (x := r) (by simp))
+    have hzero : mfderiv (𝓡 1) SurfaceModelWithCorners c (g r) = 0 :=
+      hcon (g r) ⟨r, hJab r hr, rfl⟩
+    rw [hcgchain, hzero] at hchain
+    simp only [ContinuousLinearMap.zero_comp] at hchain
+    have hWd : DifferentiableAt ℝ W r := by
+      have := (hφ.comp r hcgd)
+      rw [mdifferentiableAt_iff_differentiableAt] at this
+      exact this
+    rw [mfderiv_eq_fderiv] at hchain
+    have : fderiv ℝ W r = 0 := by
+      change fderiv ℝ (φ ∘ c ∘ g) r = 0
+      rw [hchain]
+      exact ContinuousLinearMap.comp_zero _
+    rw [← this]
+    exact hWd.hasFDerivAt
+  have hconst : ∀ r ∈ J, W r = W r₀ := by
+    intro r hr
+    have hr₀J : r₀ ∈ J := ⟨by linarith, by linarith⟩
+    exact isOpen_Ioo.is_const_of_fderiv_eq_zero isPreconnected_Ioo
+      (fun x hx => (hWdiff x hx).differentiableAt.differentiableWithinAt)
+      (fun x hx => (hWdiff x hx).fderiv) hr hr₀J
+  set r₁ := r₀ + ε' / 2 with hr₁def
+  have hr₁J : r₁ ∈ J := ⟨by linarith [hr₁def], by linarith [hr₁def]⟩
+  have hr₀J : r₀ ∈ J := ⟨by linarith, by linarith⟩
+  have hW := hconst r₁ hr₁J
+  have hinj := (extChartAt SurfaceModelWithCorners (c z₀)).injOn
+  have hs₁ : c (g r₁) ∈ (extChartAt SurfaceModelWithCorners (c z₀)).source := by
+    rw [extChartAt_source]; exact hJsrc r₁ hr₁J
+  have hs₀ : c (g r₀) ∈ (extChartAt SurfaceModelWithCorners (c z₀)).source := by
+    rw [extChartAt_source]; exact hJsrc r₀ hr₀J
+  have hcc : c (g r₁) = c (g r₀) := hinj hs₁ hs₀ hW
+  have hgg : g r₁ = g r₀ := hc.injective hcc
+  have hexp : Circle.exp r₁ = Circle.exp r₀ := mul_left_cancel hgg
+  obtain ⟨m, hm⟩ := (Circle.exp_eq_exp).mp hexp
+  have hε1 : ε' ≤ 1 := le_trans (min_le_right _ _) (min_le_right _ _)
+  have hdiff : r₁ - r₀ = ε' / 2 := by rw [hr₁def]; ring
+  have hm0 : m = 0 := by
+    by_contra hm0
+    have hmabs : (1 : ℝ) ≤ |(m : ℝ)| := by
+      rw [← Int.cast_abs]; exact_mod_cast Int.one_le_abs hm0
+    have hpi := Real.pi_gt_three
+    have heq : |r₁ - r₀| = |(m : ℝ)| * (2 * Real.pi) := by
+      rw [hm, show r₀ + (m : ℝ) * (2 * Real.pi) - r₀ = (m : ℝ) * (2 * Real.pi) by ring, abs_mul,
+        abs_of_pos (by positivity : (0:ℝ) < 2 * Real.pi)]
+    rw [hdiff, abs_of_pos (by linarith)] at heq
+    nlinarith
+  rw [hm0] at hm
+  simp at hm
+  linarith
 
 theorem exists_regular_near
     {S : Type} [TopologicalSpace S] [T2Space S] [ChartedSpace SurfaceModel S]
