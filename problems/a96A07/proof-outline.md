@@ -23,4 +23,4 @@ Show g maps Δ one-to-one onto the bounded domain D whose boundary is C = g(Γ).
   (factor through `dslope` and apply Rouché) and at most one bounded complementary component
   (Borsuk's logarithm criterion).  `holes/labs/blueprints/a96A07/BLUEPRINT.md` has the argument.
 - **Informal solution**: its Step 2 does not follow, its sign argument should use `N >= 0`, and its
-  Step 4 is unnecessary.  `holes/labs/tutor/lessons/a96A07.md` explains each.
+  Step 4 is unnecessary.  The tutor lesson for a96A07 (kept outside this repository) explains each.

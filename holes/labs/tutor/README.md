@@ -1,10 +1,7 @@
-# Prelim tutor
+# Tutor lab: moved
 
-Worked lessons, one problem each, showing how a problem gets broken down.  Each lesson records what
-the star map offered, what it missed, and the moves a student has to make.  A move is one decision
-in the solution, such as "turn a question about preimages into an integer that is locally constant".
-Skills name tools; moves say when and why to pick them up, and the second is what a tutor has to
-teach.  Moves that recur across lessons are candidates for a new layer of the star map.
-
-`lessons/<id>.md` is one lesson.  Learner marking and frontier queries are not built.
-The design sketch is futon0/holes/missions/M-futonzero-prelim-practice.md.
+The tutor work (lessons, `moves.edn`, `moves-vs-tags.md` and the JVM Arxana
+proof-presentation handoff) moved on 2026-11-07 to a separate, private
+repository, so that apm-lean stays focused on the proofs. The problems these
+lessons discuss (`problems/a96A07`, `problems/t98J02`, `problems/t03J02`)
+remain here.
