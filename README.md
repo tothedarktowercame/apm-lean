@@ -12,7 +12,7 @@ defective (for instance a claim that is false as printed).
 ## The 19 open problems: contributions welcome
 
 18 remaining problems are in algebraic and differential topology,
-where Mathlib's coverage is thinnest. One is in analysis. 
+where Mathlib's coverage is thinnest; one is in analysis. 
 
 | problem | subject | state |
 |---|---|---|
