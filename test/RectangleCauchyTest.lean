@@ -32,6 +32,12 @@ example :
       2 * Real.pi * I := by
   exact centeredSquareBoundaryIntegral_sub_inv 1 2 (by norm_num)
 
+/-- The same kernel is genuinely integrable on each of the four sides, so it
+can participate in linear combinations of boundary integrals. -/
+example : RectangleBoundaryIntegrable (fun z => (z - (1 : ℂ))⁻¹)
+    (-2 - 2 * I) (2 + 2 * I) := by
+  exact centeredSquareBoundaryIntegrable_sub_inv 1 2 (by norm_num)
+
 /-- Higher principal parts have zero integral around the centered square. -/
 example :
     centeredSquareBoundaryIntegral (fun z => z ^ (-3 : ℤ)) 2 = 0 := by
@@ -40,5 +46,6 @@ example :
 
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_sub_inv
+#print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegrable_sub_inv
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero_of_boundary_primitive
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_zpow_eq_zero
