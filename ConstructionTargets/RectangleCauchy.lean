@@ -35,6 +35,33 @@ def RectangleBoundaryIntegrable (f : ℂ → ℂ) (z w : ℂ) : Prop :=
   IntervalIntegrable (fun y : ℝ => f (w.re + y * I)) volume z.im w.im ∧
   IntervalIntegrable (fun y : ℝ => f (z.re + y * I)) volume z.im w.im
 
+/-- Differentiability on the closed rectangle implies integrability on each
+of its four parameterized boundary sides. -/
+theorem rectangleBoundaryIntegrable_of_differentiableOn
+    (f : ℂ → ℂ) (z w : ℂ)
+    (hf : DifferentiableOn ℂ f ([[z.re, w.re]] ×ℂ [[z.im, w.im]])) :
+    RectangleBoundaryIntegrable f z w := by
+  have hc := hf.continuousOn
+  constructor
+  · apply ContinuousOn.intervalIntegrable
+    apply hc.comp (by fun_prop)
+    intro x hx
+    exact ⟨by simpa using hx, by simp⟩
+  constructor
+  · apply ContinuousOn.intervalIntegrable
+    apply hc.comp (by fun_prop)
+    intro x hx
+    exact ⟨by simpa using hx, by simp⟩
+  constructor
+  · apply ContinuousOn.intervalIntegrable
+    apply hc.comp (by fun_prop)
+    intro y hy
+    exact ⟨by simp, by simpa using hy⟩
+  · apply ContinuousOn.intervalIntegrable
+    apply hc.comp (by fun_prop)
+    intro y hy
+    exact ⟨by simp, by simpa using hy⟩
+
 /-- Multiplication by a constant preserves integrability on a rectangle boundary. -/
 lemma RectangleBoundaryIntegrable.const_mul {f : ℂ → ℂ} {z w : ℂ}
     (hf : RectangleBoundaryIntegrable f z w) (c : ℂ) :

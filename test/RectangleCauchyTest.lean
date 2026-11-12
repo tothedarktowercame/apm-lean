@@ -11,6 +11,9 @@ example (z w : ℂ) :
     rectangleBoundaryIntegral (fun u : ℂ => u ^ 2) z w = 0 := by
   exact rectangleBoundaryIntegral_eq_zero _ (by fun_prop) z w
 
+example (z w : ℂ) : RectangleBoundaryIntegrable (fun u : ℂ => u ^ 2) z w := by
+  exact rectangleBoundaryIntegrable_of_differentiableOn _ _ _ (by fun_prop)
+
 /-- Linearity is checked on integrable polynomial boundary data. -/
 example (z w : ℂ) :
     rectangleBoundaryIntegral (fun u : ℂ => 2 * u + u ^ 2) z w =
@@ -45,6 +48,7 @@ example :
     0 2 (by norm_num) (-3) (by norm_num)
 
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero
+#print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegrable_of_differentiableOn
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_sub_inv
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegrable_sub_inv
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero_of_boundary_primitive
