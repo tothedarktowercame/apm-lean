@@ -26,4 +26,11 @@ example (z w : ℂ) :
     (boundaryIntegrable_of_continuous _ (by fun_prop))
     (boundaryIntegrable_of_continuous _ (by fun_prop))
 
+/-- The square winds once around each real point in its interior. -/
+example :
+    centeredSquareBoundaryIntegral (fun z => (z - (1 : ℂ))⁻¹) 2 =
+      2 * Real.pi * I := by
+  exact centeredSquareBoundaryIntegral_sub_inv 1 2 (by norm_num)
+
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero
+#print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_sub_inv

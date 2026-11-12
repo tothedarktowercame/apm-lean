@@ -1,4 +1,5 @@
 import Mathlib.Analysis.Complex.CauchyIntegral
+import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
 
 /-!
 # Cauchy's theorem on an axis-aligned rectangle
@@ -120,5 +121,209 @@ theorem rectangleBoundaryIntegral_eq_zero
     rectangleBoundaryIntegral f z w = 0 := by
   apply rectangleBoundaryIntegral_eq_zero_of_differentiableOn
   exact hf.differentiableOn
+
+/-- On the lower-right quadrant, negation crosses the principal logarithm
+cut upward and adds `π i`. -/
+lemma log_neg_eq_add_pi_I_of_re_pos_of_im_neg {q : ℂ}
+    (hre : 0 < q.re) (him : q.im < 0) :
+    Complex.log (-q) = Complex.log q + π * I := by
+  have hq : q ≠ 0 := by
+    intro h
+    have := congrArg Complex.re h
+    simp at this
+    linarith
+  have hneg : (-1 : ℂ) ≠ 0 := by norm_num
+  have hargneg : q.arg < 0 := Complex.arg_neg_iff.mpr him
+  have hmem : (-1 : ℂ).arg + q.arg ∈ Ioc (-π) π := by
+    rw [Complex.arg_neg_one]
+    constructor
+    · have hp := Real.pi_pos
+      have hlow := Complex.neg_pi_lt_arg q
+      linarith
+    · exact (add_le_iff_nonpos_right π).mpr hargneg.le
+  rw [show -q = (-1 : ℂ) * q by ring, Complex.log_mul hneg hq hmem,
+    Complex.log_neg_one]
+  ring
+
+/-- On the upper-right quadrant, negation crosses the principal logarithm
+cut downward and subtracts `π i`. -/
+lemma log_neg_eq_sub_pi_I_of_re_pos_of_im_pos {q : ℂ}
+    (hre : 0 < q.re) (him : 0 < q.im) :
+    Complex.log (-q) = Complex.log q - π * I := by
+  have hq : q ≠ 0 := by
+    intro h
+    have := congrArg Complex.re h
+    simp at this
+    linarith
+  have hnq : -q ≠ 0 := neg_ne_zero.mpr hq
+  have hneg : (-1 : ℂ) ≠ 0 := by norm_num
+  have hargneg : (-q).arg < 0 :=
+    Complex.arg_neg_iff.mpr (by simpa using neg_lt_zero.mpr him)
+  have hmem : (-q).arg + (-1 : ℂ).arg ∈ Ioc (-π) π := by
+    rw [Complex.arg_neg_one]
+    constructor
+    · have hlow := Complex.neg_pi_lt_arg (-q)
+      have hp := Real.pi_pos
+      linarith
+    · exact add_le_iff_nonpos_left.mpr hargneg.le
+  have hmul := Complex.log_mul hnq hneg hmem
+  rw [show (-q) * (-1 : ℂ) = q by ring, Complex.log_neg_one] at hmul
+  linear_combination -hmul
+
+/-- A horizontal segment away from the real axis integrates the Cauchy
+kernel by the principal logarithm. -/
+lemma integral_horizontal_sub_inv_eq_log
+    (a : ℂ) (c l u : ℝ) (hc : c ≠ a.im) :
+    (∫ x : ℝ in l..u, ((x : ℂ) + c * I - a)⁻¹) =
+      Complex.log ((u : ℂ) + c * I - a) -
+        Complex.log ((l : ℂ) + c * I - a) := by
+  have hne (x : ℝ) : (x : ℂ) + c * I - a ≠ 0 := by
+    intro h
+    have hi := congrArg Complex.im h
+    simp at hi
+    exact hc (sub_eq_zero.mp hi)
+  have hd (x : ℝ) : HasDerivAt
+      (fun t : ℝ => Complex.log ((t : ℂ) + c * I - a))
+      (((x : ℂ) + c * I - a)⁻¹) x := by
+    have hslit : (x : ℂ) + c * I - a ∈ Complex.slitPlane := by
+      right
+      simpa using sub_ne_zero.mpr hc
+    convert ((Complex.hasDerivAt_log hslit).comp x
+      (((Complex.ofRealCLM.hasDerivAt (x := x)).add_const (c * I)).sub_const a)) using 1
+    simp [Complex.ofRealCLM_apply]
+  have hi : IntervalIntegrable
+      (fun x : ℝ => ((x : ℂ) + c * I - a)⁻¹) volume l u := by
+    exact (((continuous_ofReal.add continuous_const).sub continuous_const).inv₀
+      (fun x => hne x)).intervalIntegrable _ _
+  exact intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun x _ => hd x) hi
+
+/-- On a vertical line strictly to the right of the pole, multiplying the
+parameter integral by `i` gives the logarithm endpoint difference. -/
+lemma I_mul_integral_vertical_sub_inv_eq_log
+    (a : ℂ) (d l u : ℝ) (hd : a.re < d) :
+    I * (∫ y : ℝ in l..u, ((d : ℂ) + y * I - a)⁻¹) =
+      Complex.log ((d : ℂ) + u * I - a) -
+        Complex.log ((d : ℂ) + l * I - a) := by
+  have hne (y : ℝ) : (d : ℂ) + y * I - a ≠ 0 := by
+    intro h
+    have hr := congrArg Complex.re h
+    simp at hr
+    linarith
+  have hderiv (y : ℝ) : HasDerivAt
+      (fun t : ℝ => Complex.log ((d : ℂ) + t * I - a))
+      (I * (((d : ℂ) + y * I - a)⁻¹)) y := by
+    have hslit : (d : ℂ) + y * I - a ∈ Complex.slitPlane := by
+      left
+      simp
+      linarith
+    have hpath : HasDerivAt (fun t : ℝ => (d : ℂ) + t * I - a) I y := by
+      convert ((((Complex.ofRealCLM.hasDerivAt (x := y)).mul_const I).const_add
+        (d : ℂ)).sub_const a) using 1 <;> simp [Complex.ofRealCLM_apply]
+    convert ((Complex.hasDerivAt_log hslit).comp y hpath) using 1 <;> ring
+  have hi : IntervalIntegrable
+      (fun y : ℝ => I * (((d : ℂ) + y * I - a)⁻¹)) volume l u := by
+    exact (continuous_const.mul
+      (((continuous_const.add (continuous_ofReal.mul continuous_const)).sub
+        continuous_const).inv₀ (fun y => hne y))).intervalIntegrable _ _
+  have hconst :
+      (∫ y : ℝ in l..u, I * (((d : ℂ) + y * I - a)⁻¹)) =
+        I * ∫ y : ℝ in l..u, ((d : ℂ) + y * I - a)⁻¹ :=
+    intervalIntegral.integral_const_mul (μ := volume)
+      (a := l) (b := u) I (fun y : ℝ => ((d : ℂ) + y * I - a)⁻¹)
+  rw [← hconst]
+  exact intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun y _ => hderiv y) hi
+
+/-- On a vertical line strictly to the left of the pole, `log (-(z-a))`
+is a primitive that stays on the principal slit plane. -/
+lemma neg_I_mul_integral_vertical_sub_inv_eq_log_neg
+    (a : ℂ) (d l u : ℝ) (hd : d < a.re) :
+    -I * (∫ y : ℝ in l..u, ((d : ℂ) + y * I - a)⁻¹) =
+      Complex.log (-((d : ℂ) + l * I - a)) -
+        Complex.log (-((d : ℂ) + u * I - a)) := by
+  have hne (y : ℝ) : (d : ℂ) + y * I - a ≠ 0 := by
+    intro h
+    have hr := congrArg Complex.re h
+    simp at hr
+    linarith
+  have hderiv (y : ℝ) : HasDerivAt
+      (fun t : ℝ => Complex.log (-((d : ℂ) + t * I - a)))
+      (I * (((d : ℂ) + y * I - a)⁻¹)) y := by
+    have hslit : -((d : ℂ) + y * I - a) ∈ Complex.slitPlane := by
+      left
+      simp
+      linarith
+    have hpath : HasDerivAt (fun t : ℝ => -((d : ℂ) + t * I - a)) (-I) y := by
+      convert (((((Complex.ofRealCLM.hasDerivAt (x := y)).mul_const I).const_add
+        (d : ℂ)).sub_const a).neg) using 1 <;> simp [Complex.ofRealCLM_apply]
+    convert ((Complex.hasDerivAt_log hslit).comp y hpath) using 1 <;>
+      simp only [inv_neg] <;> ring
+  have hi : IntervalIntegrable
+      (fun y : ℝ => I * (((d : ℂ) + y * I - a)⁻¹)) volume l u := by
+    exact (continuous_const.mul
+      (((continuous_const.add (continuous_ofReal.mul continuous_const)).sub
+        continuous_const).inv₀ (fun y => hne y))).intervalIntegrable _ _
+  have hFTC := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (fun y _ => hderiv y) hi
+  have hconst :
+      (∫ y : ℝ in l..u, I * (((d : ℂ) + y * I - a)⁻¹)) =
+        I * ∫ y : ℝ in l..u, ((d : ℂ) + y * I - a)⁻¹ :=
+    intervalIntegral.integral_const_mul (μ := volume)
+      (a := l) (b := u) I (fun y : ℝ => ((d : ℂ) + y * I - a)⁻¹)
+  rw [hconst] at hFTC
+  linear_combination -hFTC
+
+/-- The explicit positively oriented boundary integral of a centered square
+of half-side `R`. -/
+def centeredSquareBoundaryIntegral (f : ℂ → ℂ) (R : ℝ) : ℂ :=
+  rectangleBoundaryIntegral f (-R - R * I) (R + R * I)
+
+/-- The Cauchy kernel winds once around a real point strictly inside a
+centered square. This is the rectangle analogue of the circle integral
+`∮ (z-a)⁻¹ dz = 2πi`. -/
+theorem centeredSquareBoundaryIntegral_sub_inv
+    (a R : ℝ) (ha : |a| < R) :
+    centeredSquareBoundaryIntegral (fun z => (z - (a : ℂ))⁻¹) R =
+      2 * π * I := by
+  have hR : 0 < R := lt_of_le_of_lt (abs_nonneg a) ha
+  have har : a < R := lt_of_le_of_lt (le_abs_self a) ha
+  have hla : -R < a := by
+    have := neg_abs_le a
+    linarith
+  have hbottom := integral_horizontal_sub_inv_eq_log
+    (a : ℂ) (-R) (-R) R (by simp; exact hR.ne')
+  have htop := integral_horizontal_sub_inv_eq_log
+    (a : ℂ) R (-R) R (by simp; exact hR.ne')
+  have hright := I_mul_integral_vertical_sub_inv_eq_log
+    (a : ℂ) R (-R) R (by simpa using har)
+  have hleft := neg_I_mul_integral_vertical_sub_inv_eq_log_neg
+    (a : ℂ) (-R) (-R) R (by simpa using hla)
+  unfold centeredSquareBoundaryIntegral rectangleBoundaryIntegral
+  simp only [neg_re, ofReal_re, mul_re, mul_im, I_re, ofReal_im, I_im, mul_zero,
+    mul_one, sub_re, sub_im, neg_im, add_re, add_im, zero_mul, add_zero,
+    zero_add, sub_zero, neg_zero, zero_sub]
+  rw [hbottom, htop, hright]
+  have hleft' :
+      -(I * (∫ y : ℝ in -R..R,
+        ((((-R : ℝ) : ℂ) + y * I - (a : ℂ))⁻¹))) =
+        Complex.log (-((((-R : ℝ) : ℂ) + (-R : ℝ) * I - (a : ℂ)))) -
+          Complex.log (-((((-R : ℝ) : ℂ) + R * I - (a : ℂ)))) := by
+    simpa only [neg_mul] using hleft
+  change _ + (-(I * (∫ y : ℝ in -R..R,
+    ((((-R : ℝ) : ℂ) + y * I - (a : ℂ))⁻¹)))) = 2 * π * I
+  rw [hleft']
+  have hB : 0 < R + a := by linarith
+  have hnegUpper := log_neg_eq_add_pi_I_of_re_pos_of_im_neg
+    (q := (R + a : ℝ) - R * I) (by simp; linarith) (by simp; linarith)
+  have hnegLower := log_neg_eq_sub_pi_I_of_re_pos_of_im_pos
+    (q := (R + a : ℝ) + R * I) (by simp; linarith) (by simp; linarith)
+  rw [show (((-R : ℝ) : ℂ)) + (-R : ℝ) * I - (a : ℂ) =
+      -((R + a : ℝ) + R * I) by push_cast; ring,
+    show (((-R : ℝ) : ℂ)) + R * I - (a : ℂ) =
+      -((R + a : ℝ) - R * I) by push_cast; ring,
+    hnegUpper, hnegLower]
+  simp only [neg_neg]
+  ring
 
 end ConstructionTargets.RectangleCauchy
