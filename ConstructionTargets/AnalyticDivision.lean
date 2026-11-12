@@ -27,6 +27,12 @@ theorem analyticAt_dividedByPower (n : ℕ) (a : ℂ) (f : ℂ → ℂ)
   have hp : HasFPowerSeriesAt f p a := hf.hasFPowerSeriesAt
   exact (hp.has_fpower_series_iterate_dslope_fslope n).analyticAt
 
+/-- The divided difference of a function analytic at its base point is again
+analytic there. -/
+theorem analyticAt_dslope (a : ℂ) (f : ℂ → ℂ)
+    (hf : AnalyticAt ℂ f a) : AnalyticAt ℂ (dslope f a) a := by
+  simpa [dividedByPower] using analyticAt_dividedByPower 1 a f hf
+
 /-- At the base point, the `n`th repeated divided difference is the `n`th
 Taylor coefficient. -/
 theorem dividedByPower_apply_base (n : ℕ) (a : ℂ) (f : ℂ → ℂ)
