@@ -1,5 +1,5 @@
 import Mathlib
-import ConstructionTargets.Sinc
+import ConstructionTargets.UpperSemicircleCauchy
 
 open Complex Real MeasureTheory Filter Topology Set
 
@@ -98,121 +98,6 @@ theorem apm_a97A06_integrable :
         rw [Real.rpow_neg (le_of_lt (zero_lt_one.trans hx)), Real.rpow_two]
         ring
 
-private def apm_a97A06_q (x : ℝ) := x * Real.sinc x ^ 2
-
-private def apm_a97A06_d (x : ℝ) :=
-  2 * Real.sinc (2 * x) - Real.sinc x ^ 2
-
-private lemma apm_a97A06_q_hasDerivAt (x : ℝ) :
-    HasDerivAt apm_a97A06_q (apm_a97A06_d x) x := by
-  by_cases hx : x = 0
-  · subst x
-    rw [hasDerivAt_iff_tendsto_slope_zero]
-    have h : Tendsto (fun y : ℝ => Real.sinc y ^ 2) (𝓝[≠] 0) (𝓝 1) := by
-      have hc : Tendsto (fun y : ℝ => Real.sinc y ^ 2) (𝓝 0)
-          (𝓝 (Real.sinc 0 ^ 2)) := (Real.continuous_sinc.pow 2).continuousAt
-      simpa using hc.mono_left inf_le_left
-    have hz : Tendsto
-        (fun y : ℝ => y⁻¹ • (apm_a97A06_q (0 + y) - apm_a97A06_q 0))
-        (𝓝[≠] 0) (𝓝 1) := by
-      apply h.congr'
-      filter_upwards [self_mem_nhdsWithin] with y hy
-      have hq0 : apm_a97A06_q (0 + y) - apm_a97A06_q 0 =
-          y * Real.sinc y ^ 2 := by simp [apm_a97A06_q]
-      rw [hq0]
-      change Real.sinc y ^ 2 = y⁻¹ * (y * Real.sinc y ^ 2)
-      rw [← mul_assoc, inv_mul_cancel₀ hy, one_mul]
-    convert hz using 1 <;> norm_num [apm_a97A06_d]
-  · have hs0 : HasDerivAt (fun y : ℝ => Real.sin y / y)
-        ((Real.cos x * x - Real.sin x) / x ^ 2) x := by
-      simpa only [id_eq, mul_one] using
-        (Real.hasDerivAt_sin x).div (hasDerivAt_id x) hx
-    have hs : HasDerivAt Real.sinc
-        ((Real.cos x * x - Real.sin x) / x ^ 2) x := by
-      apply hs0.congr_of_eventuallyEq
-      filter_upwards [eventually_ne_nhds hx] with y hy
-      exact Real.sinc_of_ne_zero hy
-    have hq : HasDerivAt apm_a97A06_q
-        (Real.sinc x ^ 2 + x * (2 * Real.sinc x *
-          ((Real.cos x * x - Real.sin x) / x ^ 2))) x := by
-      simpa [apm_a97A06_q, mul_assoc] using (hasDerivAt_id x).mul (hs.pow 2)
-    convert hq using 1
-    simp only [apm_a97A06_d, Real.sinc_of_ne_zero hx,
-      Real.sinc_of_ne_zero (mul_ne_zero (by norm_num : (2 : ℝ) ≠ 0) hx)]
-    rw [Real.sin_two_mul]
-    field_simp
-    ring
-
-private lemma apm_a97A06_q_deriv (x : ℝ) :
-    deriv apm_a97A06_q x = apm_a97A06_d x :=
-  (apm_a97A06_q_hasDerivAt x).deriv
-
-private lemma apm_a97A06_finite_identity (R : ℝ) :
-    (∫ x in (0 : ℝ)..R, Real.sinc x ^ 2) =
-      (∫ x in (0 : ℝ)..(2 * R), Real.sinc x) - R * Real.sinc R ^ 2 := by
-  have hdcont : Continuous apm_a97A06_d :=
-    ((Real.continuous_sinc.comp (continuous_const.mul continuous_id)).const_mul 2).sub
-      (Real.continuous_sinc.pow 2)
-  have hftc : (∫ x in (0 : ℝ)..R, apm_a97A06_d x) =
-      apm_a97A06_q R - apm_a97A06_q 0 := by
-    apply intervalIntegral.integral_deriv_eq_sub' apm_a97A06_q
-    · funext x
-      exact apm_a97A06_q_deriv x
-    · intro x hx
-      exact (apm_a97A06_q_hasDerivAt x).differentiableAt
-    · exact hdcont.continuousOn
-  have hscale : 2 * (∫ x in (0 : ℝ)..R, Real.sinc (2 * x)) =
-      ∫ x in (0 : ℝ)..(2 * R), Real.sinc x := by
-    have heq : (fun x : ℝ => Real.sinc (2 * x)) =
-        fun x => Real.sinc (x * 2) := by
-      funext x
-      rw [mul_comm]
-    calc
-      2 * (∫ x in (0 : ℝ)..R, Real.sinc (2 * x)) =
-          2 * (∫ x in (0 : ℝ)..R, Real.sinc (x * 2)) := by rw [heq]
-      _ = ∫ x in (0 : ℝ)..(R * 2), Real.sinc x := by
-        rw [intervalIntegral.integral_comp_mul_right Real.sinc
-          (by norm_num : (2 : ℝ) ≠ 0)]
-        simp
-      _ = ∫ x in (0 : ℝ)..(2 * R), Real.sinc x := by ring_nf
-  change (∫ x in (0 : ℝ)..R,
-      2 * Real.sinc (2 * x) - Real.sinc x ^ 2) = _ at hftc
-  rw [intervalIntegral.integral_sub, intervalIntegral.integral_const_mul] at hftc
-  · rw [hscale] at hftc
-    simp [apm_a97A06_q] at hftc ⊢
-    linarith
-  · exact (Real.continuous_sinc.comp
-      (continuous_const.mul continuous_id)).intervalIntegrable 0 R |>.const_mul 2
-  · exact (Real.continuous_sinc.pow 2).intervalIntegrable 0 R
-
-private lemma apm_a97A06_tendsto_q_atTop :
-    Tendsto apm_a97A06_q atTop (𝓝 0) := by
-  refine squeeze_zero' (g := fun R : ℝ => 1 / R) ?_ ?_ ?_
-  · filter_upwards [eventually_gt_atTop (0 : ℝ)] with R hR
-    exact mul_nonneg hR.le (sq_nonneg _)
-  · filter_upwards [eventually_gt_atTop (0 : ℝ)] with R hR
-    rw [apm_a97A06_q, Real.sinc_of_ne_zero hR.ne']
-    calc
-      R * (Real.sin R / R) ^ 2 = Real.sin R ^ 2 / R := by field_simp
-      _ ≤ 1 / R := div_le_div_of_nonneg_right (Real.sin_sq_le_one R) hR.le
-  · simpa [one_div] using tendsto_inv_atTop_zero
-
-private lemma apm_a97A06_tendsto_finite_identity :
-    Tendsto (fun R : ℝ => ∫ x in (0 : ℝ)..R, Real.sinc x ^ 2)
-      atTop (𝓝 (π / 2)) := by
-  have hsinc := ConstructionTargets.Sinc.tendsto_integral_sinc_pi_div_two
-  have htwo : Tendsto (fun R : ℝ => 2 * R) atTop atTop :=
-    tendsto_id.const_mul_atTop (by norm_num)
-  have hscaled := hsinc.comp htwo
-  have hsub := hscaled.sub apm_a97A06_tendsto_q_atTop
-  have hsub' : Tendsto
-      (fun R : ℝ => (∫ x in (0 : ℝ)..(2 * R), Real.sinc x) -
-        apm_a97A06_q R) atTop (𝓝 (π / 2)) := by
-    simpa using hsub
-  apply hsub'.congr'
-  filter_upwards with R
-  exact (apm_a97A06_finite_identity R).symm
-
 /-- Real part identity: Re(F(x)) = -2 sin²(x)/x² for x ≠ 0. -/
 theorem apm_a97A06_real_part
     (x : ℝ) (hx : x ≠ 0) :
@@ -305,23 +190,186 @@ theorem apm_a97A06_arc_inv_eq_iPi
       change ((π : ℂ) * I) = I * π
       simp [mul_comm]
 
+/-- On every positive-radius upper semicircle, the arc integral of `F`
+splits into its exponential, inverse-square, and inverse terms. -/
+lemma apm_a97A06_arc_F_eq (R : ℝ) (hR : 0 < R) :
+    (∫ θ in (0 : ℝ)..π,
+      apm_a97A06_F (R * Complex.exp (I * θ)) *
+        (I * R * Complex.exp (I * θ))) =
+      (∫ θ in (0 : ℝ)..π,
+        (Complex.exp (2 * I * (R * Complex.exp (I * θ))) /
+          (R * Complex.exp (I * θ)) ^ 2) *
+          (I * R * Complex.exp (I * θ))) -
+      (∫ θ in (0 : ℝ)..π,
+        (1 / (R * Complex.exp (I * θ)) ^ 2) *
+          (I * R * Complex.exp (I * θ))) -
+      π • (2 * I * I) := by
+  have hR0 : (R : ℂ) ≠ 0 := by exact_mod_cast hR.ne'
+  have hpoint (θ : ℝ) :
+      apm_a97A06_F (R * Complex.exp (I * θ)) *
+          (I * R * Complex.exp (I * θ)) =
+        (Complex.exp (2 * I * (R * Complex.exp (I * θ))) /
+            (R * Complex.exp (I * θ)) ^ 2) *
+            (I * R * Complex.exp (I * θ)) -
+        (1 / (R * Complex.exp (I * θ)) ^ 2) *
+            (I * R * Complex.exp (I * θ)) -
+        2 * I * ((1 / (R * Complex.exp (I * θ))) *
+            (I * R * Complex.exp (I * θ))) := by
+    have hz : (R : ℂ) * Complex.exp (I * θ) ≠ 0 :=
+      mul_ne_zero hR0 (Complex.exp_ne_zero _)
+    rw [apm_a97A06_F, if_neg hz]
+    field_simp [hz]
+  rw [intervalIntegral.integral_congr (fun θ _ => hpoint θ)]
+  rw [intervalIntegral.integral_sub, intervalIntegral.integral_sub]
+  · congr 1
+    calc
+      (∫ θ in (0 : ℝ)..π,
+          2 * I * ((1 / (R * Complex.exp (I * θ))) *
+            (I * R * Complex.exp (I * θ)))) =
+          ∫ _θ in (0 : ℝ)..π, (2 * I * I : ℂ) := by
+            apply intervalIntegral.integral_congr
+            intro θ _
+            have hz : (R : ℂ) * Complex.exp (I * θ) ≠ 0 :=
+              mul_ne_zero hR0 (Complex.exp_ne_zero _)
+            field_simp [hz]
+      _ = π • (2 * I * I) := by
+        rw [intervalIntegral.integral_const, sub_zero]
+        rfl
+  all_goals
+    apply Continuous.intervalIntegrable <;>
+    fun_prop (disch := aesop)
+
+/-- The upper-semicircle arc integral of `F` tends to `2π`.  The first two
+principal terms vanish, while `-2i/z` contributes `2π`. -/
+theorem apm_a97A06_arc_F_tendsto :
+    Tendsto (fun R : ℝ => ∫ θ in (0 : ℝ)..π,
+      apm_a97A06_F (R * Complex.exp (I * θ)) *
+        (I * R * Complex.exp (I * θ))) atTop (𝓝 (2 * π)) := by
+  have hexp : Tendsto (fun R : ℝ => ∫ θ in (0 : ℝ)..π,
+      (Complex.exp (2 * I * (R * Complex.exp (I * θ))) /
+        (R * Complex.exp (I * θ)) ^ 2) *
+        (I * R * Complex.exp (I * θ))) atTop (𝓝 0) := by
+    rw [tendsto_zero_iff_norm_tendsto_zero]
+    exact apm_a97A06_arc_exp_vanishes
+  have hinv : Tendsto (fun R : ℝ => ∫ θ in (0 : ℝ)..π,
+      (1 / (R * Complex.exp (I * θ)) ^ 2) *
+        (I * R * Complex.exp (I * θ))) atTop (𝓝 0) := by
+    rw [tendsto_zero_iff_norm_tendsto_zero]
+    exact apm_a97A06_arc_inv_sq_vanishes
+  have hconst : Tendsto (fun _ : ℝ => π • (2 * I * I : ℂ))
+      atTop (𝓝 (π • (2 * I * I : ℂ))) := tendsto_const_nhds
+  have hlim : Tendsto (fun R : ℝ =>
+      (∫ θ in (0 : ℝ)..π,
+        (Complex.exp (2 * I * (R * Complex.exp (I * θ))) /
+          (R * Complex.exp (I * θ)) ^ 2) *
+          (I * R * Complex.exp (I * θ))) -
+      (∫ θ in (0 : ℝ)..π,
+        (1 / (R * Complex.exp (I * θ)) ^ 2) *
+          (I * R * Complex.exp (I * θ))) -
+      π • (2 * I * I : ℂ)) atTop
+      (𝓝 ((0 : ℂ) - 0 - π • (2 * I * I : ℂ))) :=
+    (hexp.sub hinv).sub hconst
+  have hvalue : ((0 : ℂ) - 0 - π • (2 * I * I : ℂ)) = 2 * π := by
+    have hII : (2 * I * I : ℂ) = -2 := by
+      rw [show (2 : ℂ) * I * I = 2 * (I * I) by ring, I_mul_I]
+      norm_num
+    rw [hII]
+    norm_num
+    ring
+  rw [hvalue] at hlim
+  refine hlim.congr' ?_
+  filter_upwards [eventually_gt_atTop (0 : ℝ)] with R hR
+  exact (apm_a97A06_arc_F_eq R hR).symm
+
+/-- Cauchy's theorem on the upper semicircle forces the diameter integral of
+`F` to tend to `-2π`. -/
+theorem apm_a97A06_diameter_F_tendsto :
+    Tendsto (fun R : ℝ => ∫ x in -R..R, apm_a97A06_F x)
+      atTop (𝓝 (-2 * π)) := by
+  have hdiff : Differentiable ℂ apm_a97A06_F :=
+    differentiableOn_univ.mp apm_a97A06_F_analytic.differentiableOn
+  have hcauchy (R : ℝ) :=
+    ConstructionTargets.UpperSemicircleCauchy.intervalIntegral_add_upperSemicircle_eq_zero
+      apm_a97A06_F hdiff R
+  have hneg : Tendsto (fun R : ℝ =>
+      -(∫ θ in (0 : ℝ)..π,
+        apm_a97A06_F (R * Complex.exp (I * θ)) *
+          (I * R * Complex.exp (I * θ)))) atTop (𝓝 (-2 * π)) := by
+    convert apm_a97A06_arc_F_tendsto.neg using 1 <;> ring
+  refine hneg.congr' ?_
+  filter_upwards with R
+  exact (eq_neg_of_add_eq_zero_left (hcauchy R)).symm
+
+/-- The real part of the diameter contour integral is four times the negative
+of the target finite integral. -/
+lemma apm_a97A06_diameter_re_eq (R : ℝ) (_hR : 0 ≤ R) :
+    (∫ x in -R..R, apm_a97A06_F x).re =
+      -4 * ∫ x in (0 : ℝ)..R, Real.sin x ^ 2 / x ^ 2 := by
+  have hdiff : Differentiable ℂ apm_a97A06_F :=
+    differentiableOn_univ.mp apm_a97A06_F_analytic.differentiableOn
+  have hFcont : Continuous (fun x : ℝ => apm_a97A06_F (x : ℂ)) :=
+    hdiff.continuous.comp continuous_ofReal
+  have hre :
+      (∫ x in -R..R, apm_a97A06_F x).re =
+        ∫ x in -R..R, (apm_a97A06_F x).re := by
+    symm
+    exact (RCLike.reCLM.intervalIntegral_comp_comm
+      (hFcont.intervalIntegrable (μ := volume) (-R) R))
+  rw [hre]
+  have hreal : (∫ x in -R..R, (apm_a97A06_F x).re) =
+      ∫ x in -R..R, -2 * (Real.sin x) ^ 2 / x ^ 2 := by
+    apply intervalIntegral.integral_congr_ae
+    filter_upwards [volume.ae_ne (0 : ℝ)] with x hx
+    intro _
+    exact apm_a97A06_real_part x hx
+  rw [hreal]
+  have heven (x : ℝ) :
+      (-2 * Real.sin (-x) ^ 2 / (-x) ^ 2) =
+        -2 * Real.sin x ^ 2 / x ^ 2 := by simp
+  have hneg : (∫ x in -R..(0 : ℝ), -2 * Real.sin x ^ 2 / x ^ 2) =
+      ∫ x in (0 : ℝ)..R, -2 * Real.sin x ^ 2 / x ^ 2 := by
+    calc
+      _ = ∫ x in (0 : ℝ)..R,
+          (fun y : ℝ => -2 * Real.sin y ^ 2 / y ^ 2) (-x) := by
+        simpa only [neg_zero] using (intervalIntegral.integral_comp_neg
+          (f := fun x : ℝ => -2 * Real.sin x ^ 2 / x ^ 2)
+          (a := 0) (b := R)).symm
+      _ = _ := intervalIntegral.integral_congr (fun x _ => by simpa using heven x)
+  have hrecont : Continuous (fun x : ℝ => (apm_a97A06_F (x : ℂ)).re) :=
+    Complex.continuous_re.comp hFcont
+  have hint (a b : ℝ) : IntervalIntegrable
+      (fun x : ℝ => -2 * Real.sin x ^ 2 / x ^ 2) volume a b := by
+    apply (hrecont.intervalIntegrable a b).congr_ae
+    filter_upwards [ae_restrict_of_ae (volume.ae_ne (0 : ℝ))] with x hx
+    exact apm_a97A06_real_part x hx
+  rw [← intervalIntegral.integral_add_adjacent_intervals
+    (hint (-R) 0) (hint 0 R)]
+  rw [hneg, ← two_mul]
+  have hscale : (∫ x in (0 : ℝ)..R, -2 * Real.sin x ^ 2 / x ^ 2) =
+      -2 * ∫ x in (0 : ℝ)..R, Real.sin x ^ 2 / x ^ 2 := by
+    rw [← intervalIntegral.integral_const_mul]
+    apply intervalIntegral.integral_congr
+    intro x _
+    ring
+  rw [hscale]
+  ring
+
 /-- Main result: ∫₀^∞ sin²(x)/x² dx = π/2. -/
 theorem apm_a97A06_main :
     ∫ x in Set.Ioi (0:ℝ), (Real.sin x) ^ 2 / x ^ 2 = π / 2 := by
   have himproper := intervalIntegral_tendsto_integral_Ioi 0
     apm_a97A06_integrable tendsto_id
-  have heq : ∀ R : ℝ,
-      (∫ x in (0 : ℝ)..R, Real.sin x ^ 2 / x ^ 2) =
-        ∫ x in (0 : ℝ)..R, Real.sinc x ^ 2 := by
-    intro R
-    apply intervalIntegral.integral_congr_ae
-    filter_upwards [volume.ae_ne (0 : ℝ)] with x hx0
-    intro hx
-    rw [Real.sinc_of_ne_zero hx0]
-    field_simp
   have htarget : Tendsto (fun R : ℝ => ∫ x in (0 : ℝ)..R,
       Real.sin x ^ 2 / x ^ 2) atTop (𝓝 (π / 2)) := by
-    apply apm_a97A06_tendsto_finite_identity.congr'
-    filter_upwards with R
-    exact (heq R).symm
+    have hre : Tendsto (fun R : ℝ =>
+        (∫ x in -R..R, apm_a97A06_F x).re) atTop (𝓝 (-2 * π)) := by
+      convert Complex.continuous_re.continuousAt.tendsto.comp
+        apm_a97A06_diameter_F_tendsto using 1 <;> simp
+    have hscaled := hre.const_mul (-1 / 4)
+    convert hscaled.congr' ?_ using 1 <;> ring
+    filter_upwards [eventually_ge_atTop (0 : ℝ)] with R hR
+    rw [apm_a97A06_diameter_re_eq R hR]
+    ring
   exact tendsto_nhds_unique himproper htarget
+
+#print axioms apm_a97A06_main
