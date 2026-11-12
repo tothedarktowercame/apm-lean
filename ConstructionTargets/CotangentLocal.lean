@@ -2,6 +2,7 @@ import Mathlib.Analysis.Analytic.IsolatedZeros
 import Mathlib.Analysis.Complex.RemovableSingularity
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Cotangent
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Deriv
+import ConstructionTargets.AnalyticDivision
 
 /-!
 # The removable part of `π cot (πz)`
@@ -159,6 +160,19 @@ theorem deriv_regularCot_zero :
     iteratedDeriv_succ'] at h
   exact h
 
+/-- The quadratic Taylor coefficient of the odd regular part vanishes. -/
+theorem iteratedDeriv_two_regularCot_zero :
+    iteratedDeriv 2 regularCot 0 = 0 := by
+  have h := eventually_mul_regularCot.iteratedDeriv_eq 2
+  change iteratedDeriv 2 (regularCot * sincPi) 0 = _ at h
+  rw [iteratedDeriv_mul (n := 2) (x := (0 : ℂ))
+      (contDiffAt_regularCot 2) (contDiffAt_sincPi 2)] at h
+  rw [← iteratedDeriv_succ'] at h
+  simp [Finset.sum_range_succ, deriv_sincPi_zero,
+    iteratedDeriv_two_sincPi_zero, iteratedDeriv_three_sincPi_zero,
+    deriv_regularCot_zero] at h
+  exact h
+
 /-- The cubic Taylor coefficient of `π cot (πz) - 1/z` is `-π⁴/45`:
 equivalently its third derivative at zero is `-2π⁴/15`. -/
 theorem iteratedDeriv_three_regularCot_zero :
@@ -178,6 +192,71 @@ theorem cot_cubic_coefficient :
     iteratedDeriv 3 regularCot 0 / 6 = -(Real.pi : ℂ) ^ 4 / 45 := by
   rw [iteratedDeriv_three_regularCot_zero]
   ring
+
+/-- The numerator left after removing the linear and cubic Taylor terms of
+the regular cotangent part.  It has a zero of order at least four at `0`. -/
+def cotFourthNumerator (z : ℂ) : ℂ :=
+  regularCot z + (Real.pi : ℂ) ^ 2 / 3 * z +
+    (Real.pi : ℂ) ^ 4 / 45 * z ^ 3
+
+/-- The first four derivatives of the fourth-order numerator vanish. -/
+theorem cotFourthNumerator_vanishes {k : ℕ} (hk : k < 4) :
+    iteratedDeriv k cotFourthNumerator 0 = 0 := by
+  change iteratedDeriv k
+    (fun z : ℂ => (regularCot z + (Real.pi : ℂ) ^ 2 / 3 * z) +
+      (Real.pi : ℂ) ^ 4 / 45 * z ^ 3) 0 = 0
+  have houter :
+      (fun z : ℂ => (regularCot z + (Real.pi : ℂ) ^ 2 / 3 * z) +
+        (Real.pi : ℂ) ^ 4 / 45 * z ^ 3) =
+      (fun z : ℂ => regularCot z + (Real.pi : ℂ) ^ 2 / 3 * z) +
+        (fun z : ℂ => (Real.pi : ℂ) ^ 4 / 45 * z ^ 3) := rfl
+  rw [houter]
+  rw [iteratedDeriv_add (n := k) (x := (0 : ℂ))
+    (f := fun z : ℂ => regularCot z + (Real.pi : ℂ) ^ 2 / 3 * z)
+    (g := fun z : ℂ => (Real.pi : ℂ) ^ 4 / 45 * z ^ 3)
+    ((contDiffAt_regularCot k).add (by fun_prop)) (by fun_prop)]
+  have hinner :
+      (fun z : ℂ => regularCot z + (Real.pi : ℂ) ^ 2 / 3 * z) =
+      regularCot + (fun z : ℂ => (Real.pi : ℂ) ^ 2 / 3 * z) := rfl
+  rw [hinner]
+  rw [iteratedDeriv_add (n := k) (x := (0 : ℂ))
+    (f := regularCot)
+    (g := fun z : ℂ => (Real.pi : ℂ) ^ 2 / 3 * z)
+    (contDiffAt_regularCot k) (by fun_prop)]
+  rw [iteratedDeriv_const_mul_field
+    ((Real.pi : ℂ) ^ 2 / 3) (fun z : ℂ => z)]
+  rw [iteratedDeriv_const_mul_field
+    ((Real.pi : ℂ) ^ 4 / 45) (fun z : ℂ => z ^ 3)]
+  interval_cases k
+  · simp
+  · simp [iteratedDeriv_succ', deriv_regularCot_zero]
+    ring
+  · simp [iteratedDeriv_two_regularCot_zero, iteratedDeriv_succ']
+  · simp [iteratedDeriv_three_regularCot_zero, iteratedDeriv_succ']
+    ring
+
+/-- The analytic extension at zero of the regular cotangent remainder divided
+by `z⁴`. -/
+def cotFourthRemainder : ℂ → ℂ :=
+  ConstructionTargets.AnalyticDivision.dividedByPower 4 0 cotFourthNumerator
+
+/-- The fourth-order remainder is analytic at zero. -/
+theorem analyticAt_cotFourthRemainder_zero :
+    AnalyticAt ℂ cotFourthRemainder 0 := by
+  apply ConstructionTargets.AnalyticDivision.analyticAt_dividedByPower
+  unfold cotFourthNumerator
+  exact (analyticAt_regularCot_zero.add (by fun_prop)).add (by fun_prop)
+
+/-- Off zero, the analytic remainder is the expected quotient. -/
+theorem cotFourthRemainder_eq_div {z : ℂ} (hz : z ≠ 0) :
+    cotFourthRemainder z = cotFourthNumerator z / z ^ 4 := by
+  simpa [cotFourthRemainder] using
+    (ConstructionTargets.AnalyticDivision.dividedByPower_eq_div
+      (n := 4) (a := (0 : ℂ)) (z := z)
+      (f := cotFourthNumerator) (by
+        unfold cotFourthNumerator
+        exact (analyticAt_regularCot_zero.add (by fun_prop)).add (by fun_prop))
+      (fun k hk => cotFourthNumerator_vanishes hk) hz)
 
 /-- Away from zero, the `dslope` definition is the usual quotient. -/
 theorem sincPi_eq_div {z : ℂ} (hz : z ≠ 0) :
