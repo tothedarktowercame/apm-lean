@@ -29,6 +29,74 @@ def sectorBoundaryIntegral (f : ℂ → ℂ) (R α : ℝ) : ℂ :=
     Complex.exp (I * α) *
       ∫ x : ℝ in 0..R, f (x * Complex.exp (I * α))
 
+/-- Integrability of an integrand on each of the three parameterized sides
+of a circular sector. -/
+def SectorBoundaryIntegrable (f : ℂ → ℂ) (R α : ℝ) : Prop :=
+  IntervalIntegrable (fun x : ℝ => f x) volume 0 R ∧
+    IntervalIntegrable (fun θ : ℝ =>
+      f (R * Complex.exp (I * θ)) *
+        (I * R * Complex.exp (I * θ))) volume 0 α ∧
+    IntervalIntegrable (fun x : ℝ =>
+      f (x * Complex.exp (I * α))) volume 0 R
+
+/-- Sector boundary integration is additive for integrable boundary data. -/
+lemma sectorBoundaryIntegral_add
+    {f g : ℂ → ℂ} {R α : ℝ}
+    (hf : SectorBoundaryIntegrable f R α)
+    (hg : SectorBoundaryIntegrable g R α) :
+    sectorBoundaryIntegral (fun z => f z + g z) R α =
+      sectorBoundaryIntegral f R α + sectorBoundaryIntegral g R α := by
+  unfold sectorBoundaryIntegral
+  rw [intervalIntegral.integral_add hf.1 hg.1]
+  rw [show (fun θ : ℝ =>
+      (f (R * Complex.exp (I * θ)) + g (R * Complex.exp (I * θ))) *
+        (I * R * Complex.exp (I * θ))) =
+      (fun θ : ℝ =>
+        f (R * Complex.exp (I * θ)) * (I * R * Complex.exp (I * θ)) +
+        g (R * Complex.exp (I * θ)) * (I * R * Complex.exp (I * θ))) by
+      funext θ; ring]
+  rw [intervalIntegral.integral_add hf.2.1 hg.2.1]
+  rw [intervalIntegral.integral_add hf.2.2 hg.2.2]
+  ring
+
+/-- Constants pull through a sector boundary integral. -/
+lemma sectorBoundaryIntegral_const_mul (c : ℂ) (f : ℂ → ℂ) (R α : ℝ) :
+    sectorBoundaryIntegral (fun z => c * f z) R α =
+      c * sectorBoundaryIntegral f R α := by
+  have hlower :
+      (∫ x : ℝ in 0..R, c * f x) =
+        c * ∫ x : ℝ in 0..R, f x := by
+    exact intervalIntegral.integral_const_mul (μ := volume)
+      (a := (0 : ℝ)) (b := R) c (fun x : ℝ => f x)
+  have harc :
+      (∫ θ : ℝ in 0..α,
+        c * f (R * Complex.exp (I * θ)) *
+          (I * R * Complex.exp (I * θ))) =
+        c * ∫ θ : ℝ in 0..α,
+          f (R * Complex.exp (I * θ)) *
+            (I * R * Complex.exp (I * θ)) := by
+    rw [show (fun θ : ℝ =>
+        c * f (R * Complex.exp (I * θ)) *
+          (I * R * Complex.exp (I * θ))) =
+        (fun θ : ℝ => c *
+          (f (R * Complex.exp (I * θ)) *
+            (I * R * Complex.exp (I * θ)))) by funext θ; ring]
+    exact intervalIntegral.integral_const_mul (μ := volume)
+      (a := (0 : ℝ)) (b := α) c (fun θ : ℝ =>
+        f (R * Complex.exp (I * θ)) *
+          (I * R * Complex.exp (I * θ)))
+  have hupper :
+      (∫ x : ℝ in 0..R,
+        c * f (x * Complex.exp (I * α))) =
+        c * ∫ x : ℝ in 0..R,
+          f (x * Complex.exp (I * α)) := by
+    exact intervalIntegral.integral_const_mul (μ := volume)
+      (a := (0 : ℝ)) (b := R) c (fun x : ℝ =>
+        f (x * Complex.exp (I * α)))
+  unfold sectorBoundaryIntegral
+  rw [hlower, harc, hupper]
+  ring
+
 /-- Boundary integrals around a sector respect pointwise equality on its
 three parameterized sides. -/
 lemma sectorBoundaryIntegral_congr

@@ -23,3 +23,8 @@ example (R α : ℝ) :
 #print axioms ConstructionTargets.SectorCauchy.sectorBoundaryIntegral_sub_inv_eq_log_endpoints
 #print axioms ConstructionTargets.SectorCauchy.sectorBoundaryIntegral_sub_inv_eq_two_pi_I
 #print axioms ConstructionTargets.SectorCauchy.sectorBoundaryIntegral_sub_inv_eq_two_pi_I_of_split_arc
+
+example (c : ℂ) (f : ℂ → ℂ) (R α : ℝ) :
+    sectorBoundaryIntegral (fun z => c * f z) R α =
+      c * sectorBoundaryIntegral f R α := by
+  exact sectorBoundaryIntegral_const_mul c f R α
