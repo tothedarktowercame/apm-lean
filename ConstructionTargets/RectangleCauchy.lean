@@ -50,6 +50,24 @@ lemma RectangleBoundaryIntegrable.add {f g : ℂ → ℂ} {z w : ℂ}
   ⟨hf.1.add hg.1, hf.2.1.add hg.2.1,
     hf.2.2.1.add hg.2.2.1, hf.2.2.2.add hg.2.2.2⟩
 
+/-- The zero function is integrable on every rectangle boundary. -/
+lemma rectangleBoundaryIntegrable_zero (z w : ℂ) :
+    RectangleBoundaryIntegrable (fun _ : ℂ => 0) z w := by
+  exact ⟨continuous_const.intervalIntegrable _ _, continuous_const.intervalIntegrable _ _,
+    continuous_const.intervalIntegrable _ _, continuous_const.intervalIntegrable _ _⟩
+
+/-- A finite sum of integrable boundary functions is integrable. -/
+lemma RectangleBoundaryIntegrable.finset_sum {ι : Type*} {s : Finset ι}
+    {f : ι → ℂ → ℂ} {z w : ℂ}
+    (hf : ∀ i ∈ s, RectangleBoundaryIntegrable (f i) z w) :
+    RectangleBoundaryIntegrable (fun u => ∑ i ∈ s, f i u) z w := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simpa using rectangleBoundaryIntegrable_zero z w
+  | @insert i s hi ih =>
+      simp only [Finset.mem_insert, forall_eq_or_imp] at hf
+      simpa [Finset.sum_insert hi] using hf.1.add (ih hf.2)
+
 /-- Rectangle boundary integration is additive for integrable boundary data. -/
 lemma rectangleBoundaryIntegral_add {f g : ℂ → ℂ} {z w : ℂ}
     (hf : RectangleBoundaryIntegrable f z w)
@@ -62,6 +80,24 @@ lemma rectangleBoundaryIntegral_add {f g : ℂ → ℂ} {z w : ℂ}
     intervalIntegral.integral_add hf.2.2.1 hg.2.2.1,
     intervalIntegral.integral_add hf.2.2.2 hg.2.2.2]
   ring
+
+/-- Rectangle boundary integration commutes with finite sums of integrable
+boundary data. -/
+lemma rectangleBoundaryIntegral_finset_sum {ι : Type*} {s : Finset ι}
+    {f : ι → ℂ → ℂ} {z w : ℂ}
+    (hf : ∀ i ∈ s, RectangleBoundaryIntegrable (f i) z w) :
+    rectangleBoundaryIntegral (fun u => ∑ i ∈ s, f i u) z w =
+      ∑ i ∈ s, rectangleBoundaryIntegral (f i) z w := by
+  classical
+  induction s using Finset.induction_on with
+  | empty => simp [rectangleBoundaryIntegral]
+  | @insert i s hi ih =>
+      simp only [Finset.mem_insert, forall_eq_or_imp] at hf
+      rw [Finset.sum_insert hi]
+      have hadd := rectangleBoundaryIntegral_add hf.1
+        (RectangleBoundaryIntegrable.finset_sum hf.2)
+      rw [ih hf.2] at hadd
+      simpa [Finset.sum_insert hi] using hadd
 
 /-- Constants pull through a rectangle boundary integral. -/
 lemma rectangleBoundaryIntegral_const_mul (c : ℂ) (f : ℂ → ℂ) (z w : ℂ) :
