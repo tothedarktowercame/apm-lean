@@ -29,6 +29,30 @@ def sectorBoundaryIntegral (f : ℂ → ℂ) (R α : ℝ) : ℂ :=
     Complex.exp (I * α) *
       ∫ x : ℝ in 0..R, f (x * Complex.exp (I * α))
 
+/-- Boundary integrals around a sector respect pointwise equality on its
+three parameterized sides. -/
+lemma sectorBoundaryIntegral_congr
+    {f g : ℂ → ℂ} {R α : ℝ}
+    (hlower : ∀ x ∈ [[(0 : ℝ), R]], f x = g x)
+    (harc : ∀ θ ∈ [[(0 : ℝ), α]],
+      f (R * Complex.exp (I * θ)) = g (R * Complex.exp (I * θ)))
+    (hupper : ∀ x ∈ [[(0 : ℝ), R]],
+      f (x * Complex.exp (I * α)) = g (x * Complex.exp (I * α))) :
+    sectorBoundaryIntegral f R α = sectorBoundaryIntegral g R α := by
+  have h₁ := intervalIntegral.integral_congr (μ := volume) hlower
+  have h₂ : (∫ θ : ℝ in 0..α,
+      f (R * Complex.exp (I * θ)) * (I * R * Complex.exp (I * θ))) =
+      ∫ θ : ℝ in 0..α,
+        g (R * Complex.exp (I * θ)) * (I * R * Complex.exp (I * θ)) := by
+    apply intervalIntegral.integral_congr
+    intro θ hθ
+    change f (R * Complex.exp (I * θ)) * _ =
+      g (R * Complex.exp (I * θ)) * _
+    rw [harc θ hθ]
+  have h₃ := intervalIntegral.integral_congr (μ := volume) hupper
+  unfold sectorBoundaryIntegral
+  rw [h₁, h₂, h₃]
+
 /-- **Cauchy's theorem for a circular sector.** The positively oriented
 boundary integral of an entire function around a sector is zero. -/
 theorem sectorBoundaryIntegral_eq_zero
