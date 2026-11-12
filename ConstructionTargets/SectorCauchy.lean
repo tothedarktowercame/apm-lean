@@ -344,4 +344,133 @@ theorem sectorBoundaryIntegral_sub_inv_eq_two_pi_I
   rw [show -a = -(a) by rfl]
   linear_combination h₁ + h₂
 
+/-- A unit-winding evaluation when the outer arc crosses the principal
+logarithm cut once.  Splitting the arc at `β` and using `log (z-a)` before
+the crossing and `log (a-z)` afterwards records the branch jump explicitly. -/
+theorem sectorBoundaryIntegral_sub_inv_eq_two_pi_I_of_split_arc
+    (R α β : ℝ) (a : ℂ)
+    (hlower : ∀ x ∈ [[(0 : ℝ), R]], (x : ℂ) - a ∈ Complex.slitPlane)
+    (harc₁ : ∀ θ ∈ [[(0 : ℝ), β]],
+      R * Complex.exp (I * θ) - a ∈ Complex.slitPlane)
+    (harc₂ : ∀ θ ∈ [[β, α]],
+      a - R * Complex.exp (I * θ) ∈ Complex.slitPlane)
+    (hupper : ∀ x ∈ [[(0 : ℝ), R]],
+      a - x * Complex.exp (I * α) ∈ Complex.slitPlane)
+    (ha_im : 0 < a.im)
+    (hmid_im : 0 < (R * Complex.exp (I * β) - a).im) :
+    sectorBoundaryIntegral (fun z => (z - a)⁻¹) R α = 2 * π * I := by
+  let v : ℝ → ℂ := fun θ => I * R * Complex.exp (I * θ)
+  let w : ℝ → ℂ := fun θ => R * Complex.exp (I * θ) - a
+  have hlower_deriv (x : ℝ) (hx : x ∈ [[(0 : ℝ), R]]) :
+      HasDerivAt (fun t : ℝ => Complex.log ((t : ℂ) - a))
+        (((x : ℂ) - a)⁻¹) x := by
+    convert (((hasDerivAt_id (x := (x : ℂ))).comp_ofReal).sub_const a).clog_real
+      (hlower x hx) using 1
+    simp
+  have harc₁_deriv (θ : ℝ) (hθ : θ ∈ [[(0 : ℝ), β]]) :
+      HasDerivAt (fun t : ℝ => Complex.log (w t))
+        ((w θ)⁻¹ * v θ) θ := by
+    have hp : HasDerivAt w (v θ) θ := by
+      dsimp [w, v]
+      convert (((((hasDerivAt_id (x := (θ : ℂ))).comp_ofReal).const_mul I).cexp.const_mul
+        (R : ℂ))).sub_const a using 1 <;> simp <;> ring
+    convert hp.clog_real (harc₁ θ hθ) using 1
+    field_simp
+  have harc₂_deriv (θ : ℝ) (hθ : θ ∈ [[β, α]]) :
+      HasDerivAt (fun t : ℝ => Complex.log (-w t))
+        ((w θ)⁻¹ * v θ) θ := by
+    have hp : HasDerivAt (fun t : ℝ => -w t) (-v θ) θ := by
+      dsimp [w, v]
+      convert (((((hasDerivAt_id (x := (θ : ℂ))).comp_ofReal).const_mul I).cexp.const_mul
+        (R : ℂ))).sub_const a |>.neg using 1 <;> simp <;> ring
+    have hs : -w θ = a - R * Complex.exp (I * θ) := by
+      dsimp [w]
+      ring
+    convert hp.clog_real (hs ▸ harc₂ θ hθ) using 1
+    rw [div_eq_mul_inv]
+    rw [show -w θ = -(w θ) by rfl, inv_neg]
+    ring
+  have hupper_deriv (x : ℝ) (hx : x ∈ [[(0 : ℝ), R]]) :
+      HasDerivAt
+        (fun t : ℝ => Complex.log (a - t * Complex.exp (I * α)))
+        ((x * Complex.exp (I * α) - a)⁻¹ * Complex.exp (I * α)) x := by
+    have hp : HasDerivAt (fun t : ℝ => a - t * Complex.exp (I * α))
+        (-Complex.exp (I * α)) x := by
+      convert (hasDerivAt_const (x := x) a).sub
+        (((hasDerivAt_id (x := (x : ℂ))).comp_ofReal).mul_const
+          (Complex.exp (I * α))) using 1 <;> simp
+    convert hp.clog_real (hupper x hx) using 1
+    rw [div_eq_mul_inv]
+    rw [show a - x * Complex.exp (I * α) =
+      -(x * Complex.exp (I * α) - a) by ring, inv_neg]
+    ring
+  have hlower_cont : ContinuousOn (fun x : ℝ => ((x : ℂ) - a)⁻¹)
+      [[(0 : ℝ), R]] := ContinuousOn.inv₀
+    (continuous_ofReal.sub continuous_const).continuousOn
+    (fun x hx => Complex.slitPlane_ne_zero (hlower x hx))
+  have harc₁_cont : ContinuousOn (fun θ : ℝ => (w θ)⁻¹ * v θ) [[(0 : ℝ), β]] := by
+    apply ContinuousOn.mul
+    · exact ContinuousOn.inv₀
+        ((by fun_prop : Continuous w).continuousOn)
+        (fun θ hθ => Complex.slitPlane_ne_zero (harc₁ θ hθ))
+    · exact (by fun_prop : Continuous v).continuousOn
+  have harc₂_cont : ContinuousOn (fun θ : ℝ => (w θ)⁻¹ * v θ) [[β, α]] := by
+    apply ContinuousOn.mul
+    · apply ContinuousOn.inv₀ ((by fun_prop : Continuous w).continuousOn)
+      intro θ hθ hw0
+      apply Complex.slitPlane_ne_zero (harc₂ θ hθ)
+      dsimp [w] at hw0 ⊢
+      linear_combination -hw0
+    · exact (by fun_prop : Continuous v).continuousOn
+  have hupper_cont : ContinuousOn (fun x : ℝ =>
+      (x * Complex.exp (I * α) - a)⁻¹ * Complex.exp (I * α))
+      [[(0 : ℝ), R]] := by
+    apply ContinuousOn.mul
+    · apply ContinuousOn.inv₀
+        ((by fun_prop : Continuous fun x : ℝ =>
+          x * Complex.exp (I * α) - a).continuousOn)
+      intro x hx hzero
+      apply Complex.slitPlane_ne_zero (hupper x hx)
+      rw [sub_eq_zero] at hzero ⊢
+      exact hzero.symm
+    · fun_prop
+  have hlower_int := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (a := 0) (b := R) hlower_deriv hlower_cont.intervalIntegrable
+  have harc₁_int := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (a := 0) (b := β) harc₁_deriv harc₁_cont.intervalIntegrable
+  have harc₂_int := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (a := β) (b := α) harc₂_deriv harc₂_cont.intervalIntegrable
+  have harc_int : (∫ θ : ℝ in 0..α, (w θ)⁻¹ * v θ) =
+      (Complex.log (w β) - Complex.log (w 0)) +
+        (Complex.log (-w α) - Complex.log (-w β)) := by
+    rw [← intervalIntegral.integral_add_adjacent_intervals
+      harc₁_cont.intervalIntegrable harc₂_cont.intervalIntegrable,
+      harc₁_int, harc₂_int]
+  have hupper_int := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (a := 0) (b := R) hupper_deriv hupper_cont.intervalIntegrable
+  have hmul : Complex.exp (I * α) *
+      (∫ x : ℝ in 0..R, (x * Complex.exp (I * α) - a)⁻¹) =
+      ∫ x : ℝ in 0..R,
+        (x * Complex.exp (I * α) - a)⁻¹ * Complex.exp (I * α) := by
+    calc
+      _ = ∫ x : ℝ in 0..R,
+          Complex.exp (I * α) * (x * Complex.exp (I * α) - a)⁻¹ :=
+        (intervalIntegral.integral_const_mul
+          (a := 0) (b := R) (Complex.exp (I * α))
+          (fun x : ℝ => (x * Complex.exp (I * α) - a)⁻¹)).symm
+      _ = _ := by
+        apply intervalIntegral.integral_congr
+        intro x _
+        ring
+  rw [sectorBoundaryIntegral, hlower_int]
+  change _ + (∫ θ : ℝ in 0..α, (w θ)⁻¹ * v θ) - _ = _
+  rw [harc_int, hmul, hupper_int]
+  have hmid := log_sub_log_neg_of_im_pos hmid_im
+  have ha := log_sub_log_neg_of_im_pos ha_im
+  dsimp [w]
+  simp
+  rw [show a - R * Complex.exp (I * β) =
+    -(R * Complex.exp (I * β) - a) by ring]
+  linear_combination hmid + ha
+
 end ConstructionTargets.SectorCauchy
