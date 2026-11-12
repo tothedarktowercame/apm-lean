@@ -1,5 +1,6 @@
 import ConstructionTargets.UpperSemicircleCauchy
 import Mathlib.MeasureTheory.Integral.CurveIntegral.Poincare
+import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
 
 /-!
 # Cauchy's theorem on a circular sector
@@ -187,5 +188,106 @@ theorem sectorBoundaryIntegral_eq_zero_of_convex
         simpa using hupper_int
   rw [sectorBoundaryIntegral, hlower_int, harc_int, hupper_int']
   simp
+
+/-- The boundary integral of the Cauchy kernel around a sector, reduced to
+four endpoint values of the principal complex logarithm.  The hypotheses
+choose a logarithm branch separately on the lower radius, arc, and upper
+radius; this is the explicit winding-number calculation needed for a sector
+residue theorem. -/
+theorem sectorBoundaryIntegral_sub_inv_eq_log_endpoints
+    (R α : ℝ) (a : ℂ)
+    (hlower : ∀ x ∈ [[(0 : ℝ), R]], (x : ℂ) - a ∈ Complex.slitPlane)
+    (harc : ∀ θ ∈ [[(0 : ℝ), α]],
+      R * Complex.exp (I * θ) - a ∈ Complex.slitPlane)
+    (hupper : ∀ x ∈ [[(0 : ℝ), R]],
+      a - x * Complex.exp (I * α) ∈ Complex.slitPlane) :
+    sectorBoundaryIntegral (fun z => (z - a)⁻¹) R α =
+      Complex.log (R * Complex.exp (I * α) - a) - Complex.log (-a) +
+        Complex.log a - Complex.log (a - R * Complex.exp (I * α)) := by
+  have hlower_deriv (x : ℝ) (hx : x ∈ [[(0 : ℝ), R]]) :
+      HasDerivAt (fun t : ℝ => Complex.log ((t : ℂ) - a))
+        (((x : ℂ) - a)⁻¹) x := by
+    convert (((hasDerivAt_id (x := (x : ℂ))).comp_ofReal).sub_const a).clog_real
+      (hlower x hx) using 1
+    simp
+  have harc_deriv (θ : ℝ) (hθ : θ ∈ [[(0 : ℝ), α]]) :
+      HasDerivAt
+        (fun t : ℝ => Complex.log (R * Complex.exp (I * t) - a))
+        ((R * Complex.exp (I * θ) - a)⁻¹ *
+          (I * R * Complex.exp (I * θ))) θ := by
+    have hp : HasDerivAt (fun t : ℝ => R * Complex.exp (I * t) - a)
+        (I * R * Complex.exp (I * θ)) θ := by
+      convert (((((hasDerivAt_id (x := (θ : ℂ))).comp_ofReal).const_mul I).cexp.const_mul
+        (R : ℂ))).sub_const a
+        using 1 <;> simp <;> ring
+    convert hp.clog_real (harc θ hθ) using 1
+    field_simp
+  have hupper_deriv (x : ℝ) (hx : x ∈ [[(0 : ℝ), R]]) :
+      HasDerivAt
+        (fun t : ℝ => Complex.log (a - t * Complex.exp (I * α)))
+        ((x * Complex.exp (I * α) - a)⁻¹ * Complex.exp (I * α)) x := by
+    have hp : HasDerivAt (fun t : ℝ => a - t * Complex.exp (I * α))
+        (-Complex.exp (I * α)) x := by
+      convert (hasDerivAt_const (x := x) a).sub
+        (((hasDerivAt_id (x := (x : ℂ))).comp_ofReal).mul_const
+          (Complex.exp (I * α))) using 1 <;>
+          simp
+    convert hp.clog_real (hupper x hx) using 1
+    rw [div_eq_mul_inv]
+    rw [show a - x * Complex.exp (I * α) =
+      -(x * Complex.exp (I * α) - a) by ring, inv_neg]
+    ring
+  have hlower_cont : ContinuousOn (fun x : ℝ => ((x : ℂ) - a)⁻¹)
+      [[(0 : ℝ), R]] := by
+    exact ContinuousOn.inv₀
+      (continuous_ofReal.sub continuous_const).continuousOn
+      (fun x hx => Complex.slitPlane_ne_zero (hlower x hx))
+  have harc_cont : ContinuousOn (fun θ : ℝ =>
+      (R * Complex.exp (I * θ) - a)⁻¹ *
+        (I * R * Complex.exp (I * θ))) [[(0 : ℝ), α]] := by
+    apply ContinuousOn.mul
+    · exact ContinuousOn.inv₀
+        ((by fun_prop : Continuous fun θ : ℝ =>
+          R * Complex.exp (I * θ) - a).continuousOn)
+        (fun θ hθ => Complex.slitPlane_ne_zero (harc θ hθ))
+    · fun_prop
+  have hupper_cont : ContinuousOn (fun x : ℝ =>
+      (x * Complex.exp (I * α) - a)⁻¹ * Complex.exp (I * α))
+      [[(0 : ℝ), R]] := by
+    apply ContinuousOn.mul
+    · apply ContinuousOn.inv₀
+        ((by fun_prop : Continuous fun x : ℝ =>
+          x * Complex.exp (I * α) - a).continuousOn)
+      intro x hx hzero
+      have : a - x * Complex.exp (I * α) = 0 := by
+        rw [sub_eq_zero] at hzero ⊢
+        exact hzero.symm
+      exact Complex.slitPlane_ne_zero (hupper x hx) this
+    · fun_prop
+  have hlower_int := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (a := 0) (b := R) hlower_deriv hlower_cont.intervalIntegrable
+  have harc_int := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (a := 0) (b := α) harc_deriv harc_cont.intervalIntegrable
+  have hupper_int := intervalIntegral.integral_eq_sub_of_hasDerivAt
+    (a := 0) (b := R) hupper_deriv hupper_cont.intervalIntegrable
+  rw [sectorBoundaryIntegral, hlower_int, harc_int]
+  have hmul : Complex.exp (I * α) *
+      (∫ x : ℝ in 0..R, (x * Complex.exp (I * α) - a)⁻¹) =
+      ∫ x : ℝ in 0..R,
+        (x * Complex.exp (I * α) - a)⁻¹ * Complex.exp (I * α) := by
+    calc
+      _ = ∫ x : ℝ in 0..R,
+          Complex.exp (I * α) *
+            (x * Complex.exp (I * α) - a)⁻¹ :=
+        (intervalIntegral.integral_const_mul
+          (a := 0) (b := R) (Complex.exp (I * α))
+          (fun x : ℝ => (x * Complex.exp (I * α) - a)⁻¹)).symm
+      _ = _ := by
+        apply intervalIntegral.integral_congr
+        intro x _
+        ring
+  rw [hmul, hupper_int]
+  simp
+  ring
 
 end ConstructionTargets.SectorCauchy

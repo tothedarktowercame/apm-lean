@@ -20,3 +20,4 @@ example (R α : ℝ) :
 
 #print axioms ConstructionTargets.SectorCauchy.sectorBoundaryIntegral_eq_zero
 #print axioms ConstructionTargets.SectorCauchy.sectorBoundaryIntegral_eq_zero_of_convex
+#print axioms ConstructionTargets.SectorCauchy.sectorBoundaryIntegral_sub_inv_eq_log_endpoints
