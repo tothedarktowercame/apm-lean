@@ -290,4 +290,34 @@ theorem sectorBoundaryIntegral_sub_inv_eq_log_endpoints
   simp
   ring
 
+/-- Across the negative-real-axis branch cut, the principal logarithms of
+`z` and `-z` differ by `π i` when `z` is in the upper half-plane. -/
+lemma log_sub_log_neg_of_im_pos {z : ℂ} (hz : 0 < z.im) :
+    Complex.log z - Complex.log (-z) = π * I := by
+  rw [Complex.log, Complex.log, norm_neg,
+    Complex.arg_neg_eq_arg_sub_pi_of_im_pos hz]
+  push_cast
+  ring
+
+/-- The sector Cauchy kernel has winding number one when the pole and the
+translated terminal arc point lie in the upper half-plane and the three
+displayed logarithm branches are valid. -/
+theorem sectorBoundaryIntegral_sub_inv_eq_two_pi_I
+    (R α : ℝ) (a : ℂ)
+    (hlower : ∀ x ∈ [[(0 : ℝ), R]], (x : ℂ) - a ∈ Complex.slitPlane)
+    (harc : ∀ θ ∈ [[(0 : ℝ), α]],
+      R * Complex.exp (I * θ) - a ∈ Complex.slitPlane)
+    (hupper : ∀ x ∈ [[(0 : ℝ), R]],
+      a - x * Complex.exp (I * α) ∈ Complex.slitPlane)
+    (ha_im : 0 < a.im)
+    (hend_im : 0 < (R * Complex.exp (I * α) - a).im) :
+    sectorBoundaryIntegral (fun z => (z - a)⁻¹) R α = 2 * π * I := by
+  rw [sectorBoundaryIntegral_sub_inv_eq_log_endpoints R α a hlower harc hupper]
+  have h₁ := log_sub_log_neg_of_im_pos hend_im
+  have h₂ := log_sub_log_neg_of_im_pos ha_im
+  rw [show a - R * Complex.exp (I * α) =
+    -(R * Complex.exp (I * α) - a) by ring]
+  rw [show -a = -(a) by rfl]
+  linear_combination h₁ + h₂
+
 end ConstructionTargets.SectorCauchy
