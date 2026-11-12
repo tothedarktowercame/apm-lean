@@ -32,3 +32,4 @@ example : Differentiable ℂ
     simp [hz]
 
 #print axioms ConstructionTargets.FinitePolePatch.differentiable_patchFinite
+#print axioms ConstructionTargets.FinitePolePatch.differentiableOn_patchFinite
