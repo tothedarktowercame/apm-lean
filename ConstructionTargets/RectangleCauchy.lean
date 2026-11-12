@@ -1,5 +1,6 @@
 import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
+import ConstructionTargets.UpperSemicircleCauchy
 
 /-!
 # Cauchy's theorem on an axis-aligned rectangle
@@ -16,6 +17,8 @@ open scoped Interval
 noncomputable section
 
 namespace ConstructionTargets.RectangleCauchy
+
+open ConstructionTargets.UpperSemicircleCauchy
 
 /-- The positively oriented boundary integral around the axis-aligned
 rectangle with opposite corners `z` and `w`. -/
@@ -121,6 +124,110 @@ theorem rectangleBoundaryIntegral_eq_zero
     rectangleBoundaryIntegral f z w = 0 := by
   apply rectangleBoundaryIntegral_eq_zero_of_differentiableOn
   exact hf.differentiableOn
+
+/-- A four-side fundamental theorem of calculus: if `f` is the complex
+derivative of one primitive at every boundary point, its rectangle boundary
+integral vanishes. No differentiability inside the rectangle is required. -/
+theorem rectangleBoundaryIntegral_eq_zero_of_boundary_primitive
+    (f P : ℂ → ℂ) (z w : ℂ)
+    (hf : RectangleBoundaryIntegrable f z w)
+    (hP : ∀ u, (u.re ∈ [[z.re, w.re]] ∧
+          (u.im = z.im ∨ u.im = w.im)) ∨
+        (u.im ∈ [[z.im, w.im]] ∧
+          (u.re = z.re ∨ u.re = w.re)) →
+      HasDerivAt P (f u) u) :
+    rectangleBoundaryIntegral f z w = 0 := by
+  have hbottom :
+      (∫ x : ℝ in z.re..w.re, f (x + z.im * I)) =
+        P (w.re + z.im * I) - P (z.re + z.im * I) := by
+    refine intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (f := fun x : ℝ => P (x + z.im * I))
+      (f' := fun x : ℝ => f (x + z.im * I)) ?_ hf.1
+    · intro x hx
+      have hp := hP (x + z.im * I) (by
+        left
+        constructor
+        · simpa using hx
+        · left; simp)
+      convert primitive_comp_path_hasDerivAt
+        (γ := fun u : ℂ => u + z.im * I) hp
+        ((hasDerivAt_id (x := (x : ℂ))).add_const (z.im * I)) using 1 <;>
+          simp <;> ring
+  have htop :
+      (∫ x : ℝ in z.re..w.re, f (x + w.im * I)) =
+        P (w.re + w.im * I) - P (z.re + w.im * I) := by
+    refine intervalIntegral.integral_eq_sub_of_hasDerivAt
+      (f := fun x : ℝ => P (x + w.im * I))
+      (f' := fun x : ℝ => f (x + w.im * I)) ?_ hf.2.1
+    · intro x hx
+      have hp := hP (x + w.im * I) (by
+        left
+        constructor
+        · simpa using hx
+        · right; simp)
+      convert primitive_comp_path_hasDerivAt
+        (γ := fun u : ℂ => u + w.im * I) hp
+        ((hasDerivAt_id (x := (x : ℂ))).add_const (w.im * I)) using 1 <;>
+          simp <;> ring
+  have hright :
+      I * (∫ y : ℝ in z.im..w.im, f (w.re + y * I)) =
+        P (w.re + w.im * I) - P (w.re + z.im * I) := by
+    have hi : IntervalIntegrable
+        (fun y : ℝ => I * f (w.re + y * I)) volume z.im w.im :=
+      hf.2.2.1.const_mul I
+    have hFTC : (∫ y : ℝ in z.im..w.im, I * f (w.re + y * I)) =
+        P (w.re + w.im * I) - P (w.re + z.im * I) := by
+      refine intervalIntegral.integral_eq_sub_of_hasDerivAt
+        (f := fun y : ℝ => P (w.re + y * I))
+        (f' := fun y : ℝ => I * f (w.re + y * I)) ?_ hi
+      · intro y hy
+        have hp := hP (w.re + y * I) (by
+          right
+          constructor
+          · simpa using hy
+          · right; simp)
+        convert primitive_comp_path_hasDerivAt
+          (γ := fun u : ℂ => w.re + u * I) hp
+          (((hasDerivAt_id (x := (y : ℂ))).mul_const I).const_add (w.re : ℂ)) using 1 <;>
+            simp <;> ring
+    have hconst :
+        (∫ y : ℝ in z.im..w.im, I * f (w.re + y * I)) =
+          I * ∫ y : ℝ in z.im..w.im, f (w.re + y * I) :=
+      intervalIntegral.integral_const_mul (μ := volume)
+        (a := z.im) (b := w.im) I (fun y : ℝ => f (w.re + y * I))
+    rw [hconst] at hFTC
+    exact hFTC
+  have hleft :
+      I * (∫ y : ℝ in z.im..w.im, f (z.re + y * I)) =
+        P (z.re + w.im * I) - P (z.re + z.im * I) := by
+    have hi : IntervalIntegrable
+        (fun y : ℝ => I * f (z.re + y * I)) volume z.im w.im :=
+      hf.2.2.2.const_mul I
+    have hFTC : (∫ y : ℝ in z.im..w.im, I * f (z.re + y * I)) =
+        P (z.re + w.im * I) - P (z.re + z.im * I) := by
+      refine intervalIntegral.integral_eq_sub_of_hasDerivAt
+        (f := fun y : ℝ => P (z.re + y * I))
+        (f' := fun y : ℝ => I * f (z.re + y * I)) ?_ hi
+      · intro y hy
+        have hp := hP (z.re + y * I) (by
+          right
+          constructor
+          · simpa using hy
+          · left; simp)
+        convert primitive_comp_path_hasDerivAt
+          (γ := fun u : ℂ => z.re + u * I) hp
+          (((hasDerivAt_id (x := (y : ℂ))).mul_const I).const_add (z.re : ℂ)) using 1 <;>
+            simp <;> ring
+    have hconst :
+        (∫ y : ℝ in z.im..w.im, I * f (z.re + y * I)) =
+          I * ∫ y : ℝ in z.im..w.im, f (z.re + y * I) :=
+      intervalIntegral.integral_const_mul (μ := volume)
+        (a := z.im) (b := w.im) I (fun y : ℝ => f (z.re + y * I))
+    rw [hconst] at hFTC
+    exact hFTC
+  unfold rectangleBoundaryIntegral
+  rw [hbottom, htop, hright, hleft]
+  ring
 
 /-- On the lower-right quadrant, negation crosses the principal logarithm
 cut upward and adds `π i`. -/
@@ -325,5 +432,93 @@ theorem centeredSquareBoundaryIntegral_sub_inv
     hnegUpper, hnegLower]
   simp only [neg_neg]
   ring
+
+/-- Every higher principal part has zero integral around a centered square.
+The proof uses its explicit single-valued power primitive on the boundary. -/
+theorem centeredSquareBoundaryIntegral_zpow_eq_zero
+    (a R : ℝ) (ha : |a| < R) (k : ℤ) (hk : k ≤ -2) :
+    centeredSquareBoundaryIntegral (fun z => (z - (a : ℂ)) ^ k) R = 0 := by
+  let z₀ : ℂ := -R - R * I
+  let w₀ : ℂ := R + R * I
+  let f : ℂ → ℂ := fun z => (z - (a : ℂ)) ^ k
+  let P : ℂ → ℂ := fun z =>
+    (z - (a : ℂ)) ^ (k + 1) / (k + 1 : ℂ)
+  have hR : 0 < R := lt_of_le_of_lt (abs_nonneg a) ha
+  have har : a < R := lt_of_le_of_lt (le_abs_self a) ha
+  have hla : -R < a := by
+    have := neg_abs_le a
+    linarith
+  have hk1 : k + 1 ≠ 0 := by omega
+  have boundary_ne (u : ℂ)
+      (hu : (u.re ∈ [[z₀.re, w₀.re]] ∧
+          (u.im = z₀.im ∨ u.im = w₀.im)) ∨
+        (u.im ∈ [[z₀.im, w₀.im]] ∧
+          (u.re = z₀.re ∨ u.re = w₀.re))) :
+      u - (a : ℂ) ≠ 0 := by
+    intro h
+    have hua : u = (a : ℂ) := sub_eq_zero.mp h
+    subst u
+    rcases hu with hu | hu
+    · rcases hu.2 with him | him
+      · simp [z₀] at him
+        linarith
+      · simp [w₀] at him
+        linarith
+    · rcases hu.2 with hre | hre
+      · simp [z₀] at hre
+        linarith
+      · simp [w₀] at hre
+        linarith
+  have hbottom_ne (x : ℝ) :
+      (x : ℂ) + z₀.im * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hi := congrArg Complex.im h
+    simp [z₀] at hi
+    linarith
+  have htop_ne (x : ℝ) :
+      (x : ℂ) + w₀.im * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hi := congrArg Complex.im h
+    simp [w₀] at hi
+    linarith
+  have hright_ne (y : ℝ) :
+      (w₀.re : ℂ) + y * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hr := congrArg Complex.re h
+    simp [w₀] at hr
+    linarith
+  have hleft_ne (y : ℝ) :
+      (z₀.re : ℂ) + y * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hr := congrArg Complex.re h
+    simp [z₀] at hr
+    linarith
+  have hf : RectangleBoundaryIntegrable f z₀ w₀ := by
+    have hside (γ : ℝ → ℂ) (hγ : Continuous γ)
+        (hne : ∀ t, γ t - (a : ℂ) ≠ 0) (l u : ℝ) :
+        IntervalIntegrable (fun t => f (γ t)) volume l u := by
+      unfold f
+      exact ((hγ.sub continuous_const).zpow₀
+        k (fun t => Or.inl (hne t))).intervalIntegrable _ _
+    exact ⟨hside _ (by fun_prop) hbottom_ne _ _,
+      hside _ (by fun_prop) htop_ne _ _,
+      hside _ (by fun_prop) hright_ne _ _,
+      hside _ (by fun_prop) hleft_ne _ _⟩
+  have hP (u : ℂ) (hu : (u.re ∈ [[z₀.re, w₀.re]] ∧
+          (u.im = z₀.im ∨ u.im = w₀.im)) ∨
+        (u.im ∈ [[z₀.im, w₀.im]] ∧
+          (u.re = z₀.re ∨ u.re = w₀.re))) :
+      HasDerivAt P (f u) u := by
+    have hpow := (hasDerivAt_zpow (k + 1) (u - (a : ℂ))
+      (Or.inl (boundary_ne u hu))).comp u
+        ((hasDerivAt_id (x := u)).sub_const (a : ℂ))
+    unfold P f
+    convert hpow.div_const (k + 1 : ℂ) using 1
+    · rw [show k + 1 - 1 = k by ring]
+      have hk1c : ((k + 1 : ℤ) : ℂ) ≠ 0 := by exact_mod_cast hk1
+      rw [show ((k : ℂ) + 1) = ((k + 1 : ℤ) : ℂ) by simp]
+      field_simp [hk1c]
+  unfold centeredSquareBoundaryIntegral
+  exact rectangleBoundaryIntegral_eq_zero_of_boundary_primitive f P z₀ w₀ hf hP
 
 end ConstructionTargets.RectangleCauchy

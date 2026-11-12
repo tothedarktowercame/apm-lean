@@ -32,5 +32,13 @@ example :
       2 * Real.pi * I := by
   exact centeredSquareBoundaryIntegral_sub_inv 1 2 (by norm_num)
 
+/-- Higher principal parts have zero integral around the centered square. -/
+example :
+    centeredSquareBoundaryIntegral (fun z => z ^ (-3 : ℤ)) 2 = 0 := by
+  simpa using centeredSquareBoundaryIntegral_zpow_eq_zero
+    0 2 (by norm_num) (-3) (by norm_num)
+
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_sub_inv
+#print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero_of_boundary_primitive
+#print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_zpow_eq_zero
