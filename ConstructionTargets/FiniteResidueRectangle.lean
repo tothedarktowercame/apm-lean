@@ -49,27 +49,23 @@ lemma onBoundary_vertical (R x y : ℝ) (hR : 0 ≤ R) (hx : |x| = R)
     rw [abs_le]
     exact hy
 
-/-- **Finite residue theorem for a centered square.**  If subtracting the
-listed simple principal parts from `f` gives an entire function `g`, then the
-four-side integral of `f` is `2πi` times the sum of their coefficients.
-The equality need only hold on the contour itself. -/
-theorem centeredSquareBoundaryIntegral_eq_finset_residues
+/-- **Finite residue theorem on a centered square.**  It is enough that the
+subtracted remainder be differentiable on the closed square and integrable
+on its four sides; poles outside the square are irrelevant. -/
+theorem centeredSquareBoundaryIntegral_eq_finset_residues_of_differentiableOn
     (f g : ℂ → ℂ) (s : Finset ℝ) (c : ℝ → ℂ) (R : ℝ)
     (hR : 0 < R)
     (hinside : ∀ a ∈ s, |a| < R)
-    (hg : Differentiable ℂ g)
+    (hg : DifferentiableOn ℂ g ([[-R, R]] ×ℂ [[-R, R]]))
+    (hgint : RectangleBoundaryIntegrable g (-R - R * I) (R + R * I))
     (hdecomp : ∀ z, OnCenteredSquareBoundary R z →
       f z = g z + ∑ a ∈ s, c a * (z - (a : ℂ))⁻¹) :
     centeredSquareBoundaryIntegral f R =
       2 * π * I * ∑ a ∈ s, c a := by
   let z₀ : ℂ := -R - R * I
   let w₀ : ℂ := R + R * I
-  have hgint : RectangleBoundaryIntegrable g z₀ w₀ := by
-    have hc := hg.continuous
-    exact ⟨(hc.comp (by fun_prop)).intervalIntegrable _ _,
-      (hc.comp (by fun_prop)).intervalIntegrable _ _,
-      (hc.comp (by fun_prop)).intervalIntegrable _ _,
-      (hc.comp (by fun_prop)).intervalIntegrable _ _⟩
+  have hgint' : RectangleBoundaryIntegrable g z₀ w₀ := by
+    simpa [z₀, w₀] using hgint
   let p : ℝ → ℂ → ℂ := fun a z => c a * (z - (a : ℂ))⁻¹
   have hpint : ∀ a ∈ s, RectangleBoundaryIntegrable (p a) z₀ w₀ := by
     intro a ha
@@ -100,9 +96,12 @@ theorem centeredSquareBoundaryIntegral_eq_finset_residues
         simp [z₀, w₀]
   rw [hcongr]
   unfold centeredSquareBoundaryIntegral
-  rw [rectangleBoundaryIntegral_add hgint
+  rw [rectangleBoundaryIntegral_add hgint'
     (RectangleBoundaryIntegrable.finset_sum hpint)]
-  rw [rectangleBoundaryIntegral_eq_zero g hg z₀ w₀, zero_add]
+  have hgzero : rectangleBoundaryIntegral g z₀ w₀ = 0 := by
+    apply rectangleBoundaryIntegral_eq_zero_of_differentiableOn
+    simpa [z₀, w₀] using hg
+  rw [hgzero, zero_add]
   rw [rectangleBoundaryIntegral_finset_sum hpint]
   have hpval (a : ℝ) (ha : a ∈ s) :
       rectangleBoundaryIntegral (p a) z₀ w₀ = c a * (2 * π * I) := by
@@ -115,5 +114,25 @@ theorem centeredSquareBoundaryIntegral_eq_finset_residues
   simp_rw [mul_assoc]
   rw [← Finset.sum_mul]
   ring
+
+/-- Entire-function specialization of the finite centered-square residue
+theorem. -/
+theorem centeredSquareBoundaryIntegral_eq_finset_residues
+    (f g : ℂ → ℂ) (s : Finset ℝ) (c : ℝ → ℂ) (R : ℝ)
+    (hR : 0 < R)
+    (hinside : ∀ a ∈ s, |a| < R)
+    (hg : Differentiable ℂ g)
+    (hdecomp : ∀ z, OnCenteredSquareBoundary R z →
+      f z = g z + ∑ a ∈ s, c a * (z - (a : ℂ))⁻¹) :
+    centeredSquareBoundaryIntegral f R =
+      2 * π * I * ∑ a ∈ s, c a := by
+  have hgint : RectangleBoundaryIntegrable g (-R - R * I) (R + R * I) := by
+    have hc := hg.continuous
+    exact ⟨(hc.comp (by fun_prop)).intervalIntegrable _ _,
+      (hc.comp (by fun_prop)).intervalIntegrable _ _,
+      (hc.comp (by fun_prop)).intervalIntegrable _ _,
+      (hc.comp (by fun_prop)).intervalIntegrable _ _⟩
+  exact centeredSquareBoundaryIntegral_eq_finset_residues_of_differentiableOn
+    f g s c R hR hinside hg.differentiableOn hgint hdecomp
 
 end ConstructionTargets.FiniteResidueRectangle
