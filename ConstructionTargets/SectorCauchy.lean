@@ -39,6 +39,25 @@ def SectorBoundaryIntegrable (f : ℂ → ℂ) (R α : ℝ) : Prop :=
     IntervalIntegrable (fun x : ℝ =>
       f (x * Complex.exp (I * α))) volume 0 R
 
+/-- Multiplication by a constant preserves integrability on a sector boundary. -/
+lemma SectorBoundaryIntegrable.const_mul {f : ℂ → ℂ} {R α : ℝ}
+    (hf : SectorBoundaryIntegrable f R α) (c : ℂ) :
+    SectorBoundaryIntegrable (fun z => c * f z) R α := by
+  refine ⟨hf.1.const_mul c, ?_, hf.2.2.const_mul c⟩
+  apply hf.2.1.const_mul c |>.congr
+  intro θ _
+  ring
+
+/-- Addition preserves integrability on a sector boundary. -/
+lemma SectorBoundaryIntegrable.add {f g : ℂ → ℂ} {R α : ℝ}
+    (hf : SectorBoundaryIntegrable f R α)
+    (hg : SectorBoundaryIntegrable g R α) :
+    SectorBoundaryIntegrable (fun z => f z + g z) R α := by
+  refine ⟨hf.1.add hg.1, ?_, hf.2.2.add hg.2.2⟩
+  apply hf.2.1.add hg.2.1 |>.congr
+  intro θ _
+  ring
+
 /-- Sector boundary integration is additive for integrable boundary data. -/
 lemma sectorBoundaryIntegral_add
     {f g : ℂ → ℂ} {R α : ℝ}

@@ -28,3 +28,18 @@ example (c : ℂ) (f : ℂ → ℂ) (R α : ℝ) :
     sectorBoundaryIntegral (fun z => c * f z) R α =
       c * sectorBoundaryIntegral f R α := by
   exact sectorBoundaryIntegral_const_mul c f R α
+
+/-- The three-side integrability predicate is closed under the same linear
+operations as the boundary integral. -/
+example (R α : ℝ) :
+    SectorBoundaryIntegrable (fun z : ℂ => 2 * z + z) R α := by
+  have hz : SectorBoundaryIntegrable (fun z : ℂ => z) R α := by
+    constructor
+    · exact (by fun_prop : Continuous (fun x : ℝ => (x : ℂ))).intervalIntegrable _ _
+    constructor
+    · exact (by fun_prop : Continuous (fun θ : ℝ =>
+        (R : ℂ) * Complex.exp (I * θ) *
+          (I * R * Complex.exp (I * θ)))).intervalIntegrable _ _
+    · exact (by fun_prop : Continuous (fun x : ℝ =>
+        (x : ℂ) * Complex.exp (I * α))).intervalIntegrable _ _
+  exact (hz.const_mul 2).add hz
