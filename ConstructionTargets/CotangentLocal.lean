@@ -42,6 +42,24 @@ theorem cot_pi_add_int (z : ℂ) (k : ℤ) :
         (Complex.sin ((Real.pi : ℂ) * z))⁻¹ := by ring
     _ = _ := by rw [mul_inv_cancel₀ hk]; simp
 
+/-- A nonzero complex number of norm less than one cannot be an integer. -/
+theorem mem_integerComplement_of_norm_lt_one {z : ℂ}
+    (hz : z ≠ 0) (hnorm : ‖z‖ < 1) : z ∈ integerComplement := by
+  rw [mem_integerComplement_iff]
+  rintro ⟨m, hm⟩
+  have hm0 : m ≠ 0 := by
+    intro h
+    subst m
+    apply hz
+    simpa using hm.symm
+  have hone : (1 : ℝ) ≤ |(m : ℝ)| := by
+    exact_mod_cast Int.one_le_abs hm0
+  have hre : |(m : ℝ)| ≤ ‖z‖ := by
+    calc
+      |(m : ℝ)| = |z.re| := by rw [← hm]; simp
+      _ ≤ ‖z‖ := abs_re_le_norm z
+  linarith
+
 /-- The entire extension of `sin (πz) / (πz)` across `z = 0`. -/
 def sincPi (z : ℂ) : ℂ :=
   dslope (fun w : ℂ => Complex.sin ((Real.pi : ℂ) * w)) 0 z / (Real.pi : ℂ)
