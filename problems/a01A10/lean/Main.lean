@@ -4,6 +4,7 @@ import Mathlib.Analysis.SpecialFunctions.Trigonometric.Complex
 import Mathlib.Analysis.SpecialFunctions.Sqrt
 import Mathlib.MeasureTheory.Integral.DominatedConvergence
 import Mathlib.MeasureTheory.Integral.IntervalIntegral.IntegrationByParts
+import ConstructionTargets.RectangleCauchy
 
 /-!
 # APM a01A10: Contour integral computation
@@ -41,45 +42,135 @@ a contour-shift argument. The key identity is that
 set_option linter.unusedVariables false in
 noncomputable section
 
-open Complex Real MeasureTheory
+open Complex Real MeasureTheory Filter
 open scoped Topology
 
 namespace ApmCanaries.A01A10
 
+open ConstructionTargets.RectangleCauchy
+
+/-- Cauchy's theorem on the rectangle with horizontal sides at heights `0`
+and `c`: the two truncated Gaussian integrals differ by the two vertical
+edges (packaged by `GaussianFourier.verticalIntegral`). -/
+lemma gaussian_rectangle_identity (c T : ℝ) :
+    (∫ x : ℝ in -T..T, cexp (-((x : ℂ) + c * I) ^ 2)) =
+      (∫ x : ℝ in -T..T, cexp (-(x : ℂ) ^ 2)) +
+        GaussianFourier.verticalIntegral 1 c T := by
+  let I₁ := ∫ x : ℝ in -T..T, cexp (-((x : ℂ) + c * I) ^ 2)
+  let I₂ := ∫ x : ℝ in -T..T, cexp (-(x : ℂ) ^ 2)
+  let I₄ := ∫ y : ℝ in (0 : ℝ)..c, cexp (-(T + y * I) ^ 2)
+  let I₅ := ∫ y : ℝ in (0 : ℝ)..c, cexp (-(-T + y * I) ^ 2)
+  have hC : I₂ - I₁ + I * I₄ - I * I₅ = 0 := by
+    have h := rectangleBoundaryIntegral_eq_zero
+      (fun z : ℂ => cexp (-z ^ 2)) (by fun_prop) (-T) (T + c * I)
+    simpa only [rectangleBoundaryIntegral, neg_im, ofReal_im, neg_zero,
+      ofReal_zero, zero_mul, add_zero, neg_re, ofReal_re, add_re, mul_re,
+      I_re, mul_zero, I_im, tsub_zero, add_im, mul_im, mul_one, zero_add,
+      ofReal_neg, smul_eq_mul, I₁, I₂, I₄, I₅] using h
+  unfold GaussianFourier.verticalIntegral
+  have hv :
+      (∫ y : ℝ in (0 : ℝ)..c,
+        I * (cexp (-(T + y * I) ^ 2) - cexp (-(T - y * I) ^ 2))) =
+        I * ((∫ y : ℝ in (0 : ℝ)..c, cexp (-(T + y * I) ^ 2)) -
+          ∫ y : ℝ in (0 : ℝ)..c, cexp (-(T - y * I) ^ 2)) := by
+    calc
+      _ = I * ∫ y : ℝ in (0 : ℝ)..c,
+          (cexp (-(T + y * I) ^ 2) - cexp (-(T - y * I) ^ 2)) :=
+        intervalIntegral.integral_const_mul _ _
+      _ = _ := by
+        congr 1
+        exact intervalIntegral.integral_sub
+          ((by fun_prop : Continuous fun y : ℝ => cexp (-(T + y * I)^2)).intervalIntegrable _ _)
+          ((by fun_prop : Continuous fun y : ℝ => cexp (-(T - y * I)^2)).intervalIntegrable _ _)
+  simp only [neg_one_mul]
+  rw [hv]
+  · simp_rw [(fun a b => by rw [sq]; ring_nf :
+      ∀ a b : ℂ, (a - b * I) ^ 2 = (-a + b * I) ^ 2)]
+    change I₁ = I₂ + I * (I₄ - I₅)
+    rw [mul_sub]
+    linear_combination -hC
+
+/-- The contour-shift conclusion supplied by the rectangle identity: moving
+the real line vertically does not change the integral of `exp (-z²)`. -/
+lemma gaussian_contour_shift (c : ℝ) :
+    (∫ x : ℝ, cexp (-((x : ℂ) + c * I) ^ 2)) =
+      ∫ x : ℝ, cexp (-(x : ℂ) ^ 2) := by
+  have hshiftInt : Integrable (fun x : ℝ =>
+      cexp (-((x : ℂ) + c * I) ^ 2)) := by
+    simpa only [neg_one_mul] using
+      (GaussianFourier.integrable_cexp_neg_mul_sq_add_real_mul_I
+        (b := (1 : ℂ)) (by norm_num) c)
+  exact tendsto_nhds_unique
+    (intervalIntegral_tendsto_integral
+      hshiftInt
+      tendsto_neg_atTop_atBot tendsto_id) (by
+        have hreal0 := intervalIntegral_tendsto_integral
+          (integrable_cexp_neg_mul_sq (b := (1 : ℂ)) (by norm_num))
+          tendsto_neg_atTop_atBot tendsto_id
+        have hreal : Tendsto
+            (fun T : ℝ => ∫ x : ℝ in -T..T, cexp (-(x : ℂ)^2)) atTop
+            (𝓝 (∫ x : ℝ, cexp (-(x : ℂ)^2))) := by
+          simpa only [neg_one_mul, id_eq] using hreal0
+        have hvert := GaussianFourier.tendsto_verticalIntegral
+          (b := (1 : ℂ)) (by norm_num) c
+        convert hreal.add hvert using 1
+        · funext T
+          exact gaussian_rectangle_identity c T
+        · simp)
+
 /-- Part (b): The Fourier transform of a Gaussian.
     ∫_{-∞}^∞ e^{ixy} e^{-x²} dx = √π · e^{-y²/4}.
 
-    **SORRY BOUNDARY:** The proof requires a contour-shift argument (shifting
-    the contour from ℝ to the line ℂ ∋ z = x - iy/2). While Mathlib has
-    `integral_gaussian` (∫ exp(-x²) = √π) and the complex Gaussian
-    (`integral_gaussian_sq_complex`), the contour shift is not directly
-    available as a Mathlib lemma. The result can also be obtained by
-    expanding e^{ixy} = cos(xy) + i·sin(xy) and using the fact that the
-    imaginary part (sin, odd) integrates to zero while the real part
-    (cos · e^{-x²}) gives √π · e^{-y²/4} via a known identity.
+    The proof below performs the requested contour shift: Cauchy's theorem
+    gives an identity on each finite rectangle, the two vertical sides tend
+    to zero, and the ordinary real Gaussian integral supplies the value.
 -/
 theorem gaussian_fourier_transform (y : ℝ) :
     ∫ x : ℝ, cexp ((Complex.I * ↑y * ↑x) + (-(↑x : ℂ)^2)) = ↑(√π) * cexp (-(↑y : ℂ)^2 / 4) := by
-  have h := fourierIntegral_gaussian (b := (1 : ℂ)) (by norm_num) (y : ℂ)
+  have hshift := gaussian_contour_shift (-(y / 2))
   calc
     (∫ x : ℝ, cexp ((Complex.I * ↑y * ↑x) + (-(↑x : ℂ)^2))) =
-        ∫ x : ℝ, cexp (Complex.I * (y : ℂ) * x) *
-          cexp (-(1 : ℂ) * x ^ 2) := by
-            apply integral_congr_ae
-            filter_upwards with x
-            rw [← Complex.exp_add]
-            congr 1
-            ring
-    _ = ((π : ℂ) / 1) ^ (1 / 2 : ℂ) *
-        cexp (-(y : ℂ) ^ 2 / (4 * 1)) := h
-    _ = (√π : ℂ) * cexp (-(y : ℂ)^2 / 4) := by
-      rw [div_one]
+        cexp (-(y : ℂ)^2 / 4) *
+          ∫ x : ℝ, cexp (-((x : ℂ) - I * (y : ℂ) / 2)^2) := by
+      rw [mul_comm]
+      calc
+        _ = ∫ x : ℝ, cexp (-((x : ℂ) - I * (y : ℂ) / 2)^2) *
+              cexp (-(y : ℂ)^2 / 4) := by
+          apply integral_congr_ae
+          filter_upwards with x
+          rw [← Complex.exp_add]
+          congr 1
+          ring_nf
+          simp [Complex.I_sq]
+        _ = _ := by
+          calc
+            _ = (∫ x : ℝ, cexp (-((x : ℂ) - I * (y : ℂ) / 2)^2)) *
+                cexp (-(y : ℂ)^2 / 4) :=
+              MeasureTheory.integral_mul_const _ _
+            _ = _ := by
+              rw [mul_comm]
+              congr 1
+              apply integral_congr_ae
+              filter_upwards with x
+              congr 2
+              ring
+    _ = cexp (-(y : ℂ)^2 / 4) *
+          ∫ x : ℝ, cexp (-(x : ℂ)^2) := by
+      rw [show (fun x : ℝ => cexp (-((x : ℂ) - I * (y : ℂ) / 2)^2)) =
+          fun x : ℝ => cexp (-((x : ℂ) + (-(y / 2) : ℝ) * I)^2) by
+        funext x; congr 2; push_cast; ring]
+      rw [hshift]
+    _ = cexp (-(y : ℂ)^2 / 4) * (√π : ℂ) := by
+      have hg := integral_gaussian_complex (b := (1 : ℂ)) (by norm_num)
+      have hg' : (∫ x : ℝ, cexp (-(x : ℂ)^2)) =
+          (π : ℂ) ^ (1 / 2 : ℂ) := by
+        simpa only [neg_one_mul, div_one] using hg
+      rw [hg']
       have hsqrt : (√π : ℂ) = (π : ℂ) ^ (1 / 2 : ℂ) := by
         rw [Real.sqrt_eq_rpow, Complex.ofReal_cpow Real.pi_pos.le]
         norm_num
-      rw [← hsqrt]
-      congr 2
-      ring
+      rw [hsqrt]
+    _ = (√π : ℂ) * cexp (-(y : ℂ)^2 / 4) := mul_comm _ _
 
 /-- Part (b) via completion of the square:
     -x² + ixy = -(x - iy/2)² - y²/4. -/
@@ -626,5 +717,9 @@ theorem fresnel_integral :
     Filter.atTop (nhds V)
   rw [← hLV]
   exact hL
+
+#print axioms gaussian_rectangle_identity
+#print axioms gaussian_contour_shift
+#print axioms gaussian_fourier_transform
 
 end ApmCanaries.A01A10
