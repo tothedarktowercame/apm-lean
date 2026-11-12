@@ -47,9 +47,14 @@ example :
   simpa using centeredSquareBoundaryIntegral_zpow_eq_zero
     0 2 (by norm_num) (-3) (by norm_num)
 
+example : RectangleBoundaryIntegrable (fun z => z ^ (-3 : ℤ))
+    (-2 - 2 * I) (2 + 2 * I) := by
+  simpa using centeredSquareBoundaryIntegrable_zpow 0 2 (by norm_num) (-3)
+
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegrable_of_differentiableOn
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_sub_inv
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegrable_sub_inv
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero_of_boundary_primitive
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_zpow_eq_zero
+#print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegrable_zpow

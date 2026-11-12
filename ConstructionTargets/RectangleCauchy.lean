@@ -77,6 +77,23 @@ lemma RectangleBoundaryIntegrable.add {f g : ℂ → ℂ} {z w : ℂ}
   ⟨hf.1.add hg.1, hf.2.1.add hg.2.1,
     hf.2.2.1.add hg.2.2.1, hf.2.2.2.add hg.2.2.2⟩
 
+/-- Boundary integrability respects equality on each of the four sides. -/
+lemma RectangleBoundaryIntegrable.congr {f g : ℂ → ℂ} {z w : ℂ}
+    (hf : RectangleBoundaryIntegrable f z w)
+    (hlower : ∀ x ∈ [[z.re, w.re]],
+      f (x + z.im * I) = g (x + z.im * I))
+    (hupper : ∀ x ∈ [[z.re, w.re]],
+      f (x + w.im * I) = g (x + w.im * I))
+    (hright : ∀ y ∈ [[z.im, w.im]],
+      f (w.re + y * I) = g (w.re + y * I))
+    (hleft : ∀ y ∈ [[z.im, w.im]],
+      f (z.re + y * I) = g (z.re + y * I)) :
+    RectangleBoundaryIntegrable g z w := by
+  exact ⟨hf.1.congr (fun x hx => hlower x (uIoc_subset_uIcc hx)),
+    hf.2.1.congr (fun x hx => hupper x (uIoc_subset_uIcc hx)),
+    hf.2.2.1.congr (fun y hy => hright y (uIoc_subset_uIcc hy)),
+    hf.2.2.2.congr (fun y hy => hleft y (uIoc_subset_uIcc hy))⟩
+
 /-- The zero function is integrable on every rectangle boundary. -/
 lemma rectangleBoundaryIntegrable_zero (z w : ℂ) :
     RectangleBoundaryIntegrable (fun _ : ℂ => 0) z w := by
@@ -537,6 +554,53 @@ theorem centeredSquareBoundaryIntegrable_sub_inv
       (hne : ∀ t, γ t - (a : ℂ) ≠ 0) (l u : ℝ) :
       IntervalIntegrable (fun t => (γ t - (a : ℂ))⁻¹) volume l u :=
     ((hγ.sub continuous_const).inv₀ hne).intervalIntegrable _ _
+  exact ⟨hside _ (by fun_prop) hbottom_ne _ _,
+    hside _ (by fun_prop) htop_ne _ _,
+    hside _ (by fun_prop) hright_ne _ _,
+    hside _ (by fun_prop) hleft_ne _ _⟩
+
+/-- Any integer power of `z-a` is integrable on a centered square whose
+boundary avoids the real point `a`. -/
+theorem centeredSquareBoundaryIntegrable_zpow
+    (a R : ℝ) (ha : |a| < R) (k : ℤ) :
+    RectangleBoundaryIntegrable (fun z => (z - (a : ℂ)) ^ k)
+      (-R - R * I) (R + R * I) := by
+  let z₀ : ℂ := -R - R * I
+  let w₀ : ℂ := R + R * I
+  have hR : 0 < R := lt_of_le_of_lt (abs_nonneg a) ha
+  have har : a < R := lt_of_le_of_lt (le_abs_self a) ha
+  have hla : -R < a := by
+    have := neg_abs_le a
+    linarith
+  have hbottom_ne (x : ℝ) :
+      (x : ℂ) + z₀.im * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hi := congrArg Complex.im h
+    simp [z₀] at hi
+    linarith
+  have htop_ne (x : ℝ) :
+      (x : ℂ) + w₀.im * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hi := congrArg Complex.im h
+    simp [w₀] at hi
+    linarith
+  have hright_ne (y : ℝ) :
+      (w₀.re : ℂ) + y * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hr := congrArg Complex.re h
+    simp [w₀] at hr
+    linarith
+  have hleft_ne (y : ℝ) :
+      (z₀.re : ℂ) + y * I - (a : ℂ) ≠ 0 := by
+    intro h
+    have hr := congrArg Complex.re h
+    simp [z₀] at hr
+    linarith
+  have hside (γ : ℝ → ℂ) (hγ : Continuous γ)
+      (hne : ∀ t, γ t - (a : ℂ) ≠ 0) (l u : ℝ) :
+      IntervalIntegrable (fun t => (γ t - (a : ℂ)) ^ k) volume l u :=
+    ((hγ.sub continuous_const).zpow₀ k
+      (fun t => Or.inl (hne t))).intervalIntegrable _ _
   exact ⟨hside _ (by fun_prop) hbottom_ne _ _,
     hside _ (by fun_prop) htop_ne _ _,
     hside _ (by fun_prop) hright_ne _ _,
