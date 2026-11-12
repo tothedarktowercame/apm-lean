@@ -18,6 +18,30 @@ noncomputable section
 
 namespace ConstructionTargets.CotangentLocal
 
+/-- Cotangent with argument `πz` is periodic under translation by an integer.
+This is proved from the sine and cosine addition formulas. -/
+theorem cot_pi_add_int (z : ℂ) (k : ℤ) :
+    Complex.cot ((Real.pi : ℂ) * (z + (k : ℂ))) =
+      Complex.cot ((Real.pi : ℂ) * z) := by
+  rw [show (Real.pi : ℂ) * (z + (k : ℂ)) =
+      (Real.pi : ℂ) * z + ((k : ℝ) * Real.pi : ℝ) by
+    push_cast; ring]
+  have hs : Complex.sin (((k : ℝ) * Real.pi : ℝ) : ℂ) = 0 := by
+    rw [← Complex.ofReal_sin]
+    exact_mod_cast Real.sin_int_mul_pi k
+  have hc : Complex.cos (((k : ℝ) * Real.pi : ℝ) : ℂ) = ((-1 : ℝ) ^ k : ℝ) := by
+    simpa using congrArg ((↑) : ℝ → ℂ) (Real.cos_int_mul_pi k)
+  rw [Complex.cot, Complex.sin_add, Complex.cos_add, hs, hc]
+  rw [Complex.cot]
+  have hk : (((-1 : ℝ) ^ k : ℝ) : ℂ) ≠ 0 := by
+    exact_mod_cast (zpow_ne_zero k (by norm_num : (-1 : ℝ) ≠ 0))
+  simp only [mul_zero, sub_zero, add_zero, div_eq_mul_inv, mul_inv_rev]
+  calc
+    _ = Complex.cos ((Real.pi : ℂ) * z) *
+        ((((-1 : ℝ) ^ k : ℝ) : ℂ) * ((((-1 : ℝ) ^ k : ℝ) : ℂ))⁻¹) *
+        (Complex.sin ((Real.pi : ℂ) * z))⁻¹ := by ring
+    _ = _ := by rw [mul_inv_cancel₀ hk]; simp
+
 /-- The entire extension of `sin (πz) / (πz)` across `z = 0`. -/
 def sincPi (z : ℂ) : ℂ :=
   dslope (fun w : ℂ => Complex.sin ((Real.pi : ℂ) * w)) 0 z / (Real.pi : ℂ)

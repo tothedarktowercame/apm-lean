@@ -5,6 +5,10 @@ open ConstructionTargets.CotangentLocal
 
 noncomputable section
 
+example (z : ℂ) : Complex.cot ((Real.pi : ℂ) * (z + (3 : ℂ))) =
+    Complex.cot ((Real.pi : ℂ) * z) := by
+  simpa using cot_pi_add_int z 3
+
 /-- The local calculation exposes the linear cotangent coefficient used by
 the `ζ(2)` contour. -/
 example : deriv regularCot 0 = -(Real.pi : ℂ) ^ 2 / 3 :=
