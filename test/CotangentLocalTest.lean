@@ -19,6 +19,12 @@ the `ζ(2)` contour. -/
 example : deriv regularCot 0 = -(Real.pi : ℂ) ^ 2 / 3 :=
   deriv_regularCot_zero
 
+/-- The second-order quotient fills the removable singularity used by the
+`ζ(2)` square contour. -/
+example {z : ℂ} (hz : z ≠ 0) :
+    cotSecondRemainder z = cotSecondNumerator z / z ^ 2 :=
+  cotSecondRemainder_eq_div hz
+
 /-- The same calculation exposes the residue coefficient used by the
 `ζ(4)` contour. -/
 example : iteratedDeriv 3 regularCot 0 / 6 = -(Real.pi : ℂ) ^ 4 / 45 :=
@@ -32,6 +38,7 @@ example {z : ℂ} (hz : z ≠ 0) :
 
 #print axioms ConstructionTargets.CotangentLocal.differentiable_sincPi
 #print axioms ConstructionTargets.CotangentLocal.deriv_regularCot_zero
+#print axioms ConstructionTargets.CotangentLocal.cotSecondRemainder_eq_div
 #print axioms ConstructionTargets.CotangentLocal.cot_cubic_coefficient
 #print axioms ConstructionTargets.CotangentLocal.cotFourthRemainder_eq_div
 #print axioms ConstructionTargets.CotangentLocal.regularCot_eq_cot_sub_inv
