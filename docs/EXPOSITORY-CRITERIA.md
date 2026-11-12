@@ -1,7 +1,7 @@
 # Expository proofs: criteria, two variants, and a worked example
 
 Draft, claude-9 with Joe, 2026-11-12. Status: criteria are a first proposal;
-the sources section is checked against primary texts where marked.
+the sources were checked on 2026-11-12 (what was read is marked).
 
 ## Why
 
@@ -22,22 +22,52 @@ Lean proof does not support.
 
 ## Sources
 
-See the verified notes in `~/notes/expository-proof-sources.md` (to be
-folded in here). In brief:
+Checked by a research agent on 2026-11-12; notes with quotes and pages in
+`~/notes/expository-proof-sources.md`. "Seen" says what was read.
 
-- Dutilh Novaes: a proof as a dialogue between Prover and a Skeptic who
-  checks every step; the function of proof as *explanatory persuasion*
-  (showing why, not only that); explanatoriness relative to the audience.
-  The two variants are the same Prover facing two Skeptics.
-- Pease, Aberdein and Martin (2019): an empirical study of explanation in
-  mathematical conversations; explanation occurs throughout practice, not
-  only inside proofs. Supports explanation around the proof in the teaching
+- **Dutilh Novaes, "Reductio ad absurdum from a dialogical perspective",
+  *Philosophical Studies* 173(10):2605-2628 (2016).** Seen: full text. A
+  proof is a semi-adversarial dialogue between Prover and Skeptic. Skeptic
+  grants premises, offers counterexamples, and asks for clarification, which
+  makes the proof "persuasive, perspicuous, and valid" (p. 2618). The
+  function of proof is *explanatory persuasion* (p. 2617). The Skeptic is
+  internalised, with a granularity fitted to the intended audience (§3.4,
+  p. 2620). Reductio is on the whole less explanatory (§4.2, p. 2625).
+  Also *The Dialogical Roots of Deduction* (CUP 2020) and a 2018 ICME-13
+  chapter on explanatoriness as audience-relative (seen: abstracts only).
+  *Use here:* the two variants are one Prover facing two Skeptics; the
+  teaching Skeptic asks for clarification more often and at finer grain.
+- **Pease, Aberdein and Martin, "Explanation in mathematical conversations:
+  an empirical investigation", *Phil. Trans. R. Soc. A* 377(2140):20180159
+  (2019).** Seen: full text (PMC). Six conjectures from the philosophy of
+  explanation tested on online mathematical discussions; five held. The one
+  that failed: explanation is mainly an appeal to greater generality (2%).
+  Most explanations were of a trace kind (69%), then strategic (24%), deep
+  (6%); proof was the context of only about 18%. *Use here:* explanation
+  belongs around the proof as well as in it, and is mostly about how a step
+  or a strategy works, rather than about generality.
+- **Mejia-Ramos, Fuller, Weber, Rhoads and Samkoff, "An assessment model for
+  proof comprehension in undergraduate mathematics", *Educational Studies in
+  Mathematics* 79(1):3-18 (2012).** Seen: authors' copy. Seven types of
+  comprehension, three local (meaning of terms and statements; logical
+  status of statements and proof framework; justification of claims) and
+  four holistic (summarizing via high-level ideas; identifying the modular
+  structure; transferring the general ideas or methods to another context;
+  illustrating with examples). *Use here:* the test for the teaching
   variant.
-- Mejia-Ramos, Fuller, Weber, Rhoads and Samkoff (2012): a model of proof
-  comprehension with local and holistic dimensions. Used below as the test
-  for the teaching variant: a reader should be able to answer its kinds of
-  question from the text alone.
-- Presentation order (Leron 1983, Lamport 1995/2012): deferred.
+- **Hodds, Alcock and Inglis, "Self-explanation training improves proof
+  comprehension", *JRME* 45(1):62-101 (2014).** Seen: abstract. Training
+  students to explain proofs to themselves improved comprehension (d = 0.95);
+  a 15-minute version had a lasting effect. *Use here:* the self-study
+  guide should prompt the reader to explain steps, not only read them.
+- **Presentation order, deferred.** Leron, "Structuring mathematical
+  proofs", *AMM* 90(3):174-185 (1983; seen: secondary summaries): levels,
+  main ideas on top, presented top-down. Lamport, "How to write a proof",
+  *AMM* 102(7):600-608 (1995) and "How to write a 21st century proof",
+  *J. Fixed Point Theory Appl.* 11(1):43-63 (2012) (seen: preprints):
+  numbered hierarchical steps, each with its own proof; the 2012 paper's
+  reader is a "curious child" asking "Why?" of every assertion, which is
+  close to the teaching Skeptic.
 
 ## Criteria
 
@@ -50,7 +80,7 @@ folded in here). In brief:
 | Definitions | as needed for the check | every term a student might misread is pinned down |
 | Questions | none anticipated | the likely questions asked and answered in place |
 | Factual check | every claim supported by the Lean proof | the same |
-| Test | the Skeptic cannot object | a reader can answer comprehension questions of each kind (meaning of terms, logical status, justification of steps, main idea, structure, transfer, examples) from the text |
+| Test | the Skeptic cannot object | a reader can answer, from the text alone, questions of each of Mejia-Ramos et al.'s seven types: meaning of terms and statements; logical status and proof framework; justification of claims; high-level ideas; modular structure; transfer to another context; illustrating with examples |
 
 Kinds of unclarity to look for (from a01A01; to be extended by reading more
 problems):
@@ -179,5 +209,7 @@ stated in the equivalent form ∀ M N, ∃ k ≥ N, M ≤ f_k(x).
 
 - Read about ten more problems across a, b, m and t and extend the list of
   kinds of unclarity.
-- Fold the verified source notes into the Sources section.
+- A self-study guide (Open University style: learning outcomes, activities,
+  self-assessment questions with separate answers, summary) for a01A01, as
+  a mock fourth column beside Lean, reference solution and scholia.
 - Presentation order, as a separate note.
