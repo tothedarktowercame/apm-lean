@@ -29,6 +29,16 @@ example (z w : ℂ) :
     (boundaryIntegrable_of_continuous _ (by fun_prop))
     (boundaryIntegrable_of_continuous _ (by fun_prop))
 
+example (z w : ℂ) :
+    rectangleBoundaryIntegral (fun u : ℂ => u ^ 2 - u) z w =
+      rectangleBoundaryIntegral (fun u : ℂ => u ^ 2) z w -
+        rectangleBoundaryIntegral (fun u : ℂ => u) z w := by
+  exact rectangleBoundaryIntegral_sub
+    (rectangleBoundaryIntegrable_of_differentiableOn (fun u : ℂ => u ^ 2) z w
+      (by fun_prop))
+    (rectangleBoundaryIntegrable_of_differentiableOn (fun u : ℂ => u) z w
+      (by fun_prop))
+
 /-- The square winds once around each real point in its interior. -/
 example :
     centeredSquareBoundaryIntegral (fun z => (z - (1 : ℂ))⁻¹) 2 =

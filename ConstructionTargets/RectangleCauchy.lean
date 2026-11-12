@@ -69,6 +69,12 @@ lemma RectangleBoundaryIntegrable.const_mul {f : ℂ → ℂ} {z w : ℂ}
   ⟨hf.1.const_mul c, hf.2.1.const_mul c,
     hf.2.2.1.const_mul c, hf.2.2.2.const_mul c⟩
 
+/-- Negation preserves rectangle-boundary integrability. -/
+lemma RectangleBoundaryIntegrable.neg {f : ℂ → ℂ} {z w : ℂ}
+    (hf : RectangleBoundaryIntegrable f z w) :
+    RectangleBoundaryIntegrable (fun u => -f u) z w :=
+  ⟨hf.1.neg, hf.2.1.neg, hf.2.2.1.neg, hf.2.2.2.neg⟩
+
 /-- Addition preserves integrability on a rectangle boundary. -/
 lemma RectangleBoundaryIntegrable.add {f g : ℂ → ℂ} {z w : ℂ}
     (hf : RectangleBoundaryIntegrable f z w)
@@ -76,6 +82,13 @@ lemma RectangleBoundaryIntegrable.add {f g : ℂ → ℂ} {z w : ℂ}
     RectangleBoundaryIntegrable (fun u => f u + g u) z w :=
   ⟨hf.1.add hg.1, hf.2.1.add hg.2.1,
     hf.2.2.1.add hg.2.2.1, hf.2.2.2.add hg.2.2.2⟩
+
+/-- Subtraction preserves rectangle-boundary integrability. -/
+lemma RectangleBoundaryIntegrable.sub {f g : ℂ → ℂ} {z w : ℂ}
+    (hf : RectangleBoundaryIntegrable f z w)
+    (hg : RectangleBoundaryIntegrable g z w) :
+    RectangleBoundaryIntegrable (fun u => f u - g u) z w := by
+  simpa only [sub_eq_add_neg] using hf.add hg.neg
 
 /-- Boundary integrability respects equality on each of the four sides. -/
 lemma RectangleBoundaryIntegrable.congr {f g : ℂ → ℂ} {z w : ℂ}
@@ -170,6 +183,28 @@ lemma rectangleBoundaryIntegral_const_mul (c : ℂ) (f : ℂ → ℂ) (z w : ℂ
   unfold rectangleBoundaryIntegral
   rw [hbottom, htop, hright, hleft]
   ring
+
+/-- Rectangle boundary integration commutes with negation. -/
+lemma rectangleBoundaryIntegral_neg (f : ℂ → ℂ) (z w : ℂ) :
+    rectangleBoundaryIntegral (fun u => -f u) z w =
+      -rectangleBoundaryIntegral f z w := by
+  unfold rectangleBoundaryIntegral
+  rw [intervalIntegral.integral_neg, intervalIntegral.integral_neg,
+    intervalIntegral.integral_neg, intervalIntegral.integral_neg]
+  ring
+
+/-- Rectangle boundary integration commutes with subtraction of integrable
+boundary data. -/
+lemma rectangleBoundaryIntegral_sub {f g : ℂ → ℂ} {z w : ℂ}
+    (hf : RectangleBoundaryIntegrable f z w)
+    (hg : RectangleBoundaryIntegrable g z w) :
+    rectangleBoundaryIntegral (fun u => f u - g u) z w =
+      rectangleBoundaryIntegral f z w - rectangleBoundaryIntegral g z w := by
+  rw [show (fun u => f u - g u) = (fun u => f u + -g u) by
+    funext u
+    exact sub_eq_add_neg _ _]
+  rw [rectangleBoundaryIntegral_add hf hg.neg, rectangleBoundaryIntegral_neg]
+  rfl
 
 /-- Rectangle boundary integrals respect pointwise equality on all four sides. -/
 lemma rectangleBoundaryIntegral_congr {f g : ℂ → ℂ} {z w : ℂ}
