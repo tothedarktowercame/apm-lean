@@ -729,4 +729,49 @@ theorem centeredSquareBoundaryIntegral_zpow_eq_zero
   unfold centeredSquareBoundaryIntegral
   exact rectangleBoundaryIntegral_eq_zero_of_boundary_primitive f P z₀ w₀ hf hP
 
+/-- The ML inequality for a centered square: a uniform bound `M` on its four
+sides bounds the boundary integral by the perimeter `8R` times `M`. -/
+theorem norm_centeredSquareBoundaryIntegral_le (f : ℂ → ℂ) (R M : ℝ)
+    (hR : 0 ≤ R)
+    (hbnd : ∀ x ∈ Set.uIcc (-R) R, ‖f (x + (-R) * I)‖ ≤ M)
+    (htop : ∀ x ∈ Set.uIcc (-R) R, ‖f (x + R * I)‖ ≤ M)
+    (hright : ∀ y ∈ Set.uIcc (-R) R, ‖f (R + y * I)‖ ≤ M)
+    (hleft : ∀ y ∈ Set.uIcc (-R) R, ‖f (-R + y * I)‖ ≤ M) :
+    ‖centeredSquareBoundaryIntegral f R‖ ≤ M * (8 * R) := by
+  have hinterval (g : ℝ → ℂ) (hg : ∀ t ∈ Set.uIcc (-R) R, ‖g t‖ ≤ M) :
+      ‖∫ t : ℝ in -R..R, g t‖ ≤ M * (2 * R) := by
+    calc
+      _ ≤ M * |R - -R| := intervalIntegral.norm_integral_le_of_norm_le_const
+        (fun t ht => hg t (uIoc_subset_uIcc ht))
+      _ = M * (2 * R) := by rw [abs_of_nonneg (by linarith)]; ring
+  have hb := hinterval (fun x : ℝ => f (x + (-R) * I)) hbnd
+  have ht := hinterval (fun x : ℝ => f (x + R * I)) htop
+  have hr := hinterval (fun y : ℝ => f (R + y * I)) hright
+  have hl := hinterval (fun y : ℝ => f (-R + y * I)) hleft
+  unfold centeredSquareBoundaryIntegral rectangleBoundaryIntegral
+  simp only [neg_re, ofReal_re, mul_re, mul_im, I_re, ofReal_im, I_im, mul_zero,
+    mul_one, sub_re, sub_im, neg_im, add_re, add_im, zero_mul, add_zero,
+    zero_add, sub_zero, neg_zero, zero_sub, ofReal_neg]
+  calc
+    _ ≤ (‖∫ x : ℝ in -R..R, f (x + -R * I)‖ +
+          ‖∫ x : ℝ in -R..R, f (x + R * I)‖) +
+        ‖I * ∫ y : ℝ in -R..R, f (R + y * I)‖ +
+        ‖I * ∫ y : ℝ in -R..R, f (-R + y * I)‖ := by
+      calc
+        _ ≤ ‖(∫ x : ℝ in -R..R, f (x + -R * I)) -
+              (∫ x : ℝ in -R..R, f (x + R * I))‖ +
+            ‖I * ∫ y : ℝ in -R..R, f (R + y * I)‖ +
+            ‖I * ∫ y : ℝ in -R..R, f (-R + y * I)‖ := by
+              calc
+                _ ≤ ‖(∫ x : ℝ in -R..R, f (x + -R * I)) -
+                      (∫ x : ℝ in -R..R, f (x + R * I)) +
+                      I * (∫ y : ℝ in -R..R, f (R + y * I))‖ +
+                      ‖I * ∫ y : ℝ in -R..R, f (-R + y * I)‖ := norm_sub_le _ _
+                _ ≤ _ := by gcongr; exact norm_add_le _ _
+        _ ≤ _ := by gcongr; exact norm_sub_le _ _
+    _ ≤ (M * (2 * R) + M * (2 * R)) + M * (2 * R) + M * (2 * R) := by
+      simpa using add_le_add (add_le_add (add_le_add hb ht)
+        (by simpa using hr)) (by simpa using hl)
+    _ = M * (8 * R) := by ring
+
 end ConstructionTargets.RectangleCauchy

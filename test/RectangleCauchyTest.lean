@@ -61,6 +61,12 @@ example : RectangleBoundaryIntegrable (fun z => z ^ (-3 : ℤ))
     (-2 - 2 * I) (2 + 2 * I) := by
   simpa using centeredSquareBoundaryIntegrable_zpow 0 2 (by norm_num) (-3)
 
+/-- The reusable ML estimate gives the expected zero bound for the zero
+integrand; all four side hypotheses are exercised explicitly. -/
+example : ‖centeredSquareBoundaryIntegral (fun _ : ℂ => 0) 2‖ ≤ 0 := by
+  simpa using norm_centeredSquareBoundaryIntegral_le (fun _ : ℂ => 0) 2 0
+    (by norm_num) (by simp) (by simp) (by simp) (by simp)
+
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegrable_of_differentiableOn
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_sub_inv
@@ -68,3 +74,4 @@ example : RectangleBoundaryIntegrable (fun z => z ^ (-3 : ℤ))
 #print axioms ConstructionTargets.RectangleCauchy.rectangleBoundaryIntegral_eq_zero_of_boundary_primitive
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegral_zpow_eq_zero
 #print axioms ConstructionTargets.RectangleCauchy.centeredSquareBoundaryIntegrable_zpow
+#print axioms ConstructionTargets.RectangleCauchy.norm_centeredSquareBoundaryIntegral_le

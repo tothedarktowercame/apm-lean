@@ -202,6 +202,48 @@ theorem deriv_regularCot_zero :
     iteratedDeriv_succ'] at h
   exact h
 
+/-- The numerator obtained after removing the linear Taylor term of
+`π cot (πz) - 1/z`.  It has a zero of order at least two at the origin. -/
+def cotSecondNumerator (z : ℂ) : ℂ :=
+  regularCot z + (Real.pi : ℂ) ^ 2 / 3 * z
+
+/-- The value and first derivative of the second-order numerator vanish. -/
+theorem cotSecondNumerator_vanishes {k : ℕ} (hk : k < 2) :
+    iteratedDeriv k cotSecondNumerator 0 = 0 := by
+  change iteratedDeriv k
+    (regularCot + fun z : ℂ => (Real.pi : ℂ) ^ 2 / 3 * z) 0 = 0
+  rw [iteratedDeriv_add (n := k) (x := (0 : ℂ))
+    (contDiffAt_regularCot k) (by fun_prop)]
+  rw [iteratedDeriv_const_mul_field
+    ((Real.pi : ℂ) ^ 2 / 3) (fun z : ℂ => z)]
+  interval_cases k
+  · simp
+  · simp [iteratedDeriv_succ', deriv_regularCot_zero]
+    ring
+
+/-- The analytic extension at zero of
+`(π cot (πz) - 1/z + π²z/3) / z²`. -/
+def cotSecondRemainder : ℂ → ℂ :=
+  ConstructionTargets.AnalyticDivision.dividedByPower 2 0 cotSecondNumerator
+
+/-- The second-order cotangent remainder is analytic at the origin. -/
+theorem analyticAt_cotSecondRemainder_zero :
+    AnalyticAt ℂ cotSecondRemainder 0 := by
+  apply ConstructionTargets.AnalyticDivision.analyticAt_dividedByPower
+  unfold cotSecondNumerator
+  exact analyticAt_regularCot_zero.add (by fun_prop)
+
+/-- Away from zero, the analytic extension is the expected quotient. -/
+theorem cotSecondRemainder_eq_div {z : ℂ} (hz : z ≠ 0) :
+    cotSecondRemainder z = cotSecondNumerator z / z ^ 2 := by
+  simpa [cotSecondRemainder] using
+    (ConstructionTargets.AnalyticDivision.dividedByPower_eq_div
+      (n := 2) (a := (0 : ℂ)) (z := z)
+      (f := cotSecondNumerator) (by
+        unfold cotSecondNumerator
+        exact analyticAt_regularCot_zero.add (by fun_prop))
+      (fun k hk => cotSecondNumerator_vanishes hk) hz)
+
 /-- The quadratic Taylor coefficient of the odd regular part vanishes. -/
 theorem iteratedDeriv_two_regularCot_zero :
     iteratedDeriv 2 regularCot 0 = 0 := by
