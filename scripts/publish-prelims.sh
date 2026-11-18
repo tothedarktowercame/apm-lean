@@ -30,23 +30,24 @@ WORK="${WORK:-$(mktemp -d)}"
 for f in "$TUFTIFY" "$IDS"; do
   [ -r "$f" ] || { echo "missing required input: $f" >&2; exit 1; }
 done
-command -v latexmlc >/dev/null || { echo "latexmlc not on PATH" >&2; exit 1; }
+RENDER_CONFIG="${APM_RENDER_CONFIG:-$REPO_ROOT/config/render-book.json}"
+[ -r "$RENDER_CONFIG" ] || { echo "missing render config: $RENDER_CONFIG" >&2; exit 1; }
 
 echo "== source =="
 python3 "$REPO_ROOT/scripts/build-first-proof-sprint.py" \
   "$IDS" "$TEX_DIR" "$WORK/prelims.tex" --latexml --total "$(wc -l < "$IDS")"
 
-echo "== latexml =="
-# Report the failure rather than dying mute: latexmlc gives up after 100 errors
-# and exits non-zero, and under set -e that ended the run with nothing after
-# "== latexml ==" in the log -- which looks identical to still being busy.
-if ! ( cd "$WORK" && latexmlc --timeout=7000 --dest=index.html --format=html5 \
-        --splitat=section prelims.tex > latexml.log 2>&1 ); then
-  echo "   latexmlc failed:" >&2
-  grep -E '^(Error|Fatal)' "$WORK/prelims.latexml.log" | head -20 >&2
+echo "== tex -> html =="
+# Report converter failure rather than dying mute: under set -e that used to
+# end the run after the phase banner, which looked identical to still working.
+if ! python3 "$REPO_ROOT/scripts/tex-to-html.py" \
+        --config "$RENDER_CONFIG" "$WORK/prelims.tex" "$WORK/index.html" \
+        > "$WORK/tex-to-html.log" 2>&1; then
+  echo "   TeX-to-HTML backend failed:" >&2
+  grep -E '^(Error|Fatal)' "$WORK/tex-to-html.log" | head -20 >&2 || true
   exit 1
 fi
-echo "   $(ls "$WORK"/*.html | wc -l) pages, $(grep -cE '^Error' "$WORK/latexml.log" || true) errors"
+echo "   $(find "$WORK" -maxdepth 1 -name '*.html' | wc -l) pages, $(grep -cE '^Error' "$WORK/tex-to-html.log" || true) errors"
 
 echo "== tufte =="
 mkdir -p "$WORK/out"

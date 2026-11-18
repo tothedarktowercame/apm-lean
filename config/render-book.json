@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "ordering": {
+    "provider": "apm",
+    "section": "problem",
+    "lean_file": "problems/{id}/lean/Main.lean"
+  },
+  "tex_to_html": {
+    "backend": "latexml-oxide",
+    "backends": {
+      "latexml-oxide": {
+        "executable": "latexml_oxide",
+        "args": ["--format=html5", "--split", "--splitat=section", "--timeout=7000"]
+      },
+      "latexml": {
+        "executable": "latexmlc",
+        "args": ["--format=html5", "--splitat=section", "--timeout=7000"]
+      }
+    }
+  }
+}
