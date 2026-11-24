@@ -1,5 +1,4 @@
 import Mathlib
-import ConstructionTargets.Rouche
 
 /-!
 # APM aunk04 — Rouché zero count and polynomial growth of entire functions
@@ -27,21 +26,6 @@ noncomputable def apm_aunk04_polynomial : ℂ[X] :=
 
 noncomputable def apm_aunk04_remainder : ℂ[X] :=
   Polynomial.X ^ 4 - Polynomial.C 3 * Polynomial.X ^ 3 + Polynomial.X ^ 2
-
-/-- On the unit circle, the nonconstant part has norm at most five, strictly
-less than the norm of the constant term six. -/
-lemma apm_aunk04_rouche_bound (z : ℂ) (hz : ‖z‖ = 1) :
-    ‖Polynomial.eval z apm_aunk04_remainder‖ <
-      ‖Polynomial.eval z (Polynomial.C 6 : ℂ[X])‖ := by
-  have htri : ‖z ^ 4 - 3 * z ^ 3 + z ^ 2‖ ≤
-      ‖z ^ 4‖ + ‖3 * z ^ 3‖ + ‖z ^ 2‖ := by
-    calc
-      ‖z ^ 4 - 3 * z ^ 3 + z ^ 2‖
-          ≤ ‖z ^ 4 - 3 * z ^ 3‖ + ‖z ^ 2‖ := norm_add_le _ _
-      _ ≤ (‖z ^ 4‖ + ‖3 * z ^ 3‖) + ‖z ^ 2‖ :=
-        add_le_add (norm_sub_le _ _) le_rfl
-  simp [apm_aunk04_remainder, hz] at htri ⊢
-  exact lt_of_le_of_lt htri (by norm_num)
 
 /-- The polynomial has no roots in the open unit disk.  For this particular
 polynomial the constant comparison in Rouché can be discharged directly. -/
