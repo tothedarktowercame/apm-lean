@@ -4,7 +4,7 @@
 
 ## Why It's Hard
 
-The sets $F_j$ partition $\mathbb{R}^{n}$ (modulo the set of points in no $E_k$) by multiplicity of membership. The identity $A = \sum j\cdot m(F_j)$ says that the total measure, counted with overlaps, equals the sum weighted by multiplicity. This is intuitive — each "layer" of overlap is counted exactly as many times as it should be — but making it rigorous requires connecting the sum of measures $\sum m(E_k)$ to an integral of a counting function, then decomposing that integral by level sets. The key difficulty is justifying the interchange of summation and integration for a potentially uncountable collection of overlapping sets.
+The sets $F_j$ partition $\mathbb{R}^{n}$ (modulo the set of points in no $E_k$) by multiplicity of membership. The identity $A = \sum j\cdot m(F_j)$ says that the total measure, counted with overlaps, equals the sum weighted by multiplicity. This is intuitive — each "layer" of overlap is counted exactly as many times as it should be — but making it rigorous requires connecting the sum of measures $\sum m(E_k)$ to an integral of a counting function, then decomposing that integral by level sets. The key difficulty is justifying the interchange of summation and integration for a countably infinite collection of overlapping sets.
 
 ## The Key Insight
 
