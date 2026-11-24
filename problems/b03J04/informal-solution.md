@@ -27,7 +27,7 @@ $$
 \{\text{roots of }f\text{ in }K\}=\{\zeta\alpha:\ \zeta\in K,\ \zeta^p=1\}. \tag{1}
 $$
 
-**$x^p-1$ splits in $K$.** Let $\zeta_0$ be a root of $x^p-1$ in any extension of $k$. Then $\zeta_0\alpha$ satisfies $(\zeta_0\alpha)^p=\beta$, i.e. $\zeta_0\alpha$ is a root of $f$; since $K$ is a splitting field of $f$, every root of $f$ lies in $K$, so $\zeta_0\alpha\in K$, and therefore $\zeta_0=(\zeta_0\alpha)/\alpha\in K$. Thus **all** roots of $x^p-1$ lie in $K$, so $x^p-1$ splits over $K$. Define
+**$x^p-1$ splits in $K$.** Let $L$ be a splitting field of $x^p-1$ over $K$, so that $K\subseteq L$ and products of elements of $K$ with roots of $x^p-1$ are formed in $L$. Since $f$ already splits in $K$ with $p$ roots counted with multiplicity, every root of $f$ in $L$ lies in $K$. Let $\zeta_0\in L$ be a root of $x^p-1$. Then $\zeta_0\alpha$ satisfies $(\zeta_0\alpha)^p=\beta$, i.e. $\zeta_0\alpha$ is a root of $f$ in $L$, so $\zeta_0\alpha\in K$, and therefore $\zeta_0=(\zeta_0\alpha)/\alpha\in K$. Thus **all** roots of $x^p-1$ lie in $K$, so $x^p-1$ splits over $K$. Define
 $$
 K_1:=k\big(\{\zeta\in K:\zeta^p=1\}\big)\subseteq K,
 $$
