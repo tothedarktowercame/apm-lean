@@ -19,7 +19,7 @@ Then \(f_h(t) = \int_{\mathbb R} f(x) g_{t,h}(x)\,dx\).  Hölder gives
 \]
 Because \(g_{t,h}\) is constant \((2h)^{-1}\) on an interval of length \(2h\) and zero elsewhere, \(\|g_{t,h}\|_{L^q} = (2h)^{-1} (2h)^{1/q} = (2h)^{-1/p}\); when \(p=1\), interpret \(1/q=0\) so \(\|g_{t,h}\|_{L^\infty}=1\) and the same formula results.  Thus \(|f_h(t)| \le (2h)^{-1/p}\|f\|_p\) for all \(t\).
 
-For continuity, take \(s,t\in[0,1]\).  The symmetric difference \(A_{s,t} = [s-h,s+h]\triangle[t-h,t+h]\) is the union of at most two intervals and has Lebesgue measure \(m(A_{s,t}) = 2|s-t|\).  Also
+For continuity, take \(s,t\in[0,1]\).  The symmetric difference \(A_{s,t} = [s-h,s+h]\triangle[t-h,t+h]\) is the union of at most two intervals and has Lebesgue measure \(m(A_{s,t}) = 2\min(|s-t|,2h) \le 2|s-t|\).  Also
 \[
 f_h(t) - f_h(s) = \int f(x)\,\bigl(g_{t,h}(x)-g_{s,h}(x)\bigr)\,dx.
 \]
@@ -27,7 +27,7 @@ By Hölder,
 \[
 |f_h(t)-f_h(s)| \le \|f\|_{L^p} \|g_{t,h}-g_{s,h}\|_{L^q}.
 \]
-The difference \(g_{t,h}-g_{s,h}\) is supported on \(A_{s,t}\) and has absolute value at most \((2h)^{-1}\), whence \(\|g_{t,h}-g_{s,h}\|_{L^q} \le (2h)^{-1} m(A_{s,t})^{1/q} = (2h)^{-1} (2|s-t|)^{1/q}\).  When \(p=1\) (so \(q=\infty\)), replace this with the direct inequality
+The difference \(g_{t,h}-g_{s,h}\) is supported on \(A_{s,t}\) and has absolute value at most \((2h)^{-1}\), whence \(\|g_{t,h}-g_{s,h}\|_{L^q} \le (2h)^{-1} m(A_{s,t})^{1/q} \le (2h)^{-1} (2|s-t|)^{1/q}\).  When \(p=1\) (so \(q=\infty\)), replace this with the direct inequality
 \[
 |f_h(t)-f_h(s)| \le \frac{1}{2h} \int_{A_{s,t}} |f(x)|\,dx,
 \]
