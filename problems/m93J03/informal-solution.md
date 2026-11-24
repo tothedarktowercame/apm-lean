@@ -116,13 +116,22 @@ $$x_\epsilon(t) = \epsilon + a(\epsilon)\sin t + b(\epsilon)\cos t.$$
 
 By the exact equivalence of Step 1, `x_\epsilon` is a continuous solution of the integral
 equation, and it is the unique solution with parameters `(a,b) \in W` — that is, the unique
-continuous solution near the trivial solution `x \equiv 0` of the `\epsilon = 0` problem. As
+continuous solution near the trivial solution `x \equiv 0` of the `\epsilon = 0` problem
+(uniqueness is local: other solutions exist with `(a,b)` outside `W`). As
 `\epsilon \to 0`, `(a(\epsilon),b(\epsilon)) \to (0,0)`, so `x_\epsilon \to 0` uniformly,
 and `x_\epsilon` depends continuously (indeed `C^1`) on `\epsilon`.
 
-Thus for all `\epsilon \in \mathbb{R}` of sufficiently small magnitude there is a unique
-continuous function `x` on `[-\pi,\pi]` satisfying
-`x(t) = \epsilon + \int_{-\pi}^{\pi}\sin(t+s+x(s))\,ds`. ∎
+Thus for all `\epsilon \in \mathbb{R}` of sufficiently small magnitude there is a continuous
+function `x` on `[-\pi,\pi]` satisfying
+`x(t) = \epsilon + \int_{-\pi}^{\pi}\sin(t+s+x(s))\,ds`, and it is the only solution whose
+parameters `(a,b)` lie in `W`. ∎
+
+**What this does not prove.** The implicit function theorem gives uniqueness only among
+solutions near the trivial one. The problem as printed asks for uniqueness among all
+continuous solutions, and that is false: the Lean file proves that for every `\epsilon` the
+printed equation has two different continuous solutions (second part of `apm_m93j03`), and
+its main statement is the local one proved here (unique among solutions of uniform size
+below a fixed `\eta`; see "Statement repairs" in `Main.lean`).
 
 **Remark.** The two `\pi`'s are the same `\pi` wearing two hats. The naive contraction
 failed with constant `2\pi > 1`; the reduction succeeded because the Jacobian determinant
