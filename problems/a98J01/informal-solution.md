@@ -75,7 +75,9 @@ $\delta > 0$. By inner regularity of Lebesgue measure, choose for each $k$ a com
 set $K_k \subseteq E_k$ with $m(E_k \setminus K_k) < \delta/m$. Put
 $K' = \bigcup_{k=1}^m K_k$; then $K'$ is compact and
 $$m\big([a,b]\setminus K'\big) = \sum_{k=1}^m m(E_k\setminus K_k) < \delta.$$
-The $K_k$ are pairwise disjoint compact sets, so $\rho := \min_{j\neq k}
+Discard the indices $k$ with $K_k = \varnothing$. If at most one $K_k$ remains, then
+$s|_{K'}$ is constant (or $K'$ is empty) and so continuous. Otherwise the remaining
+$K_k$ are pairwise disjoint nonempty compact sets, so $\rho := \min_{j\neq k}
 \operatorname{dist}(K_j, K_k) > 0$. On $K'$ the function $s$ equals the constant
 $c_k$ on $K_k$; for any $x \in K_k$, every point of $K'$ within distance $\rho$ of
 $x$ lies in the same $K_k$, where $s = c_k$. Hence $s|_{K'}$ is locally constant,
