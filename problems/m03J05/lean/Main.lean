@@ -7,6 +7,11 @@ import Mathlib
 The source writes `x \in R` in the antiderivative hypothesis; this is read as
 the evident `x \in ℝ`.
 
+In the differentiability clause the source also assumes that `G` is monotone
+and that `g(0) = 0`. Neither is used in the proof, so that clause is stated
+without them (2026-11-24). "Monotone" in the existence and uniqueness clause
+is read as nondecreasing; a nonincreasing `G` is not covered.
+
 ## Encoding note
 
 Mathlib does not currently bundle the Sobolev space `H¹(0,1)`.  In one
@@ -3416,10 +3421,10 @@ theorem apm_m03J05_bridge_1
 differentiability statement for the frozen energy functional. -/
 theorem apm_m03J05_bridge_2
     (F : Lp ℝ 2 m03J05UnitMeasure) :
-    ∀ (G g : ℝ → ℝ) (L : NNReal), LipschitzWith L G → Monotone G →
-      (∀ x : ℝ, HasDerivAt g (G x) x) → g 0 = 0 →
+    ∀ (G g : ℝ → ℝ) (L : NNReal), LipschitzWith L G →
+      (∀ x : ℝ, HasDerivAt g (G x) x) →
         Differentiable ℝ (m03J05Energy F g) := by
-  intro G g L hG _hmono hg _hg0
+  intro G g L hG hg
   have hpotential : Differentiable ℝ (fun u : m03J05H1 =>
       ∫ x in (0 : ℝ)..1, g (m03J05H1Value u x)) :=
     fun u => (m03J05_potential_hasFDerivAt hG hg u).differentiableAt
@@ -3732,8 +3737,8 @@ theorem apm_m03j05 (c : ℝ) (F : Lp ℝ 2 m03J05UnitMeasure) :
             ∃ a : ℝ, ∀ x ∈ Icc (0 : ℝ) 1,
               m03J05H1Value v x =
                 m03J05H1Value u x + a * m03J05MixedEigenfunction n x) ∧
-    (∀ (G g : ℝ → ℝ) (L : NNReal), LipschitzWith L G → Monotone G →
-      (∀ x : ℝ, HasDerivAt g (G x) x) → g 0 = 0 →
+    (∀ (G g : ℝ → ℝ) (L : NNReal), LipschitzWith L G →
+      (∀ x : ℝ, HasDerivAt g (G x) x) →
         Differentiable ℝ (m03J05Energy F g)) ∧
     (∀ (G : ℝ → ℝ) (L : NNReal), LipschitzWith L G → Monotone G →
       ∃! u : m03J05H1, m03J05NonlinearWeakSolution F G u) := by
