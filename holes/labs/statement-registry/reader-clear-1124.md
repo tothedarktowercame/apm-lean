@@ -16,8 +16,13 @@ file was changed. Line numbers are those of `Main.lean` on 2026-11-24.
 | m03J02 | `IsM03J02Solution` imposes the equation at every real t; the problem poses it for t > 0. The file comment gives the reason (uniqueness fails otherwise for functions on ℝ). | read by the answering seat; not judged |
 | a97A02 | t ∈ [0,1] in the estimate is unused. | generalised copy compiles (codex-18) |
 | aunk05 | Hypothesis that Ω is connected is bound and unused. | copy without it compiles |
-| b93A04 | The theorem states the join of the two fixing subgroups; the problem writes the product set H₁H₂. Equal under normality, but that step is not in the Lean. | read by the answering seat |
-| m03J05, m98A06, t96A08, m02J04 | Points raised by control-set readers about hypotheses and domains. | experiments in progress; see below |
+| b93A04 | The theorem states the join of the two fixing subgroups; the problem writes the product set H₁H₂. The header says so. A set-equality lemma via `Subgroup.mul_normal` (19 lines, text in the storage report) compiles in a scratch copy and could be added. | scratch lemma compiles (codex-18) |
+| m03J05 | `g 0 = 0` is unused in `apm_m03J05_bridge_2` (3416-3422, bound as `_hg0`) and in the matching conjunct of `apm_m03j05`; `Monotone G` is also unused in that conjunct. "Monotone" is taken as nondecreasing; a nonincreasing G is not covered by the existence and uniqueness clause. | copy without `g 0 = 0` compiles (codex-18) |
+| t96A08 | The theorem assumes piecewise-smooth reachability of every point from the base point (`hreachable`, 1469-1470) where the problem has a connected manifold; deriving reachability from connectedness is not formalised. The codomain f : M → ℝ corrects the problem's M → M. Neither is in the header, which documents only the piecewise-smooth definition. | read by codex-18, theorem lines read by claude-12 |
+| m98A06 | No finding: the header documents the repair of C¹([0,1]) to C¹([0,a]). | header read |
+| m02J04 | No finding: the header documents the repair to nonnegative C¹ curves; the problem's integration hint (a likely slip) is not used. | header read |
+
+Experiment report: `statement-experiments.head-b38755b7.md` under `futon6/inkup/reader-clear/` in the storage area.
 
 ## Lean proofs that do not carry out what the problem asks
 
