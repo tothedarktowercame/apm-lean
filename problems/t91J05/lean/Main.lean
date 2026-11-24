@@ -38,13 +38,6 @@ lemma apm_t91J05_isFiniteCover_of_homeomorph
     rfl]
   exact (hpfinite s).preimage e.injective.injOn
 
-/-- The Euler-characteristic arithmetic behind the odd-genus formula. -/
-lemma apm_t91J05_eulerCharacteristic_odd_genus (n : ℕ) :
-    eulerCharacteristic true (2 * n + 1) =
-      (n : ℤ) * eulerCharacteristic true 3 := by
-  simp [eulerCharacteristic]
-  omega
-
 /-- The total space of a local homeomorphism onto a locally path-connected
 space is locally path-connected. -/
 theorem apm_t91J05_connected_finite_cover_classification_aux_locPath

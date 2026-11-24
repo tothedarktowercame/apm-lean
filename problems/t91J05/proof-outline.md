@@ -7,8 +7,10 @@ The frozen theorem and a compiling partial development are present.
 - `apm_t91J05_isFiniteCover_of_homeomorph` proves that the concrete
   finite-cover predicate transports across a homeomorphism of source spaces,
   preserving covering, surjectivity, and finite fibers.
-- `apm_t91J05_eulerCharacteristic_odd_genus` proves
-  `χ(Σ_(2n+1)) = n * χ(Σ_3)` for the concrete classified-surface data.
+- `apm_t91J05_eulerCharacteristic_odd_genus` proved
+  `χ(Σ_(2n+1)) = n * χ(Σ_3)` for the concrete classified-surface data. It was
+  removed from `Main.lean` on 2026-11-24: the final proof counts polygon sides
+  and does not use Euler characteristic.
 
 - informal-solution: `informal-solution.md`
 - harvested-filename: `apm-t91J05.md`
