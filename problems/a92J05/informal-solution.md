@@ -28,7 +28,7 @@ Since $|h(z)| \leq 4 < 5 = |g(z)|$ for all $|z| = 1$, Rouché's theorem applies:
 
 **Theorems used:** Rouché's theorem, the fundamental theorem of algebra.
 
-**What connects.** This is a standard application of Rouché's theorem for root counting. The art is in choosing the right decomposition: the dominant term on $|z| = 1$ is $5z^{3}$ (the term with the largest coefficient, not the highest degree), and the remaining terms are bounded by $4 < 5$. The same technique works for any polynomial on any circle — the key is finding a single term that dominates all others. For roots inside a large disk, the highest-degree term dominates; for roots inside a small disk, the constant term (or lowest-degree nonzero term) dominates; for the unit circle, it depends on coefficient magnitudes.
+**What connects.** This is a standard application of Rouché's theorem for root counting. The art is in choosing the right decomposition: the dominant term on $|z| = 1$ is $5z^{3}$ (the term with the largest coefficient, not the highest degree), and the remaining terms are bounded by $4 < 5$. The same technique works on a circle whenever a single term dominates the sum of all the others there; such a term need not exist (for $z^{2} + 3z + 3$ on $|z| = 1$ no term exceeds the sum of the other two), and then a different splitting or a different circle is needed. For roots inside a large disk, the highest-degree term dominates once the radius is large enough; for roots inside a small disk, the constant term (or lowest-degree nonzero term) dominates once the radius is small enough; for the unit circle, it depends on coefficient magnitudes.
 
 ## 2. Lean 4 theorem statement
 
