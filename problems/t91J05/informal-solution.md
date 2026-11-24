@@ -35,8 +35,8 @@ $H_1(\Sigma_3) = \mathbb Z^6$.
 
 ### Necessity: a finite connected cover must be $\Sigma_{2n+1}$
 
-Let $p : Y \to \Sigma_3$ be a connected finite covering, with $n$ sheets ($n \ge 1$, finite since $\Sigma_3$ is
-compact and $Y$ connected).
+Let $p : Y \to \Sigma_3$ be a connected finite covering, with $n$ sheets ($n \ge 1$; $n$ is finite because the covering is assumed finite, which does
+not follow from compactness of $\Sigma_3$ and connectedness of $Y$, as $\mathbb{R} \to S^1$ shows).
 
 1. **$Y$ is a closed surface.** A covering space of a $2$-manifold is a $2$-manifold (covers are local
    homeomorphisms), and a finite cover of a compact space is compact; $Y$ is also without boundary. So $Y$
