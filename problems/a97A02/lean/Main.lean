@@ -5,7 +5,8 @@ import Mathlib
 
 ## Statement repairs
 
-None.
+None. The estimate is stated for every real `t`, not only `t ∈ [0,1]`: the
+proof does not use the restriction (2026-11-24).
 
 ## Encoding questions
 
@@ -87,13 +88,13 @@ theorem apm_a97a02
     (f : ℝ → ℂ) (hf : MemLp f p apm_a97A02_measure)
     (h : ℝ) (hh : 0 < h) :
     ContinuousOn (apm_a97A02_average f h) (Set.Icc (0 : ℝ) 1) ∧
-    ∀ t ∈ Set.Icc (0 : ℝ) 1,
+    ∀ t : ℝ,
       ‖apm_a97A02_average f h t‖ ≤
         (2 * h) ^ (-(1 / p.toReal)) *
           (eLpNorm f p apm_a97A02_measure).toReal := by
   refine ⟨apm_a97A02_continuousOn_average f
     (apm_a97A02_integrable_of_memLp hp hf) h hh, ?_⟩
-  intro t ht
+  intro t
   let E : Set ℝ := Set.Icc (t - h) (t + h)
   let μE := apm_a97A02_measure.restrict E
   have hμE_le : μE ≤ apm_a97A02_measure := Measure.restrict_le_self
