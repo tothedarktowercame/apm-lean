@@ -12,29 +12,23 @@ Given $m(E)=0$, cover $E$ by countably many disjoint open intervals $\{(a_k,b_k)
 
 ### Lean 4 statement
 
+The statement proved in `lean/Main.lean` is on $[0,1]$, as in the problem's TeX (the sketch
+above writes $[a,b]$; the argument is the same). Intervals in the absolute-continuity
+hypothesis are required to have disjoint interiors:
+
 ```lean
-import Mathlib.MeasureTheory.Measure.Lebesgue.Basic
-import Mathlib.MeasureTheory.Function.AbsolutelyContinuous
-import Mathlib.Order.Monotone.Basic
-
-open MeasureTheory Set
-
-/-- An absolutely continuous monotone increasing function on [a,b]
-    maps Lebesgue-null sets to Lebesgue-null sets. -/
 theorem ac_monotone_maps_null_to_null
-    {a b : ℝ} (hab : a ≤ b)
     (f : ℝ → ℝ)
-    (hf_mono : MonotoneOn f (Icc a b))
-    (hf_ac : ∀ ε > 0, ∃ δ > 0, ∀ (I : Finset (ℝ × ℝ)),
-      (∀ p ∈ I, p.1 ∈ Icc a b ∧ p.2 ∈ Icc a b ∧ p.1 ≤ p.2) →
-      (∀ p q, p ∈ I → q ∈ I → p ≠ q → Icc p.1 p.2 ∩ Icc q.1 q.2 = ∅ ∨
-        Icc p.1 p.2 ∩ Icc q.1 q.2 = {p.2} ∨ Icc p.1 p.2 ∩ Icc q.1 q.2 = {q.2}) →
-      ∑ p ∈ I, (p.2 - p.1) < δ →
-      ∑ p ∈ I, |f p.2 - f p.1| < ε)
-    (E : Set ℝ) (hE : E ⊆ Icc a b)
+    (hf_mono : MonotoneOn f (Icc 0 1))
+    (hf_ac : ∀ ε > 0, ∃ δ > 0, ∀ (s : Finset (ℝ × ℝ)),
+      (∀ p ∈ s, p.1 ∈ Icc 0 1 ∧ p.2 ∈ Icc 0 1 ∧ p.1 ≤ p.2) →
+      (∀ p q, p ∈ s → q ∈ s → p ≠ q →
+        Disjoint (Ioo p.1 p.2) (Ioo q.1 q.2)) →
+      (∑ p ∈ s, (p.2 - p.1)) < δ →
+      (∑ p ∈ s, ‖f p.2 - f p.1‖) < ε)
+    (E : Set ℝ) (hE : E ⊆ Icc 0 1)
     (hE_null : volume E = 0) :
-    volume (f '' E) = 0 := by
-  sorry
+    volume (f '' E) = 0
 ```
 
 ### Mathlib cross-references
