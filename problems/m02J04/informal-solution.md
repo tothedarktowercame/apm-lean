@@ -116,12 +116,17 @@ $$y(0) = C\cosh(D) = 1, \qquad y(1) = C\cosh\!\Big(\frac{1}{C}+D\Big) = \cosh 1.
 Try $C = 1,\ D = 0$:
 $$y(0) = \cosh(0) = 1\ \checkmark,\qquad
 y(1) = \cosh(1)\ \checkmark.$$
-Both conditions are satisfied, so the extremal is
+Both conditions are satisfied, so a stationary curve through the endpoints is
 $$\boxed{\,y(x) = \cosh x\,.}$$
 
-**Conclusion.** The curve generating the minimum surface area when rotated about
-the $x$-axis is the catenary $y = \cosh x$, and the surface it sweeps out is the
-**catenoid**. This is consistent with the general principle that the only
+**Conclusion.** The catenary $y = \cosh x$ is a stationary curve for the area with
+the given endpoints, and the surface it sweeps out is the **catenoid**. The argument
+above does not show that it is the minimizer: the Euler–Lagrange equation gives only
+stationarity, and the constants $C=1$, $D=0$ were found by trial, not shown to be the
+only choice. That $\cosh$ does give the least area among nonnegative $C^1$ curves with
+these endpoints is proved in `Main.lean` (`apm_m02J04_global_area_minimal`), by
+comparing the area density with exact derivatives (calibrations) in separate cases
+according to how low the competing curve dips; that argument is not reproduced here. This is consistent with the general principle that the only
 nonplanar minimal surface of revolution is the catenoid. (The endpoints in this
 problem are precisely the values of $\cosh x$ at $x=0$ and $x=1$, which is why
 the constants collapse to $C=1$, $D=0$; for endpoint data spaced too far apart in
@@ -146,5 +151,5 @@ boundary radii are too large relative to their separation, the area infimum is
 attained only in the limit by a degenerate surface consisting of two flat disks
 joined by a line segment. This is a standard cautionary example that the
 Euler–Lagrange equation gives *stationary* curves, and one must separately
-confirm a genuine minimizer exists and is the catenary — which it is for the
-data given here.
+confirm a genuine minimizer exists and is the catenary. For the data given here it
+is, by the Lean proof cited in the conclusion of part (c).
