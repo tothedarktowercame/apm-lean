@@ -8,7 +8,9 @@ import Mathlib
 ## Statement repairs
 
 None. In part (c), the source's subgroup product `H₁H₂` is represented by the
-subgroup join `H₁ ⊔ H₂`; under the stated Galois hypotheses these agree.
+subgroup join `H₁ ⊔ H₂`; under the stated Galois hypotheses these agree, and
+`apm_b93A04_fixingSubgroup_inf_carrier_eq_mul` at the end of the file states
+the product-set form (added 2026-11-24).
 
 ## Encoding questions
 
@@ -98,3 +100,25 @@ theorem apm_b93a04 :
     apply Prod.ext
     · exact hab1 (r₁ σ) (r₁ τ)
     · exact hab2 (r₂ σ) (r₂ τ)
+
+open scoped Pointwise
+
+/-- Part (c) in the source's own form: the fixing subgroup of `L₁ ⊓ L₂` is, as a
+set, the product `H₁H₂` of the two fixing subgroups. The join used in the main
+theorem equals this product because `H₂` is normal. -/
+theorem apm_b93A04_fixingSubgroup_inf_carrier_eq_mul
+    (F K : Type*) [Field F] [Field K] [Algebra F K] [CharZero F]
+    [FiniteDimensional F K] (L₁ L₂ : IntermediateField F K)
+    (hK : IsGalois F K) (_h₁ : IsGalois F L₁) (h₂ : IsGalois F L₂) :
+    (↑((L₁ ⊓ L₂).fixingSubgroup) : Set (K ≃ₐ[F] K)) =
+      (↑L₁.fixingSubgroup : Set (K ≃ₐ[F] K)) *
+        (↑L₂.fixingSubgroup : Set (K ≃ₐ[F] K)) := by
+  letI : IsGalois F K := hK
+  letI : IsGalois F L₂ := h₂
+  have hjoin : (L₁ ⊓ L₂).fixingSubgroup =
+      L₁.fixingSubgroup ⊔ L₂.fixingSubgroup := by
+    have hdual :=
+      (IsGalois.intermediateFieldEquivSubgroup (F := F) (E := K)).map_inf L₁ L₂
+    exact congrArg OrderDual.ofDual hdual
+  rw [hjoin]
+  exact Subgroup.mul_normal _ _
